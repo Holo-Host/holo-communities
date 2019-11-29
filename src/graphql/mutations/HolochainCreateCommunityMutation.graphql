@@ -7,7 +7,7 @@ mutation HolochainCreateCommunityMutation (
       slug: $slug,
       name: $name
     }
-  ) {
+  ) @client {
     id
     slug
     name

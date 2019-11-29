@@ -14,7 +14,7 @@ mutation HolochainCreatePostMutation (
     type: $type,
     communityId: $communityId,
     createdAt: $createdAt,
-  }) {
+  }) @client {
     ...HolochainPostFieldsFragment
   }
 }

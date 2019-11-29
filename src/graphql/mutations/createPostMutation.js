@@ -32,5 +32,5 @@ export default
     startTime: $startTime,
     endTime: $endTime,
     location: $location
-  }) {${postFieldsFragment(false)}}
+  }) @client {${postFieldsFragment(false)}}
 }`

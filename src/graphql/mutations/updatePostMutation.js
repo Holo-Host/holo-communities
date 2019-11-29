@@ -17,7 +17,7 @@ export default
   $startTime: String,
   $endTime: String,
   $location: String
-) {
+) @client {
   updatePost(id: $id, data: {
     type: $type,
     title: $title,

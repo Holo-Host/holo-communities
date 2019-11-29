@@ -7,7 +7,7 @@ mutation HolochainCreateCommentMutation (
     postId: $postId,
     text: $text,
     createdAt: $createdAt
-  }) {
+  }) @client {
     id
     text
     post {

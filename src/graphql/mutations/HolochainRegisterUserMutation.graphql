@@ -2,7 +2,7 @@ mutation HolochainRegisterUserMutation (
   $name: String,
   $avatarUrl: String
 ) {
-  registerUser(name: $name, avatarUrl: $avatarUrl) {
+  registerUser(name: $name, avatarUrl: $avatarUrl) @client {
     id
     name
     avatarUrl

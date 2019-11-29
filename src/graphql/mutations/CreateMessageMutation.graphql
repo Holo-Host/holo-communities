@@ -7,7 +7,7 @@ mutation CreateMessageMutation (
     messageThreadId: $messageThreadId,
     text: $text,
     createdAt: $createdAt
-  }) {
+  }) @client {
     id
     text
     createdAt
