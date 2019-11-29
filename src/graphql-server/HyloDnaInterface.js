@@ -1,4 +1,4 @@
-import { createZomeCall } from './holochainClient'
+import { createZomeCall } from '../client/holochainClient'
 
 export const HyloDnaInterface = {
   comments: {

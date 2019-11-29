@@ -119,4 +119,12 @@ export async function onSignal (
   })
 }
 
+export function registerHolochainSignals (signalHandlers = {}) {
+  onSignal(signal => {
+    const signalHandler = get(signal.name, signalHandlers)
+
+    if (signalHandler) signalHandler(signal)
+  })
+}
+
 export default holochainClient
