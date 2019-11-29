@@ -2,7 +2,7 @@ query CommentsQuery (
   $id: ID,
   $cursor: ID
 ) {
-  post(id: $id) {
+  post(id: $id) @client {
     id
     comments(first: 10, cursor: $cursor, order: "desc") {
       items {

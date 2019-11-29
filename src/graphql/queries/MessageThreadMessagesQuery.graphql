@@ -1,5 +1,5 @@
 query MessageThreadMessagesQuery ($id: ID, $cursor: ID) {
-  messageThread (id: $id) {
+  messageThread (id: $id) @client {
     id
     messages(first: 80, cursor: $cursor, order: "desc") {
       items {

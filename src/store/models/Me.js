@@ -11,7 +11,8 @@ export const MOCK_ME = {
   },
   firstName: () => 'Loren',
   hasFeature: () => false,
-  canModerate: () => true
+  canModerate: () => true,
+  __typename: 'Me'
 }
 
 export function firstName (user) {

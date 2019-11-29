@@ -1,5 +1,5 @@
 query MessageThreadQuery ($id: ID) {
-  messageThread (id: $id) {
+  messageThread (id: $id) @client {
     id
     unreadCount
     lastReadAt
@@ -10,7 +10,7 @@ query MessageThreadQuery ($id: ID) {
       name
       avatarUrl
     }
-    messages(first: 80, order: "desc") {
+    messages(first: 80, order: "desc") @client {
       items {
         id
         text

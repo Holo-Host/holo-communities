@@ -1,5 +1,5 @@
 query MessageThreadsQuery ($first: Int = 10, $offset: Int, $firstMessages: Int = 1) {
-  me {
+  me @client {
     id
     messageThreads(sortBy: "updatedAt", order: "desc", first: $first, offset: $offset) {
       total

@@ -13,10 +13,10 @@ query MeQuery (
   $autocomplete: String,
   $subscribed: Boolean
 ) {
-  me {
+  me @client {
     ...MeCompleteFragment
   }
-  community(slug: $slug, updateLastViewed: $updateLastViewed) @include(if: $includeCommunity) {
+  community(slug: $slug, updateLastViewed: $updateLastViewed) @include(if: $includeCommunity) @client {
     ...CommunityFragment
   }
 }

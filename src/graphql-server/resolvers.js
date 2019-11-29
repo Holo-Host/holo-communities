@@ -34,39 +34,58 @@ export const resolvers = {
 
   Query: {
     async me () {
-      return toUiData('person', await HyloDnaInterface.currentUser.get())
+      return {
+        __typename: 'Me',
+        ...toUiData('person', await HyloDnaInterface.currentUser.get())
+      }
     },
 
     async communities () {
       const communities = await HyloDnaInterface.communities.all()
 
-      return communities.map(community => toUiData('community', community))
+      return communities.map(community => ({
+        __typename: 'Community',
+        ...toUiData('community', community)
+      }))
     },
 
     async community (_, { slug }) {
-      return toUiData('community', await HyloDnaInterface.communities.getBySlug(slug))
+      return {
+        __typename: 'Community',
+        ...toUiData('community', await HyloDnaInterface.communities.getBySlug(slug))
+      }
     },
 
     async post (_, { id }) {
-      return toUiData('post', await HyloDnaInterface.posts.get(id))
+      return {
+        __typename: 'Post',
+        ...toUiData('post', await HyloDnaInterface.posts.get(id))
+      }
     },
 
     async people () {
       const people = await HyloDnaInterface.people.all()
 
-      return toUiQuerySet(people.map(person =>
-        toUiData('person', person)
-      ))
+      return toUiQuerySet(people.map(person => ({
+        __typename: 'Person',
+        ...toUiData('person', person)
+      })), 'PeopleQuerySet')
     },
 
     async messageThread (_, { id }) {
-      return toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
+      return {
+        __typename: 'MessageThread',
+        ...toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
+      }
     }
   },
 
   Comment: {
     async creator ({ creator }) {
-      return toUiData('person', await HyloDnaInterface.people.get(creator))
+      return {
+        __typename: 'Person',
+        ...toUiData('person', await HyloDnaInterface.people.get(creator))
+      }
     }
   },
 
@@ -74,9 +93,10 @@ export const resolvers = {
     async posts ({ id }) {
       const posts = await HyloDnaInterface.posts.all(id)
 
-      return toUiQuerySet(posts.map(post =>
-        toUiData('post', post)
-      ))
+      return toUiQuerySet(posts.map(post => ({
+        __typename: 'Post',
+        ...toUiData('post', post)
+      })), 'PostQuerySet')
     }
   },
 
@@ -84,9 +104,10 @@ export const resolvers = {
     async messageThreads () {
       const messageThreads = await HyloDnaInterface.messageThreads.all()
 
-      return toUiQuerySet(messageThreads.map(messageThread =>
-        toUiData('messageThread', messageThread)
-      ))
+      return toUiQuerySet(messageThreads.map(messageThread => ({
+        __typename: 'MessageThread',
+        ...toUiData('messageThread', messageThread)
+      })), 'MessageThreadQuerySet')
     },
 
     async memberships () {
@@ -94,14 +115,21 @@ export const resolvers = {
 
       return communities.map(community => ({
         id: Math.round(Math.random() * 10000),
-        community: toUiData('community', community)
+        __typename: 'Membership',
+        community: {
+          __typename: 'Community',
+          ...toUiData('community', community)
+        }
       }))
     }
   },
 
   Message: {
     async creator ({ creator }) {
-      return toUiData('person', await HyloDnaInterface.people.get(creator))
+      return {
+        __typename: 'Person',
+        ...toUiData('person', await HyloDnaInterface.people.get(creator))
+      }
     }
   },
 
@@ -109,33 +137,44 @@ export const resolvers = {
     async messages ({ id }) {
       const messages = await HyloDnaInterface.messages.all(id)
 
-      return toUiQuerySet(messages.map(message =>
-        toUiData('message', message)
-      ))
+      return toUiQuerySet(messages.map(message => ({
+        __typename: 'Message',
+        ...toUiData('message', message)
+      })), 'MessagesQuerySet')
     },
 
     async participants ({ participants }) {
-      return participants.map(participant => toUiData('person', participant))
+      return participants.map(participant => ({
+        __typename: 'Person',
+        ...toUiData('person', participant)
+      }))
     }
   },
 
   Post: {
     async communities ({ communityId }) {
       return [
-        toUiData('community', await HyloDnaInterface.communities.get(communityId))
+        {
+          __typename: 'Community',
+          ...toUiData('community', await HyloDnaInterface.communities.get(communityId))
+        }
       ]
     },
 
     async creator ({ creator }) {
-      return toUiData('person', await HyloDnaInterface.people.get(creator))
+      return {
+        __typename: 'Person',
+        ...toUiData('person', await HyloDnaInterface.people.get(creator))
+      }
     },
 
     async comments ({ id }) {
       const zomeComments = await HyloDnaInterface.comments.all(id)
 
-      return toUiQuerySet(zomeComments.map(comment =>
-        toUiData('comment', comment)
-      ))
+      return toUiQuerySet(zomeComments.map(comment => ({
+        __typename: 'Comment',
+        ...toUiData('comment', comment)
+      })), 'CommentQuerySet')
     },
 
     async commenters ({ id }) {
@@ -145,12 +184,18 @@ export const resolvers = {
         if (commenterAddresses.includes(creator)) return null
         commenterAddresses.push(creator)
 
-        return HyloDnaInterface.people.get(creator)
+        return {
+          __typename: 'Person',
+          ...HyloDnaInterface.people.get(creator)
+        }
       }))
 
       return commenters
         .filter(commenter => !!commenter)
-        .map(commenter => toUiData('person', commenter))
+        .map(commenter => ({
+          __typename: 'Person',
+          ...toUiData('person', commenter)
+        }))
     },
 
     async commentersTotal ({ id }) {

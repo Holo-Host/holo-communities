@@ -9,7 +9,6 @@ fragment HolochainPostFieldsFragment on Post {
     avatarUrl
   }
   createdAt
-  updatedAt
   communities {
     id
     name

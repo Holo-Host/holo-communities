@@ -1,6 +1,6 @@
 export default
 `query PersonDetails ($id: ID) {
-  person (id: $id) {
+  person (id: $id) @client {
     id
     name
     avatarUrl
@@ -13,7 +13,7 @@ export default
     tagline
     location
     messageThreadId
-    memberships {
+    memberships @client {
       id
       role
       hasModeratorRole

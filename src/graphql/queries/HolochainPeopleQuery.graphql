@@ -1,5 +1,5 @@
 query HolochainPeopleQuery ($first: Int) {
-  people (first: $first) {
+  people (first: $first) @client {
     items {
       id
       name

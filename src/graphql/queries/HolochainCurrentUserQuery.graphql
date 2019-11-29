@@ -1,10 +1,10 @@
 query HolochainCurrentUserQuery {
-  me {
+  me @client {
     id
     name
     avatarUrl
     isRegistered
-    memberships {
+    memberships @client {
       id
       community {
         id

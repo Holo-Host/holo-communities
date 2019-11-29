@@ -1,9 +1,9 @@
 query HolochainCommunityQuery ($slug: String) {
-  community(slug: $slug) {
+  community(slug: $slug) @client {
     id
     name
     slug
-    posts {
+    posts @client {
       hasMore
       items {
         id
@@ -22,7 +22,6 @@ query HolochainCommunityQuery ($slug: String) {
           avatarUrl
         }
         createdAt
-        updatedAt
       }
     }
   }

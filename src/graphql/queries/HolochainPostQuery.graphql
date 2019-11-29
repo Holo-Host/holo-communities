@@ -4,7 +4,7 @@ query HolochainPostQuery (
   $id: ID
   # $withComments: Boolean = false
 ) {
-  post(id: $id) {
+  post(id: $id) @client {
     ...HolochainPostFieldsFragment
   }
 }
