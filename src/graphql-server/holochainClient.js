@@ -1,15 +1,22 @@
 import { connect as hcWebClientConnect } from '@holochain/hc-web-client'
-import { graphqlToString } from 'util/graphql'
 import { get } from 'lodash/fp'
 
 export const HOLOCHAIN_LOGGING = true
+
+export function parseZomeCallPath (zomeCallPath) {
+  const [ zomeFunc, zome, dnaInstanceId ] = zomeCallPath.split('/').reverse()
+
+  return { dnaInstanceId, zome, zomeFunc }
+}
+
 const { dnaInstanceId: DNA_INSTANCE_ID } = parseZomeCallPath(process.env.HOLOCHAIN_GRAPHQL_PATH)
+
 let holochainClient
 
-async function initAndGetHolochainClient () {
+export function initAndGetHolochainClient () {
   if (holochainClient) return holochainClient
   try {
-    holochainClient = await hcWebClientConnect({
+    holochainClient = hcWebClientConnect({
       url: process.env.HOLOCHAIN_BUILD
         ? null
         : process.env.HOLOCHAIN_WEBSOCKET_URI,
@@ -24,6 +31,8 @@ async function initAndGetHolochainClient () {
     }
     throw (error)
   }
+
+  return holochainClient
 }
 
 export function createZomeCall (zomeCallPath, callOpts = {}) {
@@ -36,12 +45,12 @@ export function createZomeCall (zomeCallPath, callOpts = {}) {
     ...DEFAULT_OPTS,
     ...callOpts
   }
+
   return async function (args = {}) {
     try {
-      await initAndGetHolochainClient()
-
+      const hcClient = await initAndGetHolochainClient()
       const { zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
-      const zomeCall = holochainClient.callZome(opts.dnaInstanceId, zome, zomeFunc)
+      const zomeCall = hcClient.callZome(opts.dnaInstanceId, zome, zomeFunc)
       const rawResult = await zomeCall(args)
       const jsonResult = JSON.parse(rawResult)
       const error = get('Err', jsonResult) || get('SerializationError', jsonResult)
@@ -80,48 +89,34 @@ export function createZomeCall (zomeCallPath, callOpts = {}) {
   }
 }
 
-export async function callHolochainGraphql (graphqlOperation, opts = {
-  graphqlZomeCallPath: process.env.HOLOCHAIN_GRAPHQL_PATH,
-  dnaInstanceId: DNA_INSTANCE_ID,
-  logging: HOLOCHAIN_LOGGING
-}) {
-  const { zome, zomeFunc } = parseZomeCallPath(opts.graphqlZomeCallPath)
-  const graphqlZomeCall = createZomeCall(zome, zomeFunc, {
-    dnaInstanceId: opts.dnaInstanceId,
-    logging: false
+export async function onSignal (
+  signalCallback,
+  opts = { logging: HOLOCHAIN_LOGGING }
+) {
+  const hcClient = await initAndGetHolochainClient()
+
+  hcClient.onSignal(message => {
+    const { signal: { name, arguments: args } } = message
+    const parsedArgs = JSON.parse(args)
+
+    if (opts.logging) {
+      const detailsFormat = 'font-weight: bold; color: rgb(220, 208, 120)'
+
+      console.groupCollapsed(
+        `📣 ${name}%c signal received`,
+        'font-weight: normal; color: rgb(160, 160, 160)'
+      )
+      console.groupCollapsed('%cArguments', detailsFormat)
+      console.log(parsedArgs)
+      console.groupEnd()
+      console.groupCollapsed('%cRaw Message', detailsFormat)
+      console.log(message)
+      console.groupEnd()
+      console.groupEnd()
+    }
+
+    return signalCallback({ name, arguments: parsedArgs })
   })
-  const query = graphqlToString(graphqlOperation.query)
-  const variables = graphqlOperation.variables
-  const rawResult = await graphqlZomeCall({
-    query,
-    variables
-  })
-  const result = JSON.parse(rawResult)
-
-  if (opts.logging) {
-    const detailsFormat = 'font-weight: bold; color: rgb(220, 208, 120)'
-
-    console.groupCollapsed(
-      `👍 ${graphqlOperation.operationName}%c complete`,
-      'font-weight: normal; color: rgb(160, 160, 160)'
-    )
-    console.groupCollapsed('%cOperation', detailsFormat)
-    console.log(query)
-    console.groupEnd()
-    console.groupCollapsed('%cVariables', detailsFormat)
-    console.log(variables)
-    console.groupEnd()
-    console.groupCollapsed('%cResult', detailsFormat)
-    console.log(result)
-    console.groupEnd()
-    console.groupEnd()
-  }
-
-  return result
 }
 
-export function parseZomeCallPath (zomeCallPath) {
-  const [ zomeFunc, zome, dnaInstanceId ] = zomeCallPath.split('/').reverse()
-
-  return { dnaInstanceId, zome, zomeFunc }
-}
+export default holochainClient

@@ -81,12 +81,18 @@ export const createPost = graphql(HolochainCreatePostMutation, {
         createdAt: currentDateString(),
         communityId: get('communities[0].id', post)
       },
-      refetchQueries: [{
-        query: HolochainCommunityQuery,
-        variables: {
-          slug: getRouteParam('slug', {}, ownProps)
-        }
-      }]
+      update: (proxy, { data: { createPost } }) => {
+        const slug = getRouteParam('slug', {}, ownProps)
+        const post = { ...createPost, __typename: 'Post' }
+        const data = proxy.readQuery({
+          query: HolochainCommunityQuery,
+          variables: {
+            slug
+          }
+        })
+        data.community.posts.items.push(post)
+        proxy.writeData({ data })
+      }
     }),
     // postPending: TBD
     goToPost: props => {
