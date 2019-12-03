@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useApolloClient } from '@apollo/react-hooks'
 import { toUiData } from 'graphql-server/dataMapping'
-import { registerHolochainSignals } from 'client/holochainClient'
+import { registerHolochainSignals } from 'graphql-server/holochainClient'
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 
 export default function HolochainSignalsSubscriber () {

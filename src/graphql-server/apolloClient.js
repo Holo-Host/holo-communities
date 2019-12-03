@@ -35,17 +35,3 @@ const apolloClient = new ApolloClient({
 })
 
 export default apolloClient
-
-// * FOR USING APOLLO FOR BOTH HYLO-NODE API AND HOLOCHAIN CLIENT
-// import { HttpLink } from 'apollo-link-http'
-// import { split } from 'apollo-link'
-// import { get } from 'lodash/fp'
-// const link = split(
-//   operation => HOLOCHAIN_ACTIVE,
-//   new HolochainWebSocketLink({
-//     uri: process.env.HOLOCHAIN_WEBSOCKET_URI
-//   }),
-//   new HttpLink({
-//     uri: 'http://localhost:9000/noo/graphql'
-//   })
-// )
