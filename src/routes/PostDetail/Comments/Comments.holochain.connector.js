@@ -4,7 +4,6 @@ import { get, compose } from 'lodash/fp'
 import getMe from 'store/selectors/getMe'
 import { currentDateString } from 'util/holochain'
 import HolochainCreateCommentMutation from 'graphql/mutations/HolochainCreateCommentMutation.graphql'
-import HolochainCurrentUserQuery from 'graphql/queries/HolochainCurrentUserQuery.graphql'
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 
 export function mapStateToProps (state, props) {

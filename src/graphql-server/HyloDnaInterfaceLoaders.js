@@ -8,10 +8,6 @@ export const HyloDnaInterfaceLoaders = {
 
   person: new DataLoader(async ids => {
     return Promise.all(ids.map(id => HyloDnaInterface.people.get(id)))
-  }),
-
-  post: new DataLoader(async ids => {
-    return Promise.all(ids.map(id => HyloDnaInterface.posts.get(id)))
   })
 }
 
