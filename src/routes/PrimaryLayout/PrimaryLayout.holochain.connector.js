@@ -5,7 +5,6 @@ import { graphql } from 'react-apollo'
 import { get, compose } from 'lodash/fp'
 import { communityUrl } from 'util/navigation'
 import mobileRedirect from 'util/mobileRedirect'
-import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 import HolochainCurrentUserQuery from 'graphql/queries/HolochainCurrentUserQuery.graphql'
 import fetchForCurrentUserMock from 'store/actions/fetchForCurrentUserMock'
@@ -50,9 +49,6 @@ const community = graphql(HolochainCommunityQuery, {
   variables: props => ({
     slug: props.slug
   })
-  // options: {
-  //   pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
-  // }
 })
 
 const currentUserFromHolochainAgent = graphql(HolochainCurrentUserQuery, {

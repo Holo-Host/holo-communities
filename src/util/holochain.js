@@ -3,7 +3,6 @@ export const HOLOCHAIN_POLL_INTERVAL_SLOW = 10000
 export const HOLOCHAIN_POLL_INTERVAL_FAST = 2000
 export const HOLOCHAIN_DEFAULT_COMMUNITY_NAME = 'Hylo Holochain'
 export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'hylo-holochain'
-export const HOLOCHAIN_USE_LOCAL_RESOLVERS = true
 export const HOLOCHAIN_SUBDOMAINS = [
   'holo',
   'holochain'

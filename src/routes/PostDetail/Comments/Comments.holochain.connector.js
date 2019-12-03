@@ -39,15 +39,7 @@ const createComment = graphql(HolochainCreateCommentMutation, {
             postId: ownProps.postId,
             text,
             createdAt: currentDateString()
-          },
-          refetchQueries: [
-            {
-              query: HolochainPostQuery,
-              variables: {
-                id: ownProps.postId
-              }
-            }
-          ]
+          }
         })
         ownProps.scrollToBottom()
       }

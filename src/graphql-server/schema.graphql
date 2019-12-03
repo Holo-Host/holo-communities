@@ -140,7 +140,7 @@ input CommunityInput {
 }
 
 type Mutation {
-  createComment(data: CommentInput): Comment
+  createComment(data: CommentInput): Boolean
   createCommunity(data: CommunityInput): Community
   createMessage(data: MessageInput): Message
   createPost(data: PostInput): Post

@@ -1,27 +1,32 @@
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
-import HolochainWebSocketLink from './HolochainWebSocketLink'
 import apolloLogger from 'apollo-link-logger'
 import { SchemaLink } from 'apollo-link-schema'
 import { RetryLink } from 'apollo-link-retry'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HOLOCHAIN_ACTIVE, HOLOCHAIN_USE_LOCAL_RESOLVERS } from 'util/holochain'
+import DataLoader from 'dataloader'
+import { forEach } from 'lodash/fp'
 import schema from '../graphql-server'
+import HyloDnaInterface from '../graphql-server/HyloDnaInterface'
+
+function schemaContext () {
+  return {
+    loaders: {
+      commentsByPostIdLoader: new DataLoader(async ids => {
+        return Promise.all(ids.map(id => HyloDnaInterface.comments.all(id)))
+      }),
+
+      personByIdLoader: new DataLoader(async ids => {
+        return Promise.all(ids.map(id => HyloDnaInterface.people.get(id)))
+      })
+    }
+  }
+}
 
 const link = ApolloLink.from([
   apolloLogger,
   new RetryLink(),
-  HOLOCHAIN_USE_LOCAL_RESOLVERS && HOLOCHAIN_ACTIVE
-    ? new SchemaLink({ schema })
-    : new HolochainWebSocketLink({
-      // * Ignore our hardcoded URI unless a Holochain build
-      //   as when the UI is served from a hApp the URI is inferred
-      uri: process.env.HOLOCHAIN_BUILD
-        ? null
-        : process.env.HOLOCHAIN_WEBSOCKET_URI,
-      logging: HOLOCHAIN_ACTIVE,
-      active: HOLOCHAIN_ACTIVE
-    })
+  new SchemaLink({ schema, context: schemaContext })
 ])
 
 const apolloClient = new ApolloClient({

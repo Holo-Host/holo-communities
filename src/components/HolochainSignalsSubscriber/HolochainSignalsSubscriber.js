@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
+import { useApolloClient } from '@apollo/react-hooks'
 import { toUiData } from 'graphql-server/dataMapping'
 import { registerHolochainSignals } from 'client/holochainClient'
-import HolochainPersonQuery from 'graphql/queries/HolochainPersonQuery.graphql'
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
-import { useApolloClient } from '@apollo/react-hooks'
 
 export default function HolochainSignalsSubscriber () {
   const client = useApolloClient()
@@ -12,6 +11,7 @@ export default function HolochainSignalsSubscriber () {
     (async () => {
       registerHolochainSignals({
         'new_post': signal => console.log('new_post signal:', signal),
+
         'new_comment': ({ args }) => {
           const newComment = {
             ...toUiData('comment', args),
@@ -19,7 +19,7 @@ export default function HolochainSignalsSubscriber () {
             __typename: 'Comment',
             creator: {
               id: args.creator,
-              name: 'test',
+              name: '(loading)',
               avatarUrl: '',
               __typename: 'Person'
             }
@@ -48,7 +48,9 @@ export default function HolochainSignalsSubscriber () {
             data: ammendedPost
           })
         },
+
         'new_message': signal => console.log('new_message signal:', signal),
+
         'new_thread': signal => console.log('new_thread signal:', signal)
       })
     })()
