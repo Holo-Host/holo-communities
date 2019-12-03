@@ -2,9 +2,10 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import { get, compose } from 'lodash/fp'
 import getMe from 'store/selectors/getMe'
-import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 import { currentDateString } from 'util/holochain'
 import HolochainCreateCommentMutation from 'graphql/mutations/HolochainCreateCommentMutation.graphql'
+import HolochainCurrentUserQuery from 'graphql/queries/HolochainCurrentUserQuery.graphql'
+import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 
 export function mapStateToProps (state, props) {
   return {
@@ -39,7 +40,43 @@ const createComment = graphql(HolochainCreateCommentMutation, {
             postId: ownProps.postId,
             text,
             createdAt: currentDateString()
+          },
+          update: (proxy, { data: { createComment } }) => {
+            const { post } = proxy.readQuery({
+              query: HolochainPostQuery,
+              variables: {
+                id: createComment.post.id
+              }
+            })
+            const newComment = {
+              ...createComment,
+              attachments: []
+            }
+            const ammendedPost = {
+              post: {
+                ...post,
+                comments: {
+                  ...post.comments,
+                  items: [
+                    ...post.comments.items,
+                    newComment
+                  ]
+                }
+              }
+            }
+            proxy.writeQuery({
+              query: HolochainPostQuery,
+              data: ammendedPost
+            })
           }
+          // refetchQueries: [
+          //   {
+          //     query: HolochainPostQuery,
+          //     variables: {
+          //       id: ownProps.postId
+          //     }
+          //   }
+          // ]
         })
         ownProps.scrollToBottom()
       }

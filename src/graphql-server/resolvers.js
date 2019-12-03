@@ -20,8 +20,7 @@ export const resolvers = {
     },
 
     async createComment (_, { data: commentData }) {
-      dataMappedCall('comment', commentData, HyloDnaInterface.comments.create)
-      return true
+      return dataMappedCall('comment', commentData, HyloDnaInterface.comments.create)
     },
 
     async findOrCreateThread (_, { data: { participantIds } }) {
@@ -72,6 +71,10 @@ export const resolvers = {
   Comment: {
     async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
       return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
+    },
+
+    async post ({ postId: id }) {
+      return { id }
     }
   },
 
@@ -132,13 +135,11 @@ export const resolvers = {
     },
 
     async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
-      let person = await HyloDnaInterfaceLoaders.person.load(creator)
-
-      return toUiData('person', person)
+      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
     },
 
     async comments ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const zomeComments = await HyloDnaInterfaceLoaders.comment.load(id)
+      const zomeComments = await HyloDnaInterfaceLoaders.comments.load(id)
 
       return toUiQuerySet(zomeComments.map(comment =>
         toUiData('comment', comment)
@@ -146,7 +147,7 @@ export const resolvers = {
     },
 
     async commenters ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const comments = await HyloDnaInterfaceLoaders.comment.load(id)
+      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = []
       const commenters = await Promise.all(comments.map(({ creator }) => {
         if (commenterAddresses.includes(creator)) return null
@@ -161,7 +162,7 @@ export const resolvers = {
     },
 
     async commentersTotal ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const comments = await HyloDnaInterfaceLoaders.comment.load(id)
+      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = comments.map(comment => comment.creator)
 
       return new Set(commenterAddresses).size

@@ -7,5 +7,17 @@ mutation HolochainCreateCommentMutation (
     postId: $postId,
     text: $text,
     createdAt: $createdAt
-  })
+  }) {
+    id
+    text
+    post {
+      id
+    }
+    createdAt
+    creator {
+      id
+      name
+      avatarUrl
+    }
+  }
 }
