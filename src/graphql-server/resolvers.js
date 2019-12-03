@@ -70,8 +70,8 @@ export const resolvers = {
   },
 
   Comment: {
-    async creator ({ creator }) {
-      return toUiData('person', await HyloDnaInterface.people.get(creator))
+    async creator ({ creator }, _, { loaders }) {
+      return toUiData('person', await loaders.personByIdLoader.load(creator))
     }
   },
 
