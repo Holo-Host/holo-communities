@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
 import { push } from 'connected-react-router'
+import { graphql } from 'react-apollo'
+import { compose } from 'lodash/fp'
 import {
   HOLOCHAIN_DEFAULT_COMMUNITY_NAME,
   HOLOCHAIN_DEFAULT_COMMUNITY_SLUG

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import { get } from 'lodash/fp'
+import { graphql } from 'react-apollo'
+import { get, compose } from 'lodash/fp'
 import { push } from 'connected-react-router'
 import { threadUrl } from 'util/navigation'
 import getMe from 'store/selectors/getMe'

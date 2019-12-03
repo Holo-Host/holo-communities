@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import { isNull } from 'lodash'
+import { graphql } from 'react-apollo'
+import { isNull, compose } from 'lodash/fp'
 import { setLogin } from '../Login/Login.store'
 import HolochainCurrentUserQuery from 'graphql/queries/HolochainCurrentUserQuery.graphql'
 

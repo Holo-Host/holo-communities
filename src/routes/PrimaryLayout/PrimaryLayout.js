@@ -41,6 +41,7 @@ import SocketListener from 'components/SocketListener'
 import SocketSubscriber from 'components/SocketSubscriber'
 import TopicSupportComingSoon from 'components/TopicSupportComingSoon'
 import TopNav from './components/TopNav'
+import HolochainSignalsSubscriber from 'components/HolochainSignalsSubscriber'
 import UploadPhoto from 'routes/Signup/UploadPhoto'
 import UserSettings from 'routes/UserSettings'
 import {
@@ -167,6 +168,7 @@ export default function PrimaryLayout ({
         <Route path={path} exact key={path} children={({ match, location }) =>
           <PostEditorModal match={match} location={location} />} />)}
     </Switch>
+    <HolochainSignalsSubscriber />
     <SocketListener location={location} />
     <SocketSubscriber type='community' id={get('slug', community)} />
     {/* <Intercom appID={isTest ? null : config.intercom.appId} hide_default_launcher={hasDetail} /> */}

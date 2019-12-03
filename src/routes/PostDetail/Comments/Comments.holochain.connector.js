@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { compose, graphql } from 'react-apollo'
-import { get } from 'lodash/fp'
+import { graphql } from 'react-apollo'
+import { get, compose } from 'lodash/fp'
 import getMe from 'store/selectors/getMe'
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 import { currentDateString } from 'util/holochain'

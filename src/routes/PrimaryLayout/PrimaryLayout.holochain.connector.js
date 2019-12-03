@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { graphql, compose } from 'react-apollo'
 import { push } from 'connected-react-router'
-import { get } from 'lodash/fp'
+import { graphql } from 'react-apollo'
+import { get, compose } from 'lodash/fp'
 import { communityUrl } from 'util/navigation'
 import mobileRedirect from 'util/mobileRedirect'
 import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
@@ -49,7 +49,7 @@ const community = graphql(HolochainCommunityQuery, {
   }),
   variables: props => ({
     slug: props.slug
-  }),
+  })
   // options: {
   //   pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
   // }

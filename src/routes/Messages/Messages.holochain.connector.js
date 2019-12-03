@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { graphql, compose } from 'react-apollo'
-import { get } from 'lodash/fp'
+import { get, compose } from 'lodash/fp'
+import { graphql } from 'react-apollo'
 import { sendIsTyping } from 'client/websockets'
 import { push } from 'connected-react-router'
 import {

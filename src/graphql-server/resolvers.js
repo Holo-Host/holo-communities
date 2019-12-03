@@ -59,6 +59,10 @@ export const resolvers = {
       ))
     },
 
+    async person (_, { id }) {
+      return toUiData('person', await HyloDnaInterface.people.get(id))
+    },
+
     async messageThread (_, { id }) {
       return toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
     }

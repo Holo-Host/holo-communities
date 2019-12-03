@@ -115,7 +115,7 @@ export async function onSignal (
       console.groupEnd()
     }
 
-    return signalCallback({ name, arguments: parsedArgs })
+    return signalCallback({ name, args: parsedArgs })
   })
 }
 
