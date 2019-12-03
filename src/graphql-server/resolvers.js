@@ -48,7 +48,7 @@ export const resolvers = {
       return toUiData('community', await HyloDnaInterface.communities.getBySlug(slug))
     },
 
-    async post (_, { id }, { dataloader }) {
+    async post (_, { id }) {
       return toUiData('post', await HyloDnaInterface.posts.get(id))
     },
 
@@ -70,8 +70,8 @@ export const resolvers = {
   },
 
   Comment: {
-    async creator ({ creator }, _, { loaders }) {
-      return toUiData('person', await loaders.personByIdLoader.load(creator))
+    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
+      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
     }
   },
 
@@ -131,28 +131,28 @@ export const resolvers = {
       ]
     },
 
-    async creator ({ creator }, _, { loaders }) {
-      let person = await loaders.personByIdLoader.load(creator)
+    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
+      let person = await HyloDnaInterfaceLoaders.person.load(creator)
 
       return toUiData('person', person)
     },
 
-    async comments ({ id }, _, { loaders }) {
-      const zomeComments = await loaders.commentsByPostIdLoader.load(id)
+    async comments ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const zomeComments = await HyloDnaInterfaceLoaders.comment.load(id)
 
       return toUiQuerySet(zomeComments.map(comment =>
         toUiData('comment', comment)
       ))
     },
 
-    async commenters ({ id }, _, { loaders }) {
-      const comments = await loaders.commentsByPostIdLoader.load(id)
+    async commenters ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const comments = await HyloDnaInterfaceLoaders.comment.load(id)
       const commenterAddresses = []
       const commenters = await Promise.all(comments.map(({ creator }) => {
         if (commenterAddresses.includes(creator)) return null
         commenterAddresses.push(creator)
 
-        return loaders.personByIdLoader.load(creator)
+        return HyloDnaInterfaceLoaders.person.load(creator)
       }))
 
       return commenters
@@ -160,8 +160,8 @@ export const resolvers = {
         .map(commenter => toUiData('person', commenter))
     },
 
-    async commentersTotal ({ id }, _, { loaders }) {
-      const comments = await loaders.commentsByPostIdLoader.load(id)
+    async commentersTotal ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const comments = await HyloDnaInterfaceLoaders.comment.load(id)
       const commenterAddresses = comments.map(comment => comment.creator)
 
       return new Set(commenterAddresses).size

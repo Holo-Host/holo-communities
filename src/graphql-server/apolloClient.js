@@ -4,21 +4,12 @@ import apolloLogger from 'apollo-link-logger'
 import { SchemaLink } from 'apollo-link-schema'
 import { RetryLink } from 'apollo-link-retry'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import DataLoader from 'dataloader'
+import HyloDnaInterfaceLoaders from './HyloDnaInterfaceLoaders'
 import schema from '../graphql-server'
-import HyloDnaInterface from '../graphql-server/HyloDnaInterface'
 
 function schemaContext () {
   return {
-    loaders: {
-      commentsByPostIdLoader: new DataLoader(async ids => {
-        return Promise.all(ids.map(id => HyloDnaInterface.comments.all(id)))
-      }),
-
-      personByIdLoader: new DataLoader(async ids => {
-        return Promise.all(ids.map(id => HyloDnaInterface.people.get(id)))
-      })
-    }
+    HyloDnaInterfaceLoaders
   }
 }
 
