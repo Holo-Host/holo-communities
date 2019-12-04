@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatError } from '../util'
-import { defaultHolochainCommunityUrl } from 'util/navigation'
+import { communityUrl } from 'util/navigation'
 import TextInput from 'components/TextInput'
 import fetch from 'isomorphic-fetch'
 import Button from 'components/Button'
 import RoundImage from 'components/RoundImage'
 import Loading from 'components/Loading'
+import { HOLOCHAIN_DEFAULT_COMMUNITIES } from 'util/holochain'
 import './HolochainLogin.scss'
 
 export default class HolochainLogin extends React.Component {
@@ -15,13 +16,15 @@ export default class HolochainLogin extends React.Component {
   }
 
   submit = async () => {
-    const { registerHolochainAgent, createDefaultCommunity, redirectOnSignIn, setLogin } = this.props
+    const { registerHolochainAgent, createCommunity, redirectOnSignIn, setLogin } = this.props
 
     this.setState(() => ({ loading: true }))
     await registerHolochainAgent(this.state.name, this.state.avatarUrl)
-    await createDefaultCommunity()
+    await Promise.all(
+      HOLOCHAIN_DEFAULT_COMMUNITIES.map(community => createCommunity(community))
+    )
     setLogin(true)
-    redirectOnSignIn(defaultHolochainCommunityUrl())
+    redirectOnSignIn(communityUrl(HOLOCHAIN_DEFAULT_COMMUNITIES[0].slug))
   }
 
   onChangeHandlerForKey = key => event => this.setState({ [key]: event.target.value })

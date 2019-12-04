@@ -50,10 +50,11 @@ import {
   isSignupPath,
   isAllCommunitiesPath,
   isNetworkPath,
-  isTagPath
+  isTagPath,
+  defaultHolochainCommunityUrl
 } from 'util/navigation'
 import { CENTER_COLUMN_ID, DETAIL_COLUMN_ID } from 'util/scrolling'
-import { HOLOCHAIN_ACTIVE, HOLOCHAIN_DEFAULT_COMMUNITY_SLUG } from 'util/holochain'
+import { HOLOCHAIN_ACTIVE } from 'util/holochain'
 import './PrimaryLayout.scss'
 
 export default function PrimaryLayout ({
@@ -244,7 +245,7 @@ export function RedirectToCommunity ({ path, currentUser }) {
 
 export function redirectIfCommunity (currentUser, holochain = HOLOCHAIN_ACTIVE) {
   return () => {
-    if (holochain) return <Redirect to={`/c/${HOLOCHAIN_DEFAULT_COMMUNITY_SLUG}`} />
+    if (holochain) return <Redirect to={defaultHolochainCommunityUrl()} />
 
     if (currentUser.memberships.count() === 0) return <Redirect to={`/all`} />
 
