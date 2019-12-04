@@ -2,9 +2,10 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import { get, compose } from 'lodash/fp'
 import { push } from 'connected-react-router'
+import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 import { threadUrl } from 'util/navigation'
 import getMe from 'store/selectors/getMe'
-import MessageThreadsQuery from 'graphql/queries/MessageThreadsQuery.graphql'
+import HolochainMessageThreadsQuery from 'graphql/queries/HolochainMessageThreadsQuery.graphql'
 
 export function mapStateToProps (state, props) {
   return {
@@ -18,19 +19,22 @@ export function mapDispatchToProps (dispatch, props) {
   }
 }
 
-const threads = graphql(MessageThreadsQuery, {
+const threads = graphql(HolochainMessageThreadsQuery, {
   variables: {
     firstMessages: 80,
     first: 20,
     offset: null
   },
-  props: ({ data: { me, loading } }) => {
-    const threads = loading ? [] : get('messageThreads.items', me)
+  props: ({ data: { messageThreads, loading } }) => {
+    const threads = loading ? [] : get('items', messageThreads)
 
     return {
       threads: threads,
       pending: loading
     }
+  },
+  options: {
+    pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
   }
 })
 

@@ -1,4 +1,5 @@
 import HyloDnaInterface from './HyloDnaInterface'
+import { getRandomUuid } from 'util/holochain'
 import {
   toUiData,
   toUiQuerySet,
@@ -63,6 +64,14 @@ export const resolvers = {
       return toUiData('person', await HyloDnaInterface.people.get(id))
     },
 
+    async messageThreads () {
+      const messageThreads = await HyloDnaInterface.messageThreads.all()
+
+      return toUiQuerySet(messageThreads.map(messageThread =>
+        toUiData('messageThread', messageThread)
+      ))
+    },
+
     async messageThread (_, { id }) {
       return toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
     }
@@ -89,19 +98,11 @@ export const resolvers = {
   },
 
   Me: {
-    async messageThreads () {
-      const messageThreads = await HyloDnaInterface.messageThreads.all()
-
-      return toUiQuerySet(messageThreads.map(messageThread =>
-        toUiData('messageThread', messageThread)
-      ))
-    },
-
     async memberships () {
       const communities = await HyloDnaInterface.communities.all()
 
       return communities.map(community => ({
-        id: Math.round(Math.random() * 10000),
+        id: getRandomUuid(),
         community: toUiData('community', community)
       }))
     }

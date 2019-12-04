@@ -17,7 +17,7 @@ import { NEW_THREAD_ID } from './Messages'
 import HolochainPeopleQuery from 'graphql/queries/HolochainPeopleQuery.graphql'
 import FindOrCreateThreadMutation from 'graphql/mutations/FindOrCreateThreadMutation.graphql'
 import CreateMessageMutation from 'graphql/mutations/CreateMessageMutation.graphql'
-import MessageThreadsQuery from 'graphql/queries/MessageThreadsQuery.graphql'
+import HolochainMessageThreadsQuery from 'graphql/queries/HolochainMessageThreadsQuery.graphql'
 import MessageThreadQuery from 'graphql/queries/MessageThreadQuery.graphql'
 import {
   updateMessageText,
@@ -100,7 +100,7 @@ export const createMessage = graphql(CreateMessageMutation, {
       },
       refetchQueries: [
         {
-          query: MessageThreadsQuery,
+          query: HolochainMessageThreadsQuery,
           // * Best practice: Always pass variables that are arguments to the operation even if they are null.
           // If a query that has arguments is ran, even if those arguments are not provided
           // the query result is cache keyed with those variables in the header as null
@@ -131,9 +131,9 @@ export const contacts = graphql(HolochainPeopleQuery, {
   }
 })
 
-export const threads = graphql(MessageThreadsQuery, {
-  props: ({ data: { me, loading }, ownProps }) => {
-    const threads = get('messageThreads.items', me)
+export const threads = graphql(HolochainMessageThreadsQuery, {
+  props: ({ data: { messageThreads, loading }, ownProps }) => {
+    const threads = get('items', messageThreads)
     return {
       // TODO: Order threads by most recent message
       threads: threads && threads
