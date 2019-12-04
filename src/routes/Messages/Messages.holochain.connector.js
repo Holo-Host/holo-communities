@@ -127,7 +127,7 @@ export const contacts = graphql(HolochainPeopleQuery, {
     }
   },
   options: {
-    pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
+    pollInterval: HOLOCHAIN_POLL_INTERVAL_FAST
   }
 })
 
