@@ -9,7 +9,7 @@ import schema from '../graphql-server'
 
 function schemaContext () {
   return {
-    HyloDnaInterfaceLoaders
+    hyloDnaInterfaceLoaders: HyloDnaInterfaceLoaders()
   }
 }
 
