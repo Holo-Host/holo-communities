@@ -7,7 +7,7 @@ import fetch from 'isomorphic-fetch'
 import Button from 'components/Button'
 import RoundImage from 'components/RoundImage'
 import Loading from 'components/Loading'
-import { HOLOCHAIN_DEFAULT_COMMUNITIES } from 'util/holochain'
+import { HOLOCHAIN_DEFAULT_COMMUNITY_SLUG } from 'util/holochain'
 import './HolochainLogin.scss'
 
 export default class HolochainLogin extends React.Component {
@@ -16,15 +16,12 @@ export default class HolochainLogin extends React.Component {
   }
 
   submit = async () => {
-    const { registerHolochainAgent, createCommunity, redirectOnSignIn, setLogin } = this.props
+    const { registerHolochainAgent, redirectOnSignIn, setLogin } = this.props
 
     this.setState(() => ({ loading: true }))
     await registerHolochainAgent(this.state.name, this.state.avatarUrl)
-    await Promise.all(
-      HOLOCHAIN_DEFAULT_COMMUNITIES.map(community => createCommunity(community))
-    )
     setLogin(true)
-    redirectOnSignIn(communityUrl(HOLOCHAIN_DEFAULT_COMMUNITIES[0].slug))
+    redirectOnSignIn(communityUrl(HOLOCHAIN_DEFAULT_COMMUNITY_SLUG))
   }
 
   onChangeHandlerForKey = key => event => this.setState({ [key]: event.target.value })

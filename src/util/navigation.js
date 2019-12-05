@@ -5,7 +5,7 @@ import { host } from 'config'
 import {
   HOLOCHAIN_ACTIVE,
   HOLOCHAIN_HASH_MATCH,
-  HOLOCHAIN_DEFAULT_COMMUNITIES
+  HOLOCHAIN_DEFAULT_COMMUNITY_SLUG
 } from './holochain'
 
 // Post type / post context related
@@ -27,7 +27,7 @@ export function allCommunitiesUrl () {
 }
 
 export function defaultHolochainCommunityUrl () {
-  return `/c/${HOLOCHAIN_DEFAULT_COMMUNITIES[0].slug}`
+  return `/c/${HOLOCHAIN_DEFAULT_COMMUNITY_SLUG}`
 }
 
 export function defaultCommunityUrl () {
