@@ -42,6 +42,8 @@
     "HOLOCHAIN_GRAPHQL_PATH": {
       "required": true
     },
+    "COMMUNITY_DNA_INSTANCE_ID": "community",
+    "HOLOFUEL_DNA_INSTANCE_ID": "holofuel"
   },
   "formation": {
   },

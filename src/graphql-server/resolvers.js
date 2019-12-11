@@ -1,4 +1,5 @@
-import HyloDnaInterface from './HyloDnaInterface'
+import HyloDnaInterface from 'data-interfaces/HyloDnaInterface'
+import HoloFuelDnaInterface from 'data-interfaces/HoloFuelDnaInterface'
 import { getRandomUuid } from 'util/holochain'
 import {
   toUiData,
@@ -30,6 +31,12 @@ export const resolvers = {
 
     async createMessage (_, { data: messageData }) {
       return dataMappedCall('message', messageData, HyloDnaInterface.messages.create)
+    },
+
+    async offerHolofuel (_, offerHolofuel) {
+      const { counterpartyId, amount, notes } = offerHolofuel
+
+      return HoloFuelDnaInterface.offers.create(counterpartyId, amount, notes)
     }
   },
 
@@ -78,8 +85,8 @@ export const resolvers = {
   },
 
   Comment: {
-    async creator ({ creator }, _, { hyloDnaInterfaceLoaders }) {
-      return toUiData('person', await hyloDnaInterfaceLoaders.person.load(creator))
+    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
+      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
     },
 
     async post ({ postId: id }) {
@@ -135,26 +142,26 @@ export const resolvers = {
       ]
     },
 
-    async creator ({ creator }, _, { hyloDnaInterfaceLoaders }) {
-      return toUiData('person', await hyloDnaInterfaceLoaders.person.load(creator))
+    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
+      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
     },
 
-    async comments ({ id }, _, { hyloDnaInterfaceLoaders }) {
-      const zomeComments = await hyloDnaInterfaceLoaders.comments.load(id)
+    async comments ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const zomeComments = await HyloDnaInterfaceLoaders.comments.load(id)
 
       return toUiQuerySet(zomeComments.map(comment =>
         toUiData('comment', comment)
       ))
     },
 
-    async commenters ({ id }, _, { hyloDnaInterfaceLoaders }) {
-      const comments = await hyloDnaInterfaceLoaders.comments.load(id)
+    async commenters ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = []
       const commenters = await Promise.all(comments.map(({ creator }) => {
         if (commenterAddresses.includes(creator)) return null
         commenterAddresses.push(creator)
 
-        return hyloDnaInterfaceLoaders.person.load(creator)
+        return HyloDnaInterfaceLoaders.person.load(creator)
       }))
 
       return commenters
@@ -162,8 +169,8 @@ export const resolvers = {
         .map(commenter => toUiData('person', commenter))
     },
 
-    async commentersTotal ({ id }, _, { hyloDnaInterfaceLoaders }) {
-      const comments = await hyloDnaInterfaceLoaders.comments.load(id)
+    async commentersTotal ({ id }, _, { HyloDnaInterfaceLoaders }) {
+      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = comments.map(comment => comment.creator)
 
       return new Set(commenterAddresses).size

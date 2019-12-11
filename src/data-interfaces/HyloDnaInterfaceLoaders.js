@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader'
-import HyloDnaInterface from '../graphql-server/HyloDnaInterface'
+import HyloDnaInterface from './HyloDnaInterface'
 
 export const HyloDnaInterfaceLoaders = () => ({
   comments: new DataLoader(async ids => {
