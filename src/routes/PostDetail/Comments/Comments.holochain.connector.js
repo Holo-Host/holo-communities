@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
-import { compose, graphql } from 'react-apollo'
-import { get } from 'lodash/fp'
+import { graphql } from 'react-apollo'
+import { get, compose, uniqBy } from 'lodash/fp'
 import getMe from 'store/selectors/getMe'
-import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 import { currentDateString } from 'util/holochain'
 import HolochainCreateCommentMutation from 'graphql/mutations/HolochainCreateCommentMutation.graphql'
+import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
+import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 
 export function mapStateToProps (state, props) {
   return {
@@ -40,14 +41,52 @@ const createComment = graphql(HolochainCreateCommentMutation, {
             text,
             createdAt: currentDateString()
           },
-          refetchQueries: [
-            {
+          update: (proxy, { data: { createComment } }) => {
+            const { post } = proxy.readQuery({
               query: HolochainPostQuery,
-              variables: {
-                id: ownProps.postId
+              variables: { id: createComment.post.id }
+            })
+            const newComment = {
+              ...createComment,
+              attachments: []
+            }
+            const ammendedPost = {
+              post: {
+                ...post,
+                commentersTotal: post.commentersTotal + 1,
+                commenters: uniqBy('id', [...post.commenters, newComment.creator]),
+                comments: {
+                  ...post.comments,
+                  items: [
+                    ...post.comments.items,
+                    newComment
+                  ]
+                }
               }
             }
-          ]
+            proxy.writeQuery({
+              query: HolochainPostQuery,
+              data: ammendedPost
+            })
+            post.communities.forEach(({ slug }) => {
+              const { community } = proxy.readQuery({
+                query: HolochainCommunityQuery,
+                variables: { slug }
+              })
+              proxy.writeQuery({
+                query: HolochainCommunityQuery,
+                data: {
+                  community: {
+                    ...community,
+                    posts: {
+                      ...community.posts,
+                      items: community.posts.items.map(p => p.id === post.id ? ammendedPost.post : p)
+                    }
+                  }
+                }
+              })
+            })
+          }
         })
         ownProps.scrollToBottom()
       }

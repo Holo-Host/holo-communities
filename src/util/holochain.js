@@ -1,9 +1,7 @@
 export const HOLOCHAIN_HASH_MATCH = '[a-zA-Z0-9]{46}'
-export const HOLOCHAIN_POLL_INTERVAL_SLOW = 10000
-export const HOLOCHAIN_POLL_INTERVAL_FAST = 2000
-export const HOLOCHAIN_DEFAULT_COMMUNITY_NAME = 'Hylo Holochain'
+export const HOLOCHAIN_POLL_INTERVAL_SLOW = 25000
+export const HOLOCHAIN_POLL_INTERVAL_FAST = 5000
 export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'hylo-holochain'
-export const HOLOCHAIN_USE_LOCAL_RESOLVERS = true
 export const HOLOCHAIN_SUBDOMAINS = [
   'holo',
   'holochain'
@@ -20,4 +18,8 @@ export function getHolochainWebsocketURI () {
 
 export function currentDateString () {
   return new Date().toISOString()
+}
+
+export function getRandomUuid () {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }

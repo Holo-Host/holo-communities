@@ -1,6 +1,7 @@
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
+import { compose } from 'lodash/fp'
 import { push } from 'connected-react-router'
 import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 import { editPostUrl, removePostFromUrl } from 'util/navigation'

@@ -16,6 +16,8 @@ mutation HolochainCreateCommentMutation (
     createdAt
     creator {
       id
+      name
+      avatarUrl
     }
   }
 }

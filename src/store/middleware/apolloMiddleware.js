@@ -1,5 +1,5 @@
 import { get, omit } from 'lodash/fp'
-import apolloClient from 'client/apolloClient'
+import apolloClient from 'graphql-server/apolloClient'
 import { LOGOUT, RESET_STORE } from 'store/constants'
 
 /*

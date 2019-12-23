@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import { get, orderBy, pick } from 'lodash/fp'
+import { graphql } from 'react-apollo'
+import { get, orderBy, pick, compose } from 'lodash/fp'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 
 export function mapStateToProps (state, props) {

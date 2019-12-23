@@ -104,6 +104,7 @@ type Query {
   person(id: ID): Person
   community(id: ID, slug: String): Community
   communities: [Community]
+  messageThreads: MessageThreadQuerySet
   messageThread(id: ID): MessageThread
   post(id: ID): Post
   people: PeopleQuerySet

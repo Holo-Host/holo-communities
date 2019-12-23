@@ -8,7 +8,7 @@ import { ApolloProvider } from 'react-apollo'
 import { Provider } from 'react-redux'
 import { createMemoryHistory } from 'history'
 import { serverRouter } from 'router'
-import apolloClient from 'client/apolloClient'
+import apolloClient from 'graphql-server/apolloClient'
 import createStore from '../store'
 
 export default function appMiddleware (req, res, next) {

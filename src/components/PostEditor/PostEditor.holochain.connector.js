@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { postUrl } from 'util/navigation'
-import { pick, get } from 'lodash/fp'
+import { pick, get, compose } from 'lodash/fp'
 import { currentDateString } from 'util/holochain'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 import HolochainCreatePostMutation from 'graphql/mutations/HolochainCreatePostMutation.graphql'
@@ -81,12 +81,25 @@ export const createPost = graphql(HolochainCreatePostMutation, {
         createdAt: currentDateString(),
         communityId: get('communities[0].id', post)
       },
-      refetchQueries: [{
-        query: HolochainCommunityQuery,
-        variables: {
-          slug: getRouteParam('slug', {}, ownProps)
-        }
-      }]
+      // NOTE: Replaced this with update below
+      // refetchQueries: [{
+      //   query: HolochainCommunityQuery,
+      //   variables: {
+      //     slug: getRouteParam('slug', {}, ownProps)
+      //   }
+      // }],
+      update: (proxy, { data: { createPost } }) => {
+        const slug = getRouteParam('slug', {}, ownProps)
+        const post = { ...createPost, __typename: 'Post' }
+        const data = proxy.readQuery({
+          query: HolochainCommunityQuery,
+          variables: {
+            slug
+          }
+        })
+        data.community.posts.items.push(post)
+        proxy.writeData({ data })
+      }
     }),
     // postPending: TBD
     goToPost: props => {
