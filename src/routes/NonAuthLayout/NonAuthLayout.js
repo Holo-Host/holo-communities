@@ -29,9 +29,9 @@ export default class NonAuthLayout extends React.Component {
         <Particles params={particlesjsConfig} style={particlesStyle} />
       </div>
       <div styleName='topRow'>
-        <a href='/'>
+        {!HOLOCHAIN_ACTIVE && <a href='/'>
           <img styleName='logo' src='assets/hylo.svg' alt='Hylo logo' />
-        </a>
+        </a>}
         {!HOLOCHAIN_ACTIVE && <Route path='/login' component={() =>
           <Link tabIndex={-1} to='/signup'>
             <Button styleName='signupButton' color='green-white-green-border'>Sign Up</Button>

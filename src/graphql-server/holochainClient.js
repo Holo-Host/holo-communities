@@ -3,14 +3,6 @@ import { get } from 'lodash/fp'
 
 export const HOLOCHAIN_LOGGING = true
 
-export function parseZomeCallPath (zomeCallPath) {
-  const [ zomeFunc, zome, dnaInstanceId ] = zomeCallPath.split('/').reverse()
-
-  return { dnaInstanceId, zome, zomeFunc }
-}
-
-const { dnaInstanceId: DNA_INSTANCE_ID } = parseZomeCallPath(process.env.HOLOCHAIN_GRAPHQL_PATH)
-
 let holochainClient
 
 export function initAndGetHolochainClient () {
@@ -35,9 +27,20 @@ export function initAndGetHolochainClient () {
   return holochainClient
 }
 
+export function parseZomeCallPath (zomeCallPath) {
+  const [ zomeFunc, zome, dnaInstanceId ] = zomeCallPath.split('/').reverse()
+
+  return { dnaInstanceId, zome, zomeFunc }
+}
+
+export function instanceCreateZomeCall (dnaInstanceId) {
+  return (zomeCallPath, callOpts = {}) =>
+    createZomeCall(zomeCallPath, { dnaInstanceId, ...callOpts })
+}
+
 export function createZomeCall (zomeCallPath, callOpts = {}) {
   const DEFAULT_OPTS = {
-    dnaInstanceId: DNA_INSTANCE_ID,
+    dnaInstanceId: process.env.COMMUNITY_DNA_INSTANCE_ID,
     logging: HOLOCHAIN_LOGGING,
     resultParser: null
   }
@@ -49,8 +52,8 @@ export function createZomeCall (zomeCallPath, callOpts = {}) {
   return async function (args = {}) {
     try {
       const hcClient = await initAndGetHolochainClient()
-      const { zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
-      const zomeCall = hcClient.callZome(opts.dnaInstanceId, zome, zomeFunc)
+      const { dnaInstanceId, zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
+      const zomeCall = hcClient.callZome(dnaInstanceId || opts.dnaInstanceId, zome, zomeFunc)
       const rawResult = await zomeCall(args)
       const jsonResult = JSON.parse(rawResult)
       const error = get('Err', jsonResult) || get('SerializationError', jsonResult)
