@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import { toRefArray, itemsToArray } from 'util/reduxOrmMigration'
 import { humanDate, textLength, truncate } from 'hylo-utils/text'
-import { newMessageUrl, threadUrl } from 'util/navigation'
+import { newMessageUrl, threadUrl, messagesUrl } from 'util/navigation'
 import RoundImageRow from 'components/RoundImageRow'
 import TopNavDropdown from '../TopNavDropdown'
 import { participantAttributes, isUnread, isUpdatedSince } from 'store/models/MessageThread'
@@ -14,6 +14,10 @@ import LoadingItems from 'routes/PrimaryLayout/components/TopNav/LoadingItems'
 import './MessagesDropdown.scss'
 
 export default class MessagesDropdown extends Component {
+  static defaultProps = {
+    openLastThread: true
+  }
+
   constructor (props) {
     super(props)
     this.dropdown = React.createRef()
@@ -50,6 +54,7 @@ export default class MessagesDropdown extends Component {
       renderToggleChildren,
       threads,
       className,
+      openLastThread,
       goToThread,
       currentUser,
       pending
@@ -82,6 +87,10 @@ export default class MessagesDropdown extends Component {
       ? threadUrl(threads[0].id)
       : newMessageUrl()
 
+    const openMessagesUrl = openLastThread
+      ? firstThreadUrl
+      : messagesUrl()
+
     return <TopNavDropdown
       ref={this.dropdown}
       className={className}
@@ -89,7 +98,7 @@ export default class MessagesDropdown extends Component {
       toggleChildren={renderToggleChildren(this.hasUnread())}
       header={
         <div styleName='header-content'>
-          <Link to={firstThreadUrl} styleName='open'>
+          <Link to={openMessagesUrl} styleName='open'>
             Open Messages
           </Link>
           <Link to={newMessageUrl()} styleName='new'>New</Link>

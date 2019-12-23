@@ -35,10 +35,10 @@ $space-20x: $space-base-unit * 20;
 // $space-xxl: $space-18x;
 
 $topnav-height: 56px;
-$content-width: 80rem;
-$center-column-width: 49%;
-$detail-column-width: 43%;
-$layout-spacing: 70px;
+$content-width: 100%;
+$center-column-width: 620px;
+$detail-column-width: 500px;
+$layout-spacing: 40px;
 $messages-header-height: 80px;
 $post-editor-width: 590px;
 $post-editor-height: 516px;
@@ -193,3 +193,9 @@ $color-pale-pink: #FFD6DF;
     right: 0;
   }
 }
+
+// responsive breakpoints
+
+$bp-small-screen: 800px;
+$bp-medium-screen: 1050px;
+$bp-min-screen-width: 320px;

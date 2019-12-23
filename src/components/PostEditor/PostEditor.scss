@@ -21,6 +21,18 @@ $wrapperBorderRadius: 8px;
   border: 1px solid $color-cape-cod-10;
   background: $color-white;
 }
+@media (max-width: $bp-small-screen) {
+  .wrapper {
+    min-width: unset;
+    height: 100%;
+  }
+}
+@media (max-height: 500px) {
+  .wrapper {
+    min-height: unset;
+    height: 100%;
+  }
+}
 
 .wrapper-scrollable-inner {
   max-height: 360px;
@@ -103,12 +115,20 @@ $wrapperBorderRadius: 8px;
     background-color: $color-moon-raker;
   }
 }
+@media (max-width: $bp-small-screen) {
+  .postType {
+    margin: 0 $space-1x;
+    padding: 0 $space-1x;
+    font-size: 11px;
+  }
+}
 
 // Body area
 
 .body {
   padding: 0 $space-4x;
   display: flex;
+  flex: 1;
   flex-direction: row;
   &-column:last-child {
     width: 100%;
@@ -138,10 +158,20 @@ $wrapperBorderRadius: 8px;
 }
 
 .editor {
-  min-height: 100px;
+  min-height: 200px;
   max-height: 200px;
   margin-bottom: $space-6x;
   color: $color-rhino-80;
+}
+@media (max-width: $bp-small-screen) {
+  .editor {
+    min-height: unset;
+  }
+}
+@media (max-height: 500px) {
+  .editor {
+    min-height: unset;
+  }
 }
 
 // Footer area

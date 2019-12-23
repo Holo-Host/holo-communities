@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { humanDate } from 'hylo-utils/text'
 import RoundImage from 'components/RoundImage'
 import Badge from 'components/Badge'
-import Button from 'components/Button'
 import TextInput from 'components/TextInput'
 import ScrollListener from 'components/ScrollListener'
 import { toRefArray, itemsToArray } from 'util/reduxOrmMigration'
@@ -32,10 +31,6 @@ export default class ThreadList extends Component {
     } = this.props
 
     return <div styleName='thread-list' className={className}>
-      <div styleName='header'>
-        <Link to='/t/new'><Button label='New Message' styleName='new-message' /></Link>
-        <div styleName='header-text'>Messages</div>
-      </div>
       <div styleName='search'>
         <TextInput
           placeholder='Search for people...'

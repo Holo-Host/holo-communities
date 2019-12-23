@@ -36,6 +36,7 @@ exports[`renders as expected with no community 1`] = `
         data-stylename="user-menu"
         toggleChildren={
           <RoundImage
+            medium={false}
             small={true}
           />
         }

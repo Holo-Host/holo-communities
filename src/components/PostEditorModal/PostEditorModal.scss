@@ -48,6 +48,7 @@
 
 .post-editor-modal {
   position: fixed;
+  min-width: $bp-min-screen-width;
   z-index: 100;
   top: 0;
   left: 0;
@@ -65,4 +66,20 @@
   width: $post-editor-width;
   margin: -($post-editor-height/2) auto 70px;
   top: 50%;
+}
+@media (max-width: $bp-small-screen) {
+  .post-editor-wrapper {
+    width: unset;
+    top: 0px;
+    height: 100%;
+    margin: 0px;
+  }
+}
+@media (max-height: 500px) {
+  .post-editor-wrapper {
+    width: unset;
+    top: 0px;
+    height: 100%;
+    margin: 0px;
+  }
 }

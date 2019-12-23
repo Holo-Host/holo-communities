@@ -7,7 +7,7 @@ import {
 
 export const resolvers = {
   Mutation: {
-    async registerUser (_, userData) {    
+    async registerUser (_, userData) {
       return dataMappedCall('person', userData, HyloDnaInterface.currentUser.create)
     },
 
@@ -87,6 +87,15 @@ export const resolvers = {
       return toUiQuerySet(messageThreads.map(messageThread =>
         toUiData('messageThread', messageThread)
       ))
+    },
+
+    async memberships () {
+      const communities = await HyloDnaInterface.communities.all()
+
+      return communities.map(community => ({
+        id: Math.round(Math.random() * 10000),
+        community: toUiData('community', community)
+      }))
     }
   },
 

@@ -18,9 +18,15 @@
   margin-bottom: $space-6x;
   // mixing metaphors here because the top padding is not a multiple of the spacer
   padding-top: 13px;
-  padding-left: $space-5x;
-  padding-right: $space-5x;
+  padding-left: $space-3x;
+  padding-right: $space-3x;
   box-shadow: 0px 4px 56px 0px $color-alto;
+}
+@media (max-width: $bp-small-screen) {
+  .topNav {
+    padding-left: $space-3x;
+    padding-right: $space-3x;
+  }
 }
 
 .image {
@@ -50,6 +56,22 @@
   left: 19px;
 }
 
+.backButton {
+  margin-right: 10px;
+  color: #777;
+  padding: 0 16px;
+  .image {
+    @include image(20px);
+  }
+  .communityName {
+    font-size: 14px !important;
+    line-height: 14px;
+  }
+  .label {
+    font-size: 8px;
+  }
+}
+
 .title {
   padding-left: 10px;
   display: inline-block;
@@ -75,7 +97,7 @@
     vertical-align: middle;
     margin-right: 15px;
     display: inline-block;
-    height: 28px;
+    // height: 28px;
     margin-right: 15px;
     text-decoration: none;
     cursor: pointer;
@@ -118,4 +140,9 @@
 
 .hover-highlight:hover {
   color: $color-black;
+}
+
+.subnav {
+  width: 100%;
+  padding: 5px;
 }
