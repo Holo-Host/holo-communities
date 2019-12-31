@@ -82,7 +82,6 @@ export default class HolochainLogin extends React.Component {
 
 HolochainLogin.propTypes = {
   className: PropTypes.string,
-  createDefaultCommunity: PropTypes.func,
   error: PropTypes.string,
   redirectOnSignIn: PropTypes.func,
   registerHolochainAgent: PropTypes.func,

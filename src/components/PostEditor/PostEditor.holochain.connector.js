@@ -94,10 +94,12 @@ export const createPost = graphql(HolochainCreatePostMutation, {
         const data = proxy.readQuery({
           query: HolochainCommunityQuery,
           variables: {
-            slug
+            slug,
+            limit: 3,
+            withPosts: true
           }
         })
-        data.community.posts.items.push(post)
+        data.community.posts.items.unshift(post)
         proxy.writeData({ data })
       }
     }),

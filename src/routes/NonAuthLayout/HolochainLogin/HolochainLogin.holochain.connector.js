@@ -3,7 +3,6 @@ import { push } from 'connected-react-router'
 import { graphql } from 'react-apollo'
 import { compose } from 'lodash/fp'
 import HolochainRegisterUserMutation from 'graphql/mutations/HolochainRegisterUserMutation.graphql'
-import HolochainCreateCommunityMutation from 'graphql/mutations/HolochainCreateCommunityMutation.graphql'
 import { setLogin } from '../Login/Login.store'
 import { getReturnToURL, resetReturnToURL } from 'router/AuthRoute/AuthRoute.store'
 
@@ -52,16 +51,7 @@ const registerHolochainAgent = graphql(HolochainRegisterUserMutation, {
   }
 })
 
-const createCommunity = graphql(HolochainCreateCommunityMutation, {
-  props: ({ mutate }) => ({
-    createCommunity: community => mutate({
-      variables: community
-    })
-  })
-})
-
 export default compose(
   connect(mapStateToProps, mapDispatchToProps, mergeProps),
-  registerHolochainAgent,
-  createCommunity
+  registerHolochainAgent
 )

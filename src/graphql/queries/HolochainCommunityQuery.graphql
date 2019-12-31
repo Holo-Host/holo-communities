@@ -1,9 +1,14 @@
-query HolochainCommunityQuery ($slug: String) {
+query HolochainCommunityQuery (
+  $slug: String,
+  $withPosts: Boolean = false,
+  $limit: Int = 10,
+  $since: ID
+) {
   community(slug: $slug) {
     id
     name
     slug
-    posts {
+    posts(limit: $limit, since: $since) @include(if: $withPosts) {
       hasMore
       items {
         id

@@ -85,10 +85,10 @@ export const toUiData = (...args) => {
   }
 }
 
-export const toUiQuerySet = results => ({
-  total: results.length,
-  items: results,
-  hasMore: false
+export const toUiQuerySet = (items, { hasMore = false } = {}) => ({
+  total: items.length,
+  items,
+  hasMore
 })
 
 export async function dataMappedCall (entityType, inputData, interfaceFunc) {

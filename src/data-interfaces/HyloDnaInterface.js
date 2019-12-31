@@ -86,7 +86,7 @@ export const HyloDnaInterface = {
   },
 
   posts: {
-    all: base => createZomeCall('posts/all_for_base')({ base }),
+    all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base, limit, since }),
 
     get: address => createZomeCall('posts/get')({ address }),
 

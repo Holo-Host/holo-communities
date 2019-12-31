@@ -47,12 +47,12 @@ const community = graphql(HolochainCommunityQuery, {
     community: community || {},
     communityPending: loading
   }),
-  variables: props => ({
-    slug: props.slug
-  }),
-  options: {
+  options: props => ({
+    variables: {
+      slug: props.slug
+    },
     pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
-  }
+  })
 })
 
 const currentUserFromHolochainAgent = graphql(HolochainCurrentUserQuery, {
