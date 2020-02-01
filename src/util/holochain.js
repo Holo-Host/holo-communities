@@ -6,10 +6,12 @@ export const HOLOCHAIN_SUBDOMAINS = [
   'holo',
   'holochain'
 ]
-export const HOLOCHAIN_ACTIVE = process.env.HOLOCHAIN_BUILD || (
-  typeof window !== 'undefined' &&
-    HOLOCHAIN_SUBDOMAINS.some(subdomain => window.location.host.split('.')[0] === subdomain)
-)
+export const HOLOCHAIN_ACTIVE = true
+// process.env.HOLOCHAIN_BUILD || (
+//   typeof window !== 'undefined' &&
+//     HOLOCHAIN_SUBDOMAINS.some(subdomain => window.location.host.split('.')[0] === subdomain)
+// )
+
 export const DISABLED_IN_HOLOCHAIN = HOLOCHAIN_ACTIVE
 
 export function getHolochainWebsocketURI () {

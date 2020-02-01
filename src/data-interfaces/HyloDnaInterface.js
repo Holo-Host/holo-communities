@@ -86,7 +86,8 @@ export const HyloDnaInterface = {
   },
 
   posts: {
-    all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base, limit, since }),
+    // TODO: Re-introduce pagination here
+    all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base }),
 
     get: address => createZomeCall('posts/get')({ address }),
 
