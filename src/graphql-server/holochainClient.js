@@ -1,5 +1,6 @@
 import { connect as hcWebClientConnect } from '@holochain/hc-web-client'
 import { get } from 'lodash/fp'
+import { HOLOCHAIN_WEBSOCKET_URI } from 'util/holochain'
 
 export const HOLOCHAIN_LOGGING = true
 
@@ -11,7 +12,7 @@ export function initAndGetHolochainClient () {
     holochainClient = hcWebClientConnect({
       url: process.env.HOLOCHAIN_BUILD
         ? null
-        : process.env.HOLOCHAIN_WEBSOCKET_URI,
+        : HOLOCHAIN_WEBSOCKET_URI,
       wsClient: { max_reconnects: 0 }
     })
     if (HOLOCHAIN_LOGGING) {
