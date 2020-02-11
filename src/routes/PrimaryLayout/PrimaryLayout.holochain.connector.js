@@ -49,7 +49,8 @@ const community = graphql(HolochainCommunityQuery, {
   }),
   options: props => ({
     variables: {
-      slug: props.slug
+      slug: props.slug,
+      withPosts: true
     },
     pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
   })

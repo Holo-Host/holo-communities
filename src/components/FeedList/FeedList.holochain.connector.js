@@ -29,8 +29,9 @@ export const posts = graphql(HolochainCommunityQuery, {
 
     return {
       posts,
-      hasMore: get('posts.hasMore', community),
       pending: loading,
+      // Only used in the case of feed pagination, which has not yet been implemented
+      hasMore: get('posts.hasMore', community),
       fetchPosts: () => fetchMore({
         updateQuery: (previousResult, { fetchMoreResult, variables }) => ({
           ...previousResult,
@@ -47,9 +48,7 @@ export const posts = graphql(HolochainCommunityQuery, {
         }),
         variables: {
           slug: get('fetchPostsParam.slug', ownProps),
-          withPosts: true,
-          limit: 3,
-          since: get('id', posts[posts.length - 1])
+          withPosts: true
         }
       })
     }
@@ -57,9 +56,10 @@ export const posts = graphql(HolochainCommunityQuery, {
   options: props => ({
     variables: {
       slug: get('fetchPostsParam.slug', props),
-      withPosts: true,
-      limit: 3
-    }
+      withPosts: true
+    },
+    // Will need to change/be refactored once pagination is introduced
+    fetchPolicy: 'cache-only'
   })
 })
 

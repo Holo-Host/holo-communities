@@ -95,7 +95,6 @@ export const createPost = graphql(HolochainCreatePostMutation, {
           query: HolochainCommunityQuery,
           variables: {
             slug,
-            limit: 3,
             withPosts: true
           }
         })
