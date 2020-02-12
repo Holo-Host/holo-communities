@@ -10,7 +10,6 @@ import ThreadHeader from './ThreadHeader'
 import MessageSection from './MessageSection'
 import MessageForm from './MessageForm'
 import PeopleTyping from 'components/PeopleTyping'
-import SocketSubscriber from 'components/SocketSubscriber'
 import './Messages.scss'
 
 export const NEW_THREAD_ID = 'new'
@@ -208,7 +207,6 @@ export default class Messages extends React.Component {
                   pending={messageCreatePending} />
               </div>}
             <PeopleTyping styleName='people-typing' />
-            {socket && <SocketSubscriber type='post' id={messageThreadId} />}
           </div>
         </div>}
       </div>

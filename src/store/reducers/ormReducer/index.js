@@ -6,7 +6,6 @@ import {
   CREATE_COMMENT_PENDING,
   CREATE_MESSAGE,
   CREATE_MESSAGE_PENDING,
-  FETCH_MESSAGES_PENDING,
   JOIN_PROJECT_PENDING,
   LEAVE_COMMUNITY,
   LEAVE_PROJECT_PENDING,
@@ -121,14 +120,6 @@ export default function ormReducer (state = {}, action) {
       Message.withId(meta.tempId).delete()
       const message = payload.data.createMessage
       MessageThread.withId(message.messageThread.id).newMessageReceived()
-      break
-
-    case FETCH_MESSAGES_PENDING:
-      if (meta.reset) {
-        // this is so that after websocket reconnect events, pagination
-        // of messages works as expected
-        Message.filter({ messageThread: meta.id }).delete()
-      }
       break
 
     case UPDATE_THREAD_READ_TIME:

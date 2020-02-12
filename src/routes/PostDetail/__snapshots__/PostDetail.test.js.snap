@@ -89,9 +89,5 @@ exports[`PostDetail renders correctly 1`] = `
     scrollToBottom={[Function]}
     slug="foo"
   />
-  <Connect(SocketSubscriber)
-    id="91"
-    type="post"
-  />
 </div>
 `;

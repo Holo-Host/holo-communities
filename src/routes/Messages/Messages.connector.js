@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { get, isEmpty } from 'lodash/fp'
-import { getSocket, sendIsTyping } from 'client/websockets'
 import { push } from 'connected-react-router'
 import { threadUrl } from 'util/navigation'
 import changeQuerystringParam from 'store/actions/changeQuerystringParam'
@@ -55,13 +54,12 @@ export function mapStateToProps (state, props) {
     threads: getThreads(state, props),
     hasMoreThreads: getThreadsHasMore(state, props),
     threadSearch: getThreadSearch(state, props),
-    sendIsTyping: sendIsTyping(messageThreadId),
+    sendIsTyping: () => {},
     messages: getMessages(state, props),
     hasMoreMessages: getMessagesHasMore(state, { id: messageThreadId }),
     messageCreatePending:
       isPendingFor(createMessage, state) ||
-      isPendingFor(findOrCreateThread, state),
-    socket: getSocket()
+      isPendingFor(findOrCreateThread, state)
   }
 }
 
