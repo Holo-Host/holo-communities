@@ -71,7 +71,7 @@ const createComment = graphql(HolochainCreateCommentMutation, {
             post.communities.forEach(({ slug }) => {
               const { community } = proxy.readQuery({
                 query: HolochainCommunityQuery,
-                variables: { slug }
+                variables: { slug, withPosts: true }
               })
               proxy.writeQuery({
                 query: HolochainCommunityQuery,

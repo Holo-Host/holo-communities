@@ -95,12 +95,13 @@ export const resolvers = {
   },
 
   Community: {
-    async posts ({ id }) {
-      const posts = await HyloDnaInterface.posts.all(id)
+    async posts ({ id }, { limit, since }) {
+      const postsQueryset = await HyloDnaInterface.posts.all(id, { limit, since })
 
-      return toUiQuerySet(posts.map(post =>
-        toUiData('post', post)
-      ))
+      return toUiQuerySet(
+        postsQueryset.posts.map(post => toUiData('post', post)),
+        { hasMore: postsQueryset.more }
+      )
     }
   },
 

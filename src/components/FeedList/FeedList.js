@@ -64,6 +64,7 @@ export default class FeedList extends React.Component {
   }
 
   fetchOrShowCached = () => {
+    if (HOLOCHAIN_ACTIVE) return
     const { hasMore, posts, fetchPosts, storeFetchPostsParam } = this.props
     if (isEmpty(posts) && hasMore !== false) fetchPosts()
     storeFetchPostsParam()
@@ -71,6 +72,7 @@ export default class FeedList extends React.Component {
 
   fetchMorePosts = () => {
     const { pending, posts, hasMore, fetchPosts } = this.props
+
     if (pending || posts.length === 0 || !hasMore) return
     fetchPosts(posts.length)
   }

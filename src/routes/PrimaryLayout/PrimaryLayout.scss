@@ -48,6 +48,7 @@
   flex-wrap: nowrap;
   margin-left: auto;
   margin-right: auto;
+  overflow: auto;
 }
 @media (max-width: $bp-small-screen) {
   .main {
@@ -86,7 +87,7 @@ $drawer-z-index: 51;
   flex: 1;
   max-width: $center-column-width;
   min-width: 500px;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   padding-right: $space-2x;
 }

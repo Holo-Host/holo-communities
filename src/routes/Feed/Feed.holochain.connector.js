@@ -59,7 +59,6 @@ export function mapDispatchToProps (dispatch, props) {
 export const community = graphql(HolochainCommunityQuery, {
   props: ({ data: { community, loading } }) => ({
     community,
-    postCount: get('postCount', community),
     pending: loading
   }),
   options: props => ({
