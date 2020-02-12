@@ -47,10 +47,15 @@ export const HyloDnaInterface = {
 
   messageThreads: {
     all: async () => {
-      const addresses = await createZomeCall('messages/get_threads')()
+      const threadLinks = await createZomeCall('messages/get_threads')()
 
-      return Promise.all(addresses.map(
-        messageThreadAddress => HyloDnaInterface.messageThreads.get(messageThreadAddress)
+      return Promise.all(threadLinks.map(
+        async ({ address, status }) => {
+          return {
+            ...await HyloDnaInterface.messageThreads.get(address),
+            isUnread: status
+          }
+        }
       ))
     },
 
