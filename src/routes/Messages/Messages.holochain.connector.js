@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { get, compose } from 'lodash/fp'
 import { graphql } from 'react-apollo'
-import { sendIsTyping } from 'client/websockets'
 import { push } from 'connected-react-router'
 import {
   currentDateString,
@@ -44,7 +43,7 @@ export function mapStateToProps (state, props) {
     // * For now doing the most simplest thing
     onCloseURL: communityUrl('hylo-holochain'),
     messageText: getTextForCurrentMessageThread(state, props),
-    sendIsTyping: sendIsTyping(messageThreadId),
+    sendIsTyping: () => {},
     threadSearch: getThreadSearch(state, props),
     contactsSearch: getContactsSearch(state, props),
     // * Apollo + holochain query mocks

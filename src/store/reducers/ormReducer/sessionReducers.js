@@ -15,10 +15,6 @@ export {
 } from 'routes/CommunitySettings/InviteSettingsTab/InviteSettingsTab.store'
 
 export {
-  ormSessionReducer as socketListenerReducer
-} from 'components/SocketListener/SocketListener.store'
-
-export {
   ormSessionReducer as primaryLayoutReducer
 } from 'routes/PrimaryLayout/PrimaryLayout.store'
 

@@ -16,7 +16,6 @@ import {
 } from 'components/PostCard'
 import ScrollListener from 'components/ScrollListener'
 import Comments from './Comments'
-import SocketSubscriber from 'components/SocketSubscriber'
 import Button from 'components/Button'
 import Loading from 'components/Loading'
 import NotFound from 'components/NotFound'
@@ -199,7 +198,6 @@ export default class PostDetail extends Component {
         {postFooter}
       </div>}
       <Comments postId={post.id} slug={routeParams.slug} scrollToBottom={scrollToBottom} />
-      <SocketSubscriber type='post' id={post.id} />
     </div>
   }
 }
