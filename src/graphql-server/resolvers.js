@@ -26,11 +26,11 @@ export const resolvers = {
     },
 
     async findOrCreateThread (_, { data: { participantIds } }) {
-      return dataMappedCall('messageThread', participantIds, HyloDnaInterface.messageThreads.create)
+      return dataMappedCall('messageThread', participantIds, HyloDnaInterface.messages.createThread)
     },
 
     async createMessage (_, { data: messageData }) {
-      return dataMappedCall('message', messageData, HyloDnaInterface.messages.create)
+      return dataMappedCall('message', messageData, HyloDnaInterface.messages.createMessage)
     },
 
     async offerHolofuel (_, offerHolofuel) {
@@ -72,7 +72,7 @@ export const resolvers = {
     },
 
     async messageThreads () {
-      const messageThreads = await HyloDnaInterface.messageThreads.all()
+      const messageThreads = await HyloDnaInterface.messages.allThreads()
 
       return toUiQuerySet(messageThreads.map(messageThread =>
         toUiData('messageThread', messageThread)
@@ -80,7 +80,7 @@ export const resolvers = {
     },
 
     async messageThread (_, { id }) {
-      return toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
+      return toUiData('messageThread', await HyloDnaInterface.messages.getThread(id))
     }
   },
 
@@ -124,7 +124,7 @@ export const resolvers = {
 
   MessageThread: {
     async messages ({ id }) {
-      const messages = await HyloDnaInterface.messages.all(id)
+      const messages = await HyloDnaInterface.messages.allMessagesForThread(id)
 
       return toUiQuerySet(messages.map(message =>
         toUiData('message', message)

@@ -22,13 +22,7 @@ export function participantAttributes (messageThread, currentUser, maxShown) {
 }
 
 export function isUnread (messageThread) {
-  const { lastReadAt, updatedAt } = messageThread
-
-  return lastReadAt === undefined || new Date(lastReadAt) < new Date(updatedAt)
-}
-
-export function isUpdatedSince (messageThread, date) {
-  return new Date(messageThread.updatedAt) > date
+  // return messageThread.unreadCount && messageThread.unreadCount > 0
 }
 
 export function markAsRead (messageThreadInstance) {
@@ -40,14 +34,6 @@ export function markAsRead (messageThreadInstance) {
   return messageThreadInstance
 }
 
-export function newMessageReceived (messageThreadInstance, bumpUnreadCount) {
-  const update = bumpUnreadCount
-    ? { unreadCount: messageThreadInstance.unreadCount + 1, updatedAt: new Date().toString() }
-    : { updatedAt: new Date().toString() }
-  messageThreadInstance.update(update)
-  return messageThreadInstance
-}
-
 // ReduxORM Model
 
 const MessageThread = Model.createClass({
@@ -55,16 +41,8 @@ const MessageThread = Model.createClass({
     return isUnread(this)
   },
 
-  isUpdatedSince (date) {
-    return isUpdatedSince(this, date)
-  },
-
   toString () {
     return `MessageThread: ${this.id}`
-  },
-
-  newMessageReceived (bumpUnreadCount) {
-    return newMessageReceived(this, bumpUnreadCount)
   },
 
   markAsRead () {
@@ -83,9 +61,8 @@ MessageThread.modelName = 'MessageThread'
 MessageThread.fields = {
   id: attr(),
   unreadCount: attr(),
-  participants: many('Person'),
-  updatedAt: attr(),
-  lastReadAt: attr()
+  lastReadMessageId: attr(),
+  participants: many('Person')
 }
 
 // Utility

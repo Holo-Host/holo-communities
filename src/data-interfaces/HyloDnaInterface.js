@@ -4,21 +4,21 @@ const createZomeCall = instanceCreateZomeCall(process.env.COMMUNITY_DNA_INSTANCE
 
 export const HyloDnaInterface = {
   comments: {
+    create: createZomeCall('comments/create'),
+
     all: base => createZomeCall('comments/all_for_base')({ base }),
 
-    get: address => createZomeCall('comments/get')({ address }),
-
-    create: createZomeCall('comments/create')
+    get: address => createZomeCall('comments/get')({ address })
   },
 
   communities: {
+    create: createZomeCall('communities/create'),
+
     all: createZomeCall('communities/all'),
 
     get: address => createZomeCall('communities/get')({ address }),
 
-    getBySlug: slug => createZomeCall('communities/get_by_slug')({ slug }),
-
-    create: createZomeCall('communities/create')
+    getBySlug: slug => createZomeCall('communities/get_by_slug')({ slug })
   },
 
   currentUser: {
@@ -38,49 +38,50 @@ export const HyloDnaInterface = {
   },
 
   messages: {
-    all: address => createZomeCall('messages/get_thread_messages')({ thread_address: address }),
+    createMessage: createZomeCall('messages/create_message'),
 
-    get: address => createZomeCall('messages/get')({ message_addr: address }),
-
-    create: createZomeCall('messages/create')
-  },
-
-  messageThreads: {
-    all: async () => {
-      const threadLinks = await createZomeCall('messages/get_threads')()
-
-      return Promise.all(threadLinks.map(
-        async ({ address, status }) => {
-          return {
-            ...await HyloDnaInterface.messageThreads.get(address),
-            isUnread: status
-          }
-        }
-      ))
-    },
-
-    get: async address => {
-      return {
-        address,
-        participants: await HyloDnaInterface.messageThreads.__getParticipants(address)
-      }
-    },
-
-    create: async participantAddresses => {
-      const address = await createZomeCall('messages/create_thread')({ participant_ids: participantAddresses })
-
-      return {
-        address,
-        participants: await HyloDnaInterface.messageThreads.__getParticipants(address)
-      }
-    },
-
-    __getParticipants: async address => {
-      const participantAddresses = await createZomeCall('messages/get_participants')({ thread_address: address })
-
-      return Promise.all(participantAddresses.map(
+    createThread: async participantAddresses => {
+      const messageThread = await createZomeCall('messages/create_thread')({ participant_ids: participantAddresses })
+      const participants = await Promise.all(messageThread['participant_addresses'].map(
         async participantAddress => HyloDnaInterface.people.get(participantAddress)
       ))
+
+      return {
+        ...messageThread,
+        participants
+      }
+    },
+
+    // params: { thread_address: Address, last_read_message_address: Address }
+    setLastReadMessageId: createZomeCall('messages/set_last_read_message'),
+
+    allThreads: async () => {
+      const messageThreads = await createZomeCall('messages/all_threads')()
+
+      return Promise.all(
+        messageThreads.map(async messageThread => HyloDnaInterface.messages.__buildThread(messageThread))
+      )
+    },
+
+    allMessagesForThread: async address => createZomeCall('messages/all_messages_for_thread')({ thread_address: address }),
+
+    getThread: async threadId => {
+      const messageThread = await createZomeCall('messages/get_thread')({ thread_address: threadId })
+
+      return HyloDnaInterface.messages.__buildThread(messageThread)
+    },
+
+    __buildThread: async messageThread => {
+      const participants = await Promise.all(
+        messageThread['participant_addresses'].map(
+          async participantId => HyloDnaInterface.people.get(participantId)
+        )
+      )
+
+      return {
+        ...messageThread,
+        participants
+      }
     }
   },
 
@@ -91,12 +92,12 @@ export const HyloDnaInterface = {
   },
 
   posts: {
+    create: createZomeCall('posts/create'),
+
     // TODO: Re-introduce pagination here
     all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base }),
 
-    get: address => createZomeCall('posts/get')({ address }),
-
-    create: createZomeCall('posts/create')
+    get: address => createZomeCall('posts/get')({ address })
   }
 }
 

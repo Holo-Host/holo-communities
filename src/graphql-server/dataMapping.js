@@ -34,6 +34,9 @@ export const toInterfaceKeyMap = {
   },
   message: {
     'messageThreadId': 'thread_address'
+  },
+  messageThread: {
+    'lastReadMessageId': 'last_read_message_address'
   }
 }
 

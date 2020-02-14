@@ -6,7 +6,8 @@ import { push } from 'connected-react-router'
 import {
   currentDateString,
   HOLOCHAIN_POLL_INTERVAL_SLOW,
-  HOLOCHAIN_POLL_INTERVAL_FAST
+  HOLOCHAIN_POLL_INTERVAL_FAST,
+  HOLOCHAIN_DEFAULT_COMMUNITY_SLUG
 } from 'util/holochain'
 import { threadUrl, communityUrl } from 'util/navigation'
 import changeQuerystringParam from 'store/actions/changeQuerystringParam'
@@ -41,7 +42,7 @@ export function mapStateToProps (state, props) {
     messageThreadId,
     currentUser: getMe(state, props),
     // * For now doing the most simplest thing
-    onCloseURL: communityUrl('hylo-holochain'),
+    onCloseURL: communityUrl(HOLOCHAIN_DEFAULT_COMMUNITY_SLUG),
     messageText: getTextForCurrentMessageThread(state, props),
     sendIsTyping: () => {},
     threadSearch: getThreadSearch(state, props),
@@ -59,6 +60,7 @@ export function mapStateToProps (state, props) {
     fetchPeople: () => {},
     // Not implemented
     fetchRecentContacts: () => {},
+    // TODO: bind this to the Holochain mark-as-read mutaion call..
     updateThreadReadTime: () => {}
   }
 }
@@ -80,7 +82,7 @@ export const findOrCreateThread = graphql(FindOrCreateThreadMutation, {
     findOrCreateThread: participantIds => mutate({
       variables: {
         participantIds
-        // * not currently supported by hylo-holo-dnas
+        // * not currently supported by holo-communities-dna
         // createdAt: currentDateString()
       }
     })

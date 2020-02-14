@@ -81,8 +81,7 @@ type MessageThread {
   participants(first: Int, cursor: ID, order: String): [Person]
   participantsTotal: Int
   messages(first: Int, cursor: ID, order: String): MessageQuerySet
-  unreadCount: Int
-  lastReadAt: String
+  lastReadMessageId: ID
 }
 
 type MessageQuerySet {

@@ -5,7 +5,7 @@ export const HOLOCHAIN_POLL_INTERVAL_FAST = 5000
 
 const conductorPortMatch = window.location.host.split('.')[0].match(/\d{4,6}/)
 
-export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'hylo-holochain'
+export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'holochain-communities'
 export const HOLOCHAIN_WEBSOCK_URI_DEFAULT = 'ws://localhost'
 export const HOLOCHAIN_WEBSOCK_PORT_DEFAULT = '3400'
 export const HOLOCHAIN_WEBSOCKET_URI = HOLOCHAIN_WEBSOCK_URI_DEFAULT + ':' +
