@@ -2,7 +2,7 @@ import { instanceCreateZomeCall } from '../graphql-server/holochainClient'
 
 const createZomeCall = instanceCreateZomeCall(process.env.COMMUNITY_DNA_INSTANCE_ID)
 
-export const HyloDnaInterface = {
+export const HoloCommunitiesDnaInterface = {
   comments: {
     create: createZomeCall('comments/create'),
 
@@ -43,7 +43,7 @@ export const HyloDnaInterface = {
     createThread: async participantAddresses => {
       const messageThread = await createZomeCall('messages/create_thread')({ participant_ids: participantAddresses })
       const participants = await Promise.all(messageThread['participant_addresses'].map(
-        async participantAddress => HyloDnaInterface.people.get(participantAddress)
+        async participantAddress => HoloCommunitiesDnaInterface.people.get(participantAddress)
       ))
 
       return {
@@ -53,13 +53,13 @@ export const HyloDnaInterface = {
     },
 
     // params: { thread_address: Address, last_read_message_address: Address }
-    setLastReadMessageId: createZomeCall('messages/set_last_read_message'),
+    setLastReadTime: createZomeCall('messages/set_last_read_time'),
 
     allThreads: async () => {
       const messageThreads = await createZomeCall('messages/all_threads')()
 
       return Promise.all(
-        messageThreads.map(async messageThread => HyloDnaInterface.messages.__buildThread(messageThread))
+        messageThreads.map(async messageThread => HoloCommunitiesDnaInterface.messages.__buildThread(messageThread))
       )
     },
 
@@ -68,13 +68,13 @@ export const HyloDnaInterface = {
     getThread: async threadId => {
       const messageThread = await createZomeCall('messages/get_thread')({ thread_address: threadId })
 
-      return HyloDnaInterface.messages.__buildThread(messageThread)
+      return HoloCommunitiesDnaInterface.messages.__buildThread(messageThread)
     },
 
     __buildThread: async messageThread => {
       const participants = await Promise.all(
         messageThread['participant_addresses'].map(
-          async participantId => HyloDnaInterface.people.get(participantId)
+          async participantId => HoloCommunitiesDnaInterface.people.get(participantId)
         )
       )
 
@@ -101,4 +101,4 @@ export const HyloDnaInterface = {
   }
 }
 
-export default HyloDnaInterface
+export default HoloCommunitiesDnaInterface

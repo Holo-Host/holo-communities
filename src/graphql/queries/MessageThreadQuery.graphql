@@ -1,7 +1,7 @@
 query MessageThreadQuery ($id: ID) {
   messageThread (id: $id) {
     id
-    lastReadMessageId
+    lastReadTime
     participants {
       id
       name
