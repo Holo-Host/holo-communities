@@ -25,12 +25,16 @@ export const resolvers = {
       return dataMappedCall('comment', commentData, HoloCommunitiesDnaInterface.comments.create)
     },
 
-    async findOrCreateThread (_, { data: { participantIds } }) {
+    async findOrCreateMessageThread (_, { data: { participantIds } }) {
       return dataMappedCall('messageThread', participantIds, HoloCommunitiesDnaInterface.messages.createThread)
     },
 
     async createMessage (_, { data: messageData }) {
       return dataMappedCall('message', messageData, HoloCommunitiesDnaInterface.messages.createMessage)
+    },
+
+    async setMessageThreadLastReadTime (_, { data: setLastReadTimeData }) {
+      return dataMappedCall('message', setLastReadTimeData, HoloCommunitiesDnaInterface.messages.createMessage)
     },
 
     async offerHolofuel (_, offerHolofuel) {

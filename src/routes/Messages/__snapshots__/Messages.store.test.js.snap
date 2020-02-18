@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`findOrCreateThread matches the last snapshot 1`] = `
+exports[`findOrCreateMessageThread matches the last snapshot 1`] = `
 Object {
   "graphql": Object {
     "query": Object {
@@ -10,7 +10,7 @@ Object {
           "kind": "OperationDefinition",
           "name": Object {
             "kind": "Name",
-            "value": "FindOrCreateThreadMutation",
+            "value": "FindOrCreateMessageThreadMutation",
           },
           "operation": "mutation",
           "selectionSet": Object {
@@ -49,7 +49,7 @@ Object {
                 "kind": "Field",
                 "name": Object {
                   "kind": "Name",
-                  "value": "findOrCreateThread",
+                  "value": "findOrCreateMessageThread",
                 },
                 "selectionSet": Object {
                   "kind": "SelectionSet",
@@ -270,8 +270,8 @@ Object {
       "loc": Object {
         "end": 427,
         "source": Object {
-          "body": "mutation FindOrCreateThreadMutation ($participantIds: [String]) {
-  findOrCreateThread(data: {
+          "body": "mutation FindOrCreateMessageThreadMutation ($participantIds: [String]) {
+  findOrCreateMessageThread(data: {
     participantIds: $participantIds
   }) {
     id

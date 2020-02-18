@@ -52,8 +52,10 @@ export const HoloCommunitiesDnaInterface = {
       }
     },
 
-    // params: { thread_address: Address, last_read_message_address: Address }
-    setLastReadTime: createZomeCall('messages/set_last_read_time'),
+    setLastReadTime: async (threadId, lastReadTime) => createZomeCall('messages/set_last_read_time')({
+      thread_address: threadId,
+      last_read_time: lastReadTime
+    }),
 
     allThreads: async () => {
       const messageThreads = await createZomeCall('messages/all_threads')()

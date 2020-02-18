@@ -19,7 +19,8 @@ export const toInterfaceKeyMap = {
   global: {
     'createdAt': 'timestamp',
     'id': 'address',
-    'avatarUrl': 'avatar_url'
+    'avatarUrl': 'avatar_url',
+    'messageThreadId': 'thread_address'
   },
   post: {
     'type': 'post_type',
@@ -32,11 +33,8 @@ export const toInterfaceKeyMap = {
     'postId': 'base',
     'creator': 'agent_id'
   },
-  message: {
-    'messageThreadId': 'thread_address'
-  },
   messageThread: {
-    'lastReadMessageId': 'last_read_message_address'
+    'lastReadTime': 'last_read_time'
   }
 }
 

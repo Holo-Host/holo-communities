@@ -1,5 +1,5 @@
-mutation FindOrCreateThreadMutation ($participantIds: [String]) {
-  findOrCreateThread(data: {
+mutation FindOrCreateMessageThreadMutation ($participantIds: [String]) {
+  findOrCreateMessageThread(data: {
     participantIds: $participantIds
   }) {
     id

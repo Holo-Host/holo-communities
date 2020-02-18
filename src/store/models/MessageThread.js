@@ -61,7 +61,7 @@ MessageThread.modelName = 'MessageThread'
 MessageThread.fields = {
   id: attr(),
   unreadCount: attr(),
-  lastReadMessageId: attr(),
+  lastReadTime: attr(),
   participants: many('Person')
 }
 

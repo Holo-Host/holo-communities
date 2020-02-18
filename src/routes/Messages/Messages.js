@@ -80,13 +80,13 @@ export default class Messages extends React.Component {
   }
 
   async sendNewMessage () {
-    const { findOrCreateThread, createMessage, goToThread, messageText } = this.props
+    const { findOrCreateMessageThread, createMessage, goToThread, messageText } = this.props
     const { participants } = this.state
     const participantIds = participants.map(p => p.id)
-    const createThreadResponse = await findOrCreateThread(participantIds)
+    const createThreadResponse = await findOrCreateMessageThread(participantIds)
     // * This is a Redux vs Apollo data structure thing
-    const messageThreadId = get('payload.data.findOrCreateThread.id', createThreadResponse) ||
-      get('data.findOrCreateThread.id', createThreadResponse)
+    const messageThreadId = get('payload.data.findOrCreateMessageThread.id', createThreadResponse) ||
+      get('data.findOrCreateMessageThread.id', createThreadResponse)
     await createMessage(messageThreadId, messageText, true)
     goToThread(messageThreadId)
   }
@@ -224,7 +224,7 @@ Messages.propTypes = {
   fetchRecentContacts: PropTypes.func,
   fetchThread: PropTypes.func,
   fetchThreads: PropTypes.func,
-  findOrCreateThread: PropTypes.func,
+  findOrCreateMessageThread: PropTypes.func,
   goToThread: PropTypes.func,
   hasMoreMessages: PropTypes.bool,
   contacts: PropTypes.array,

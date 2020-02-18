@@ -1,0 +1,14 @@
+mutation HolochainSetMessageThreadLastReadTimeMutation (
+  $messageThreadId: String!,
+  $lastReadTime: String!
+) {
+  setMessageThreadLastReadTime(data: {
+    messageThreadId: $messageThreadId,
+    lastReadTime: $lastReadTime
+  }) {
+    messageThread {
+      id
+      lastReadTime
+    }
+  }
+}

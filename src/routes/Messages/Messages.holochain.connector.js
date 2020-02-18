@@ -15,7 +15,7 @@ import getMe from 'store/selectors/getMe'
 // import getPreviousLocation from 'store/selectors/getPreviousLocation'
 import { NEW_THREAD_ID } from './Messages'
 import HolochainPeopleQuery from 'graphql/queries/HolochainPeopleQuery.graphql'
-import FindOrCreateThreadMutation from 'graphql/mutations/FindOrCreateThreadMutation.graphql'
+import FindOrCreateMessageThreadMutation from 'graphql/mutations/FindOrCreateMessageThreadMutation.graphql'
 import CreateMessageMutation from 'graphql/mutations/CreateMessageMutation.graphql'
 import HolochainMessageThreadsQuery from 'graphql/queries/HolochainMessageThreadsQuery.graphql'
 import MessageThreadQuery from 'graphql/queries/MessageThreadQuery.graphql'
@@ -77,9 +77,9 @@ export function mapDispatchToProps (dispatch) {
 
 // Apollo queries, selectors, mutations and loading status
 
-export const findOrCreateThread = graphql(FindOrCreateThreadMutation, {
+export const findOrCreateMessageThread = graphql(FindOrCreateMessageThreadMutation, {
   props: ({ mutate }) => ({
-    findOrCreateThread: participantIds => mutate({
+    findOrCreateMessageThread: participantIds => mutate({
       variables: {
         participantIds
         // * not currently supported by holo-communities-dna
@@ -175,7 +175,7 @@ export const thread = graphql(MessageThreadQuery, {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  findOrCreateThread,
+  findOrCreateMessageThread,
   createMessage,
   threads,
   thread,
