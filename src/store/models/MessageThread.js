@@ -21,14 +21,29 @@ export function participantAttributes (messageThread, currentUser, maxShown) {
   return { names, avatarUrls }
 }
 
+export function unreadCount ({ messages: { items: messages }, lastReadTime: lastReadTimeString }) {
+  if (!messages || !lastReadTimeString) return 0
+
+  const lastReadTime = new Date(lastReadTimeString)
+  let count = 0
+
+  messages.forEach(message => {
+    if (new Date(message.createdAt) > lastReadTime) {
+      count += 1
+    }
+  })
+
+  return count
+}
+
 export function isUnread (messageThread) {
-  // return messageThread.unreadCount && messageThread.unreadCount > 0
+  return unreadCount(messageThread) > 0
 }
 
 export function markAsRead (messageThreadInstance) {
   messageThreadInstance.update({
     unreadCount: 0,
-    lastReadAt: new Date().toString()
+    lastReadAt: new Date().toISOString()
   })
 
   return messageThreadInstance
@@ -60,7 +75,6 @@ MessageThread.modelName = 'MessageThread'
 
 MessageThread.fields = {
   id: attr(),
-  unreadCount: attr(),
   lastReadTime: attr(),
   participants: many('Person')
 }

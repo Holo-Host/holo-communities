@@ -133,8 +133,7 @@ export function MessagesDropdownItem ({ thread, onClick, currentUser, maxMessage
     displayText = `${truncate(displayText, maxMessageLength)}...`
   }
 
-  return <li styleName={cx('thread', { unread: isUnread(thread) })}
-    onClick={onClick}>
+  return <li styleName={cx('thread', { unread: isUnread(thread) })} onClick={onClick}>
     <div styleName='image-wrapper'>
       <RoundImageRow imageUrls={avatarUrls} vertical ascending cap='2' />
     </div>
