@@ -126,7 +126,7 @@ input MessageInput {
   text: String
 }
 
-input time {
+input FindOrCreateMessageThreadInput {
   participantIds: [String]
 }
 
@@ -181,7 +181,7 @@ type Transaction {
 type Mutation {
   createComment(data: CommentInput): Comment
   createCommunity(data: CommunityInput): Community
-  findOrCreateMessageThread(data: time): MessageThread
+  findOrCreateMessageThread(data: FindOrCreateMessageThreadInput): MessageThread
   createMessage(data: MessageInput): Message
   setMessageThreadLastReadTime(data: SetMessageThreadLastReadTimeInput): MessageThread
   createPost(data: PostInput): Post

@@ -1,11 +1,9 @@
 import { invert, isArray } from 'lodash/fp'
-import { currentDataTimeIso } from 'util/holochain'
 
 // Data mapping, interface <> Hylo UI
 export const interfaceDefaultAttribsMap = () => ({
   post: {
-    announcement: false,
-    timestamp: currentDataTimeIso()
+    announcement: false
   },
   comment: {
     attachments: []
