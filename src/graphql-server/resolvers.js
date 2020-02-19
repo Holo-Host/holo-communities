@@ -9,37 +9,35 @@ import {
 
 export const resolvers = {
   Mutation: {
-    async registerUser (_, userData) {
-      return dataMappedCall('person', userData, HoloCommunitiesDnaInterface.currentUser.create)
+    async registerUser (_, registerUserData) {
+      return dataMappedCall('person', registerUserData, HoloCommunitiesDnaInterface.currentUser.create)
     },
 
-    async createCommunity (_, { data: communityData }) {
-      return dataMappedCall('community', communityData, HoloCommunitiesDnaInterface.communities.create)
+    async createCommunity (_, { data: createCommunityData }) {
+      return dataMappedCall('community', createCommunityData, HoloCommunitiesDnaInterface.communities.create)
     },
 
-    async createPost (_, { data: postData }) {
-      return dataMappedCall('post', postData, HoloCommunitiesDnaInterface.posts.create)
+    async createPost (_, { data: createPostData }) {
+      return dataMappedCall('post', createPostData, HoloCommunitiesDnaInterface.posts.create)
     },
 
-    async createComment (_, { data: commentData }) {
-      return dataMappedCall('comment', commentData, HoloCommunitiesDnaInterface.comments.create)
+    async createComment (_, { data: createCommentData }) {
+      return dataMappedCall('comment', createCommentData, HoloCommunitiesDnaInterface.comments.create)
     },
 
-    async findOrCreateMessageThread (_, { data: { participantIds } }) {
-      return dataMappedCall('messageThread', participantIds, HoloCommunitiesDnaInterface.messages.createThread)
+    async findOrCreateMessageThread (_, { data: findOrCreateMessageThreadData }) {
+      return dataMappedCall('messageThread', findOrCreateMessageThreadData, HoloCommunitiesDnaInterface.messages.createMessageThread)
     },
 
-    async createMessage (_, { data: messageData }) {
-      return dataMappedCall('message', messageData, HoloCommunitiesDnaInterface.messages.createMessage)
+    async createMessage (_, { data: createMessageData }) {
+      return dataMappedCall('message', createMessageData, HoloCommunitiesDnaInterface.messages.createMessage)
     },
 
-    async setMessageThreadLastReadTime (_, { data: setLastReadTimeData }) {
-      return dataMappedCall('message', setLastReadTimeData, HoloCommunitiesDnaInterface.messages.createMessage)
+    async setMessageThreadLastReadTime (_, { data: setMessageThreadLastReadTimeData }) {
+      return dataMappedCall('messageThread', setMessageThreadLastReadTimeData, HoloCommunitiesDnaInterface.messages.setLastReadTime)
     },
 
-    async offerHolofuel (_, offerHolofuel) {
-      const { counterpartyId, amount, notes } = offerHolofuel
-
+    async offerHolofuel (_, { counterpartyId, amount, notes }) {
       return HoloFuelDnaInterface.offers.create(counterpartyId, amount, notes)
     }
   },
@@ -135,8 +133,12 @@ export const resolvers = {
       ))
     },
 
-    async participants ({ participants }) {
-      return participants.map(participant => toUiData('person', participant))
+    async participants ({ participantIds }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return Promise.all(
+        participantIds.map(
+          async participantId => toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(participantId))
+        )
+      )
     }
   },
 

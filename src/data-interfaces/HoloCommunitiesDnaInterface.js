@@ -1,10 +1,14 @@
 import { instanceCreateZomeCall } from '../graphql-server/holochainClient'
+import { currentDataTimeIso } from 'util/holochain'
 
 const createZomeCall = instanceCreateZomeCall(process.env.COMMUNITY_DNA_INSTANCE_ID)
 
 export const HoloCommunitiesDnaInterface = {
   comments: {
-    create: createZomeCall('comments/create'),
+    create: createData => createZomeCall('comments/create')({
+      ...createData,
+      timestamp: currentDataTimeIso()
+    }),
 
     all: base => createZomeCall('comments/all_for_base')({ base }),
 
@@ -38,10 +42,11 @@ export const HoloCommunitiesDnaInterface = {
   },
 
   messages: {
-    createMessage: createZomeCall('messages/create_message'),
-
-    createThread: async participantAddresses => {
-      const messageThread = await createZomeCall('messages/create_thread')({ participant_ids: participantAddresses })
+    createMessageThread: async createMessageThreadData => {
+      const messageThread = await createZomeCall('messages/create_thread')({
+        ...createMessageThreadData,
+        timestamp: currentDataTimeIso()
+      })
       const participants = await Promise.all(messageThread['participant_addresses'].map(
         async participantAddress => HoloCommunitiesDnaInterface.people.get(participantAddress)
       ))
@@ -52,39 +57,18 @@ export const HoloCommunitiesDnaInterface = {
       }
     },
 
-    setLastReadTime: async (threadId, lastReadTime) => createZomeCall('messages/set_last_read_time')({
-      thread_address: threadId,
-      last_read_time: lastReadTime
+    createMessage: createMessageData => createZomeCall('messages/create_message')({
+      ...createMessageData,
+      timestamp: currentDataTimeIso()
     }),
 
-    allThreads: async () => {
-      const messageThreads = await createZomeCall('messages/all_threads')()
+    setLastReadTime: createZomeCall('messages/set_last_read_time'),
 
-      return Promise.all(
-        messageThreads.map(async messageThread => HoloCommunitiesDnaInterface.messages.__buildThread(messageThread))
-      )
-    },
+    allThreads: createZomeCall('messages/all_threads'),
 
     allMessagesForThread: async address => createZomeCall('messages/all_messages_for_thread')({ thread_address: address }),
 
-    getThread: async threadId => {
-      const messageThread = await createZomeCall('messages/get_thread')({ thread_address: threadId })
-
-      return HoloCommunitiesDnaInterface.messages.__buildThread(messageThread)
-    },
-
-    __buildThread: async messageThread => {
-      const participants = await Promise.all(
-        messageThread['participant_addresses'].map(
-          async participantId => HoloCommunitiesDnaInterface.people.get(participantId)
-        )
-      )
-
-      return {
-        ...messageThread,
-        participants
-      }
-    }
+    getThread: async threadId => createZomeCall('messages/get_thread')({ thread_address: threadId })
   },
 
   people: {
@@ -94,7 +78,10 @@ export const HoloCommunitiesDnaInterface = {
   },
 
   posts: {
-    create: createZomeCall('posts/create'),
+    create: createData => createZomeCall('posts/create')({
+      ...createData,
+      timestamp: currentDataTimeIso()
+    }),
 
     // TODO: Re-introduce pagination here
     all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base }),

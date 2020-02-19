@@ -11,7 +11,7 @@ export const HOLOCHAIN_WEBSOCK_PORT_DEFAULT = '3400'
 export const HOLOCHAIN_WEBSOCKET_URI = HOLOCHAIN_WEBSOCK_URI_DEFAULT + ':' +
   (conductorPortMatch ? conductorPortMatch[0] : HOLOCHAIN_WEBSOCK_PORT_DEFAULT)
 
-export function currentDateString () {
+export function currentDataTimeIso () {
   return new Date().toISOString()
 }
 

@@ -114,24 +114,20 @@ input PostInput {
   details: String
   type: String
   communityId: String
-  createdAt: String
 }
 
 input CommentInput {
   postId: String
   text: String
-  createdAt: String
 }
 
 input MessageInput {
   messageThreadId: String
   text: String
-  createdAt: String
 }
 
-input MessageThreadInput {
+input time {
   participantIds: [String]
-  createdAt: String
 }
 
 input SetMessageThreadLastReadTimeInput {
@@ -185,7 +181,7 @@ type Transaction {
 type Mutation {
   createComment(data: CommentInput): Comment
   createCommunity(data: CommunityInput): Community
-  findOrCreateMessageThread(data: MessageThreadInput): MessageThread
+  findOrCreateMessageThread(data: time): MessageThread
   createMessage(data: MessageInput): Message
   setMessageThreadLastReadTime(data: SetMessageThreadLastReadTimeInput): MessageThread
   createPost(data: PostInput): Post

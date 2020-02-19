@@ -38,18 +38,18 @@ export default class ThreadList extends Component {
           onChange={this.onSearchChange} />
       </div>
       <ul styleName='list' id={'thread-list-list'}>
-        {!isEmpty(threads) && threads.map(t => {
-          const messages = itemsToArray(toRefArray(t.messages))
+        {!isEmpty(threads) && threads.map(thread => {
+          const messages = itemsToArray(toRefArray(thread.messages))
           const latestMessage = orderBy(m => Date.parse(m.createdAt), 'desc', messages)[0]
 
           return <ThreadListItem
-            id={t.id}
-            active={t.id === messageThreadId}
-            thread={t}
+            id={thread.id}
+            active={thread.id === messageThreadId}
+            thread={thread}
             latestMessage={latestMessage}
             currentUser={currentUser}
-            unreadCount={t.unreadCount}
-            key={`thread-li-${t.id}`} />
+            unreadCount={thread.unreadCount}
+            key={`thread-li-${thread.id}`} />
         })}
         {threadsPending &&
           <Loading type='bottom' />}

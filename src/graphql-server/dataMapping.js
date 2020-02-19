@@ -1,11 +1,11 @@
 import { invert, isArray } from 'lodash/fp'
-import { currentDateString } from 'util/holochain'
+import { currentDataTimeIso } from 'util/holochain'
 
 // Data mapping, interface <> Hylo UI
 export const interfaceDefaultAttribsMap = () => ({
   post: {
     announcement: false,
-    timestamp: currentDateString()
+    timestamp: currentDataTimeIso()
   },
   comment: {
     attachments: []
@@ -20,7 +20,9 @@ export const toInterfaceKeyMap = {
     'createdAt': 'timestamp',
     'id': 'address',
     'avatarUrl': 'avatar_url',
-    'messageThreadId': 'thread_address'
+    'messageThreadId': 'thread_address',
+    'participantIds': 'participant_addresses',
+    'lastReadTime': 'last_read_time'
   },
   post: {
     'type': 'post_type',
@@ -32,9 +34,6 @@ export const toInterfaceKeyMap = {
   comment: {
     'postId': 'base',
     'creator': 'agent_id'
-  },
-  messageThread: {
-    'lastReadTime': 'last_read_time'
   }
 }
 

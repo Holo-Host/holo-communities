@@ -4,7 +4,6 @@ import { get, compose } from 'lodash/fp'
 import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import {
-  currentDateString,
   HOLOCHAIN_POLL_INTERVAL_SLOW,
   HOLOCHAIN_POLL_INTERVAL_FAST,
   HOLOCHAIN_DEFAULT_COMMUNITY_SLUG
@@ -18,6 +17,7 @@ import HolochainPeopleQuery from 'graphql/queries/HolochainPeopleQuery.graphql'
 import FindOrCreateMessageThreadMutation from 'graphql/mutations/FindOrCreateMessageThreadMutation.graphql'
 import CreateMessageMutation from 'graphql/mutations/CreateMessageMutation.graphql'
 import HolochainMessageThreadsQuery from 'graphql/queries/HolochainMessageThreadsQuery.graphql'
+import HolochainSetMessageThreadLastReadTimeMutation from 'graphql/mutations/HolochainSetMessageThreadLastReadTimeMutation.graphql'
 import MessageThreadQuery from 'graphql/queries/MessageThreadQuery.graphql'
 import {
   updateMessageText,
@@ -59,9 +59,7 @@ export function mapStateToProps (state, props) {
     fetchMessages: () => {},
     fetchPeople: () => {},
     // Not implemented
-    fetchRecentContacts: () => {},
-    // TODO: bind this to the Holochain mark-as-read mutaion call..
-    updateThreadReadTime: () => {}
+    fetchRecentContacts: () => {}
   }
 }
 
@@ -82,8 +80,6 @@ export const findOrCreateMessageThread = graphql(FindOrCreateMessageThreadMutati
     findOrCreateMessageThread: participantIds => mutate({
       variables: {
         participantIds
-        // * not currently supported by holo-communities-dna
-        // createdAt: currentDateString()
       }
     })
   })
@@ -96,8 +92,7 @@ export const createMessage = graphql(CreateMessageMutation, {
       // messageCreatePending: loading,
       variables: {
         messageThreadId,
-        text,
-        createdAt: currentDateString()
+        text
       },
       refetchQueries: [
         {
@@ -135,11 +130,10 @@ export const contacts = graphql(HolochainPeopleQuery, {
 export const threads = graphql(HolochainMessageThreadsQuery, {
   props: ({ data: { messageThreads, loading }, ownProps }) => {
     const threads = get('items', messageThreads)
+    console.log('!!!! threads in connector:', threads)
     return {
-      // TODO: Order threads by most recent message
       threads: threads && threads
-        .filter(filterThreadsByParticipant(ownProps.threadSearch))
-        .reverse(),
+        .filter(filterThreadsByParticipant(ownProps.threadSearch)),
       threadsPending: loading
     }
   },
@@ -173,9 +167,21 @@ export const thread = graphql(MessageThreadQuery, {
   })
 })
 
+export const setMessageThreadLastReadTime = graphql(HolochainSetMessageThreadLastReadTimeMutation, {
+  props: ({ mutate }) => ({
+    setMessageThreadLastReadTime: (messageThreadId, lastReadTime) => mutate({
+      variables: {
+        messageThreadId,
+        lastReadTime
+      }
+    })
+  })
+})
+
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   findOrCreateMessageThread,
+  setMessageThreadLastReadTime,
   createMessage,
   threads,
   thread,
