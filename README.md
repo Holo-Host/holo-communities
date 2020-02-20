@@ -24,3 +24,9 @@
 ## Further documentation
 
 So long as this repo remains private, remaining docs are available in [Confluence](https://hylozoic.atlassian.net/wiki/spaces/DEV/pages/87195649/Web+Client).
+
+## License
+
+Cryptographic Autonomy License version 1.0
+
+[CAL-1.0](https://github.com/holochain/cryptographic-autonomy-license/blob/master/README.md)
