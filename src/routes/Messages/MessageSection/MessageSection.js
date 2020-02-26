@@ -142,8 +142,11 @@ export default class MessageSection extends React.Component {
 
   markAsRead = debounce(() => {
     const { messageThread, setMessageThreadLastReadTime, messages } = this.props
+
     if (messageThread) {
-      setMessageThreadLastReadTime(messageThread.id, messages[messages.length - 1].createdAt)
+      // TODO: Replace with the following once link tagging with ISO dates is working again in DNA:
+      // setMessageThreadLastReadTime(messageThread.id, messages[messages.length - 1].createdAt)
+      setMessageThreadLastReadTime(messageThread.id, Math.round(new Date(messages[messages.length - 1].createdAt) / 1000).toString())
     }
   }, 2000)
 

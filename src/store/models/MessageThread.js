@@ -24,8 +24,10 @@ export function participantAttributes (messageThread, currentUser, maxShown) {
 export function unreadCount ({ messages: { items: messages }, lastReadTime: lastReadTimeString }) {
   if (!messages || !lastReadTimeString) return 0
 
-  const lastReadTime = new Date(lastReadTimeString)
-  let count = 0
+  // TODO: Replace with the following once link tagging with ISO dates is working again in DNA:
+  // const lastReadTime = new Date(lastReadTimeString)
+  const lastReadTime = new Date(Number(lastReadTimeString) * 1000)
+  let count = -1
 
   messages.forEach(message => {
     if (new Date(message.createdAt) > lastReadTime) {
@@ -33,7 +35,7 @@ export function unreadCount ({ messages: { items: messages }, lastReadTime: last
     }
   })
 
-  return count
+  return count < 0 ? 0 : count
 }
 
 export function isUnread (messageThread) {

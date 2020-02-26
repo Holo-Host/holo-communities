@@ -1,5 +1,5 @@
 import { instanceCreateZomeCall } from '../graphql-server/holochainClient'
-import { currentDataTimeIso } from 'util/holochain'
+import { currentDataTimeIso, currentDateTimeUnixTimestamp } from 'util/holochain'
 
 const createZomeCall = instanceCreateZomeCall(process.env.COMMUNITY_DNA_INSTANCE_ID)
 
@@ -42,20 +42,11 @@ export const HoloCommunitiesDnaInterface = {
   },
 
   messages: {
-    createMessageThread: async createMessageThreadData => {
-      const messageThread = await createZomeCall('messages/create_thread')({
-        ...createMessageThreadData,
-        timestamp: currentDataTimeIso()
-      })
-      const participants = await Promise.all(messageThread['participant_addresses'].map(
-        async participantAddress => HoloCommunitiesDnaInterface.people.get(participantAddress)
-      ))
-
-      return {
-        ...messageThread,
-        participants
-      }
-    },
+    createMessageThread: async createMessageThreadData => createZomeCall('messages/create_thread')({
+      ...createMessageThreadData,
+      // TODO: Replace with currentDataTimeIso() once link tagging with ISO dates is working again in DNA
+      timestamp: currentDateTimeUnixTimestamp()
+    }),
 
     createMessage: createMessageData => createZomeCall('messages/create_message')({
       ...createMessageData,

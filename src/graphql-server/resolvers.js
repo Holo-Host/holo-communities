@@ -119,8 +119,8 @@ export const resolvers = {
   },
 
   Message: {
-    async creator ({ creator }) {
-      return toUiData('person', await HoloCommunitiesDnaInterface.people.get(creator))
+    async creator ({ creator }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(creator))
     }
   },
 

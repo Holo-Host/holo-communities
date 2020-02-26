@@ -41,14 +41,14 @@ export default class ThreadList extends Component {
         {!isEmpty(threads) && threads.map(thread => {
           const messages = itemsToArray(toRefArray(thread.messages))
           const latestMessage = orderBy(m => Date.parse(m.createdAt), 'desc', messages)[0]
-          
+
           return <ThreadListItem
             id={thread.id}
             active={thread.id === messageThreadId}
             thread={thread}
             latestMessage={latestMessage}
             currentUser={currentUser}
-            unreadCount={unreadCount(thread)}  
+            unreadCount={unreadCount(thread)}
             key={`thread-li-${thread.id}`} />
         })}
         {threadsPending &&

@@ -15,6 +15,11 @@ export function currentDataTimeIso () {
   return new Date().toISOString()
 }
 
+// TODO: Remove this once link tagging with ISO dates is working again in DNA
+export function currentDateTimeUnixTimestamp () {
+  return Math.round((new Date()).getTime() / 1000).toString()
+}
+
 export function getRandomUuid () {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }
