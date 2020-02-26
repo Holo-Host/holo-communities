@@ -5,14 +5,19 @@ export const HOLOCHAIN_POLL_INTERVAL_FAST = 5000
 
 const conductorPortMatch = window.location.host.split('.')[0].match(/\d{4,6}/)
 
-export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'hylo-holochain'
+export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'holochain-communities'
 export const HOLOCHAIN_WEBSOCK_URI_DEFAULT = 'ws://localhost'
 export const HOLOCHAIN_WEBSOCK_PORT_DEFAULT = '3400'
 export const HOLOCHAIN_WEBSOCKET_URI = HOLOCHAIN_WEBSOCK_URI_DEFAULT + ':' +
   (conductorPortMatch ? conductorPortMatch[0] : HOLOCHAIN_WEBSOCK_PORT_DEFAULT)
 
-export function currentDateString () {
+export function currentDataTimeIso () {
   return new Date().toISOString()
+}
+
+// TODO: Remove this once link tagging with ISO dates is working again in DNA
+export function currentDateTimeUnixTimestamp () {
+  return Math.round((new Date()).getTime() / 1000).toString()
 }
 
 export function getRandomUuid () {

@@ -8,7 +8,7 @@ import { humanDate, textLength, truncate } from 'hylo-utils/text'
 import { newMessageUrl, threadUrl, messagesUrl } from 'util/navigation'
 import RoundImageRow from 'components/RoundImageRow'
 import TopNavDropdown from '../TopNavDropdown'
-import { participantAttributes, isUnread, isUpdatedSince } from 'store/models/MessageThread'
+import { participantAttributes, isUnread } from 'store/models/MessageThread'
 import NoItems from 'routes/PrimaryLayout/components/TopNav/NoItems'
 import LoadingItems from 'routes/PrimaryLayout/components/TopNav/LoadingItems'
 import './MessagesDropdown.scss'
@@ -41,10 +41,8 @@ export default class MessagesDropdown extends Component {
       return currentUser && currentUser.unseenThreadCount > 0
     }
 
-    const { lastOpenedAt } = this.state
-
     return some(
-      thread => isUnread(thread) && (!lastOpenedAt || isUpdatedSince(thread, lastOpenedAt)),
+      thread => isUnread(thread),
       this.props.threads
     )
   }
@@ -135,8 +133,7 @@ export function MessagesDropdownItem ({ thread, onClick, currentUser, maxMessage
     displayText = `${truncate(displayText, maxMessageLength)}...`
   }
 
-  return <li styleName={cx('thread', { unread: isUnread(thread) })}
-    onClick={onClick}>
+  return <li styleName={cx('thread', { unread: isUnread(thread) })} onClick={onClick}>
     <div styleName='image-wrapper'>
       <RoundImageRow imageUrls={avatarUrls} vertical ascending cap='2' />
     </div>

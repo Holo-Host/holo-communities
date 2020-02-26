@@ -80,13 +80,13 @@ export default class Messages extends React.Component {
   }
 
   async sendNewMessage () {
-    const { findOrCreateThread, createMessage, goToThread, messageText } = this.props
+    const { findOrCreateMessageThread, createMessage, goToThread, messageText } = this.props
     const { participants } = this.state
     const participantIds = participants.map(p => p.id)
-    const createThreadResponse = await findOrCreateThread(participantIds)
+    const createMessageThreadResponse = await findOrCreateMessageThread(participantIds)
     // * This is a Redux vs Apollo data structure thing
-    const messageThreadId = get('payload.data.findOrCreateThread.id', createThreadResponse) ||
-      get('data.findOrCreateThread.id', createThreadResponse)
+    const messageThreadId = get('payload.data.findOrCreateMessageThread.id', createMessageThreadResponse) ||
+      get('data.findOrCreateMessageThread.id', createMessageThreadResponse)
     await createMessage(messageThreadId, messageText, true)
     goToThread(messageThreadId)
   }
@@ -128,7 +128,7 @@ export default class Messages extends React.Component {
       messagesPending,
       fetchMessages,
       messageCreatePending,
-      updateThreadReadTime,
+      setMessageThreadLastReadTime,
       // MessageForm
       messageText,
       sendIsTyping,
@@ -192,7 +192,7 @@ export default class Messages extends React.Component {
                 messages={messages}
                 hasMore={hasMoreMessages}
                 pending={messagesPending}
-                updateThreadReadTime={updateThreadReadTime}
+                setMessageThreadLastReadTime={setMessageThreadLastReadTime}
                 messageThread={messageThread} />
             </>}
             {(!forNewThread || participants.length > 0) &&
@@ -224,7 +224,7 @@ Messages.propTypes = {
   fetchRecentContacts: PropTypes.func,
   fetchThread: PropTypes.func,
   fetchThreads: PropTypes.func,
-  findOrCreateThread: PropTypes.func,
+  findOrCreateMessageThread: PropTypes.func,
   goToThread: PropTypes.func,
   hasMoreMessages: PropTypes.bool,
   contacts: PropTypes.array,
@@ -247,6 +247,6 @@ Messages.propTypes = {
   threads: PropTypes.array,
   threadsPending: PropTypes.bool,
   updateMessageText: PropTypes.func,
-  updateThreadReadTime: PropTypes.func,
+  setMessageThreadLastReadTime: PropTypes.func,
   smallScreen: PropTypes.bool
 }

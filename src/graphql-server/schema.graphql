@@ -81,8 +81,7 @@ type MessageThread {
   participants(first: Int, cursor: ID, order: String): [Person]
   participantsTotal: Int
   messages(first: Int, cursor: ID, order: String): MessageQuerySet
-  unreadCount: Int
-  lastReadAt: String
+  lastReadTime: String
 }
 
 type MessageQuerySet {
@@ -115,24 +114,25 @@ input PostInput {
   details: String
   type: String
   communityId: String
-  createdAt: String
 }
 
 input CommentInput {
   postId: String
   text: String
-  createdAt: String
 }
 
 input MessageInput {
   messageThreadId: String
   text: String
-  createdAt: String
 }
 
-input MessageThreadInput {
+input FindOrCreateMessageThreadInput {
   participantIds: [String]
-  createdAt: String
+}
+
+input SetMessageThreadLastReadTimeInput {
+  messageThreadId: ID
+  lastReadTime: String
 }
 
 input CommunityInput {
@@ -181,9 +181,10 @@ type Transaction {
 type Mutation {
   createComment(data: CommentInput): Comment
   createCommunity(data: CommunityInput): Community
+  findOrCreateMessageThread(data: FindOrCreateMessageThreadInput): MessageThread
   createMessage(data: MessageInput): Message
+  setMessageThreadLastReadTime(data: SetMessageThreadLastReadTimeInput): MessageThread
   createPost(data: PostInput): Post
   offerHolofuel(counterpartyId: String, amount: Float, requestId:ID): Transaction
-  findOrCreateThread(data: MessageThreadInput): MessageThread
   registerUser(name: String, avatarUrl: String): Person
 }

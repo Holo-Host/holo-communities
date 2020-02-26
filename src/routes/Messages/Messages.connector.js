@@ -14,7 +14,7 @@ import {
   createMessage,
   fetchMessages,
   fetchThread,
-  findOrCreateThread,
+  findOrCreateMessageThread,
   updateMessageText,
   updateThreadReadTime,
   setThreadSearch,
@@ -59,7 +59,7 @@ export function mapStateToProps (state, props) {
     hasMoreMessages: getMessagesHasMore(state, { id: messageThreadId }),
     messageCreatePending:
       isPendingFor(createMessage, state) ||
-      isPendingFor(findOrCreateThread, state)
+      isPendingFor(findOrCreateMessageThread, state)
   }
 }
 
@@ -70,7 +70,7 @@ export function mapDispatchToProps (dispatch, props) {
     updateMessageText,
     fetchThreads,
     fetchMessages,
-    findOrCreateThread,
+    findOrCreateMessageThread,
     createMessage,
     changeQuerystringParam,
     fetchRecentContacts,

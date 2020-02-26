@@ -1,12 +1,10 @@
 mutation HolochainCreateCommentMutation (
   $postId: String!,
-  $text: String!,
-  $createdAt: String!
+  $text: String!
 ) {
   createComment(data: {
     postId: $postId,
-    text: $text,
-    createdAt: $createdAt
+    text: $text
   }) {
     id
     text

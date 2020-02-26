@@ -1,12 +1,10 @@
 mutation CreateMessageMutation (
   $messageThreadId: String,
-  $text: String,
-  $createdAt: String
+  $text: String
 ) {
   createMessage(data: {
     messageThreadId: $messageThreadId,
-    text: $text,
-    createdAt: $createdAt
+    text: $text
   }) {
     id
     text

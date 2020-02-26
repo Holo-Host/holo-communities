@@ -8,7 +8,7 @@ import Badge from 'components/Badge'
 import TextInput from 'components/TextInput'
 import ScrollListener from 'components/ScrollListener'
 import { toRefArray, itemsToArray } from 'util/reduxOrmMigration'
-import { participantAttributes } from 'store/models/MessageThread'
+import { participantAttributes, unreadCount } from 'store/models/MessageThread'
 import Loading from 'components/Loading'
 import './ThreadList.scss'
 
@@ -38,18 +38,18 @@ export default class ThreadList extends Component {
           onChange={this.onSearchChange} />
       </div>
       <ul styleName='list' id={'thread-list-list'}>
-        {!isEmpty(threads) && threads.map(t => {
-          const messages = itemsToArray(toRefArray(t.messages))
+        {!isEmpty(threads) && threads.map(thread => {
+          const messages = itemsToArray(toRefArray(thread.messages))
           const latestMessage = orderBy(m => Date.parse(m.createdAt), 'desc', messages)[0]
 
           return <ThreadListItem
-            id={t.id}
-            active={t.id === messageThreadId}
-            thread={t}
+            id={thread.id}
+            active={thread.id === messageThreadId}
+            thread={thread}
             latestMessage={latestMessage}
             currentUser={currentUser}
-            unreadCount={t.unreadCount}
-            key={`thread-li-${t.id}`} />
+            unreadCount={unreadCount(thread)}
+            key={`thread-li-${thread.id}`} />
         })}
         {threadsPending &&
           <Loading type='bottom' />}

@@ -6,7 +6,7 @@ import {
   Switch
 } from 'react-router-dom'
 import cx from 'classnames'
-import { get, some } from 'lodash/fp'
+import { some } from 'lodash/fp'
 // import Intercom from 'react-intercom'
 // import config, { isTest } from 'config'
 import { isSmallScreen, isMediumScreen } from 'util/responsive'

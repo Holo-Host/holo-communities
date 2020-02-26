@@ -3,7 +3,6 @@ import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { postUrl } from 'util/navigation'
 import { pick, get, compose } from 'lodash/fp'
-import { currentDateString } from 'util/holochain'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 import HolochainCreatePostMutation from 'graphql/mutations/HolochainCreatePostMutation.graphql'
 import getRouteParam from 'store/selectors/getRouteParam'
@@ -78,7 +77,6 @@ export const createPost = graphql(HolochainCreatePostMutation, {
           'title',
           'details'
         ], post),
-        createdAt: currentDateString(),
         communityId: get('communities[0].id', post)
       },
       // NOTE: Replaced this with update below

@@ -6,7 +6,7 @@ import reducer, {
   defaultState,
   getMessages,
   filterThreadsByParticipant,
-  findOrCreateThread,
+  findOrCreateMessageThread,
   createMessage,
   updateMessageText,
   moduleSelector,
@@ -122,7 +122,7 @@ describe('filterThreadsByParticipant', () => {
   })
 })
 
-describe('findOrCreateThread', () => {
+describe('findOrCreateMessageThread', () => {
   it('matches the last snapshot', () => {
     const graphql = {
       query: 'All the lonely people / Where do they all come from?',
@@ -131,7 +131,7 @@ describe('findOrCreateThread', () => {
       }
     }
     const { query, variables } = graphql
-    const actual = findOrCreateThread(variables.participantIds, query)
+    const actual = findOrCreateMessageThread(variables.participantIds, query)
     expect(actual).toMatchSnapshot()
   })
 })

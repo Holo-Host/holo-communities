@@ -9,7 +9,7 @@ Object {
   "fetchRecentContacts": [Function],
   "fetchThread": [Function],
   "fetchThreads": [Function],
-  "findOrCreateThread": [Function],
+  "findOrCreateMessageThread": [Function],
   "goToThread": [Function],
   "setContactsSearch": [Function],
   "setThreadSearch": [Function],

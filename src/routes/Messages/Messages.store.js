@@ -13,7 +13,7 @@ import {
   FIND_OR_CREATE_THREAD
 } from 'store/constants'
 import { makeGetQueryResults } from 'store/reducers/queryResults'
-import FindOrCreateThreadMutation from 'graphql/mutations/FindOrCreateThreadMutation.graphql'
+import FindOrCreateMessageThreadMutation from 'graphql/mutations/FindOrCreateMessageThreadMutation.graphql'
 import CreateMessageMutation from 'graphql/mutations/CreateMessageMutation.graphql'
 import MessageThreadQuery from 'graphql/queries/MessageThreadQuery.graphql'
 import MessageThreadMessagesQuery from 'graphql/queries/MessageThreadMessagesQuery.graphql'
@@ -93,11 +93,11 @@ export default function reducer (state = defaultState, action) {
 
 // ACTIONS (to be moved to /store/actions/*)
 
-export function findOrCreateThread (participantIds) {
+export function findOrCreateMessageThread (participantIds) {
   return {
     type: FIND_OR_CREATE_THREAD,
     graphql: {
-      query: FindOrCreateThreadMutation,
+      query: FindOrCreateMessageThreadMutation,
       variables: {
         participantIds
       }

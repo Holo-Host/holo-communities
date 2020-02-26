@@ -4,9 +4,9 @@ import { get, compose } from 'lodash/fp'
 import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import {
-  currentDateString,
   HOLOCHAIN_POLL_INTERVAL_SLOW,
-  HOLOCHAIN_POLL_INTERVAL_FAST
+  HOLOCHAIN_POLL_INTERVAL_FAST,
+  HOLOCHAIN_DEFAULT_COMMUNITY_SLUG
 } from 'util/holochain'
 import { threadUrl, communityUrl } from 'util/navigation'
 import changeQuerystringParam from 'store/actions/changeQuerystringParam'
@@ -14,9 +14,10 @@ import getMe from 'store/selectors/getMe'
 // import getPreviousLocation from 'store/selectors/getPreviousLocation'
 import { NEW_THREAD_ID } from './Messages'
 import HolochainPeopleQuery from 'graphql/queries/HolochainPeopleQuery.graphql'
-import FindOrCreateThreadMutation from 'graphql/mutations/FindOrCreateThreadMutation.graphql'
+import FindOrCreateMessageThreadMutation from 'graphql/mutations/FindOrCreateMessageThreadMutation.graphql'
 import CreateMessageMutation from 'graphql/mutations/CreateMessageMutation.graphql'
 import HolochainMessageThreadsQuery from 'graphql/queries/HolochainMessageThreadsQuery.graphql'
+import HolochainSetMessageThreadLastReadTimeMutation from 'graphql/mutations/HolochainSetMessageThreadLastReadTimeMutation.graphql'
 import MessageThreadQuery from 'graphql/queries/MessageThreadQuery.graphql'
 import {
   updateMessageText,
@@ -41,7 +42,7 @@ export function mapStateToProps (state, props) {
     messageThreadId,
     currentUser: getMe(state, props),
     // * For now doing the most simplest thing
-    onCloseURL: communityUrl('hylo-holochain'),
+    onCloseURL: communityUrl(HOLOCHAIN_DEFAULT_COMMUNITY_SLUG),
     messageText: getTextForCurrentMessageThread(state, props),
     sendIsTyping: () => {},
     threadSearch: getThreadSearch(state, props),
@@ -58,8 +59,7 @@ export function mapStateToProps (state, props) {
     fetchMessages: () => {},
     fetchPeople: () => {},
     // Not implemented
-    fetchRecentContacts: () => {},
-    updateThreadReadTime: () => {}
+    fetchRecentContacts: () => {}
   }
 }
 
@@ -75,13 +75,11 @@ export function mapDispatchToProps (dispatch) {
 
 // Apollo queries, selectors, mutations and loading status
 
-export const findOrCreateThread = graphql(FindOrCreateThreadMutation, {
+export const findOrCreateMessageThread = graphql(FindOrCreateMessageThreadMutation, {
   props: ({ mutate }) => ({
-    findOrCreateThread: participantIds => mutate({
+    findOrCreateMessageThread: participantIds => mutate({
       variables: {
         participantIds
-        // * not currently supported by hylo-holo-dnas
-        // createdAt: currentDateString()
       }
     })
   })
@@ -94,8 +92,7 @@ export const createMessage = graphql(CreateMessageMutation, {
       // messageCreatePending: loading,
       variables: {
         messageThreadId,
-        text,
-        createdAt: currentDateString()
+        text
       },
       refetchQueries: [
         {
@@ -133,11 +130,10 @@ export const contacts = graphql(HolochainPeopleQuery, {
 export const threads = graphql(HolochainMessageThreadsQuery, {
   props: ({ data: { messageThreads, loading }, ownProps }) => {
     const threads = get('items', messageThreads)
+    console.log('!!!! threads in connector:', threads)
     return {
-      // TODO: Order threads by most recent message
       threads: threads && threads
-        .filter(filterThreadsByParticipant(ownProps.threadSearch))
-        .reverse(),
+        .filter(filterThreadsByParticipant(ownProps.threadSearch)),
       threadsPending: loading
     }
   },
@@ -171,9 +167,21 @@ export const thread = graphql(MessageThreadQuery, {
   })
 })
 
+export const setMessageThreadLastReadTime = graphql(HolochainSetMessageThreadLastReadTimeMutation, {
+  props: ({ mutate }) => ({
+    setMessageThreadLastReadTime: (messageThreadId, lastReadTime) => mutate({
+      variables: {
+        messageThreadId,
+        lastReadTime
+      }
+    })
+  })
+})
+
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  findOrCreateThread,
+  findOrCreateMessageThread,
+  setMessageThreadLastReadTime,
   createMessage,
   threads,
   thread,

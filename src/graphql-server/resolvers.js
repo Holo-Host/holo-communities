@@ -1,4 +1,4 @@
-import HyloDnaInterface from 'data-interfaces/HyloDnaInterface'
+import HoloCommunitiesDnaInterface from 'data-interfaces/HoloCommunitiesDnaInterface'
 import HoloFuelDnaInterface from 'data-interfaces/HoloFuelDnaInterface'
 import { getRandomUuid } from 'util/holochain'
 import {
@@ -9,58 +9,60 @@ import {
 
 export const resolvers = {
   Mutation: {
-    async registerUser (_, userData) {
-      return dataMappedCall('person', userData, HyloDnaInterface.currentUser.create)
+    async registerUser (_, registerUserData) {
+      return dataMappedCall('person', registerUserData, HoloCommunitiesDnaInterface.currentUser.create)
     },
 
-    async createCommunity (_, { data: communityData }) {
-      return dataMappedCall('community', communityData, HyloDnaInterface.communities.create)
+    async createCommunity (_, { data: createCommunityData }) {
+      return dataMappedCall('community', createCommunityData, HoloCommunitiesDnaInterface.communities.create)
     },
 
-    async createPost (_, { data: postData }) {
-      return dataMappedCall('post', postData, HyloDnaInterface.posts.create)
+    async createPost (_, { data: createPostData }) {
+      return dataMappedCall('post', createPostData, HoloCommunitiesDnaInterface.posts.create)
     },
 
-    async createComment (_, { data: commentData }) {
-      return dataMappedCall('comment', commentData, HyloDnaInterface.comments.create)
+    async createComment (_, { data: createCommentData }) {
+      return dataMappedCall('comment', createCommentData, HoloCommunitiesDnaInterface.comments.create)
     },
 
-    async findOrCreateThread (_, { data: { participantIds } }) {
-      return dataMappedCall('messageThread', participantIds, HyloDnaInterface.messageThreads.create)
+    async findOrCreateMessageThread (_, { data: findOrCreateMessageThreadData }) {
+      return dataMappedCall('messageThread', findOrCreateMessageThreadData, HoloCommunitiesDnaInterface.messages.createMessageThread)
     },
 
-    async createMessage (_, { data: messageData }) {
-      return dataMappedCall('message', messageData, HyloDnaInterface.messages.create)
+    async createMessage (_, { data: createMessageData }) {
+      return dataMappedCall('message', createMessageData, HoloCommunitiesDnaInterface.messages.createMessage)
     },
 
-    async offerHolofuel (_, offerHolofuel) {
-      const { counterpartyId, amount, notes } = offerHolofuel
+    async setMessageThreadLastReadTime (_, { data: setMessageThreadLastReadTimeData }) {
+      return dataMappedCall('messageThread', setMessageThreadLastReadTimeData, HoloCommunitiesDnaInterface.messages.setLastReadTime)
+    },
 
+    async offerHolofuel (_, { counterpartyId, amount, notes }) {
       return HoloFuelDnaInterface.offers.create(counterpartyId, amount, notes)
     }
   },
 
   Query: {
     async me () {
-      return toUiData('person', await HyloDnaInterface.currentUser.get())
+      return toUiData('person', await HoloCommunitiesDnaInterface.currentUser.get())
     },
 
     async communities () {
-      const communities = await HyloDnaInterface.communities.all()
+      const communities = await HoloCommunitiesDnaInterface.communities.all()
 
       return communities.map(community => toUiData('community', community))
     },
 
     async community (_, { slug }) {
-      return toUiData('community', await HyloDnaInterface.communities.getBySlug(slug))
+      return toUiData('community', await HoloCommunitiesDnaInterface.communities.getBySlug(slug))
     },
 
     async post (_, { id }) {
-      return toUiData('post', await HyloDnaInterface.posts.get(id))
+      return toUiData('post', await HoloCommunitiesDnaInterface.posts.get(id))
     },
 
     async people () {
-      const people = await HyloDnaInterface.people.all()
+      const people = await HoloCommunitiesDnaInterface.people.all()
 
       return toUiQuerySet(people.map(person =>
         toUiData('person', person)
@@ -68,11 +70,11 @@ export const resolvers = {
     },
 
     async person (_, { id }) {
-      return toUiData('person', await HyloDnaInterface.people.get(id))
+      return toUiData('person', await HoloCommunitiesDnaInterface.people.get(id))
     },
 
     async messageThreads () {
-      const messageThreads = await HyloDnaInterface.messageThreads.all()
+      const messageThreads = await HoloCommunitiesDnaInterface.messages.allThreads()
 
       return toUiQuerySet(messageThreads.map(messageThread =>
         toUiData('messageThread', messageThread)
@@ -80,13 +82,13 @@ export const resolvers = {
     },
 
     async messageThread (_, { id }) {
-      return toUiData('messageThread', await HyloDnaInterface.messageThreads.get(id))
+      return toUiData('messageThread', await HoloCommunitiesDnaInterface.messages.getThread(id))
     }
   },
 
   Comment: {
-    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
-      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
+    async creator ({ creator }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(creator))
     },
 
     async post ({ postId: id }) {
@@ -96,7 +98,7 @@ export const resolvers = {
 
   Community: {
     async posts ({ id }, { limit, since }) {
-      const postsQueryset = await HyloDnaInterface.posts.all(id, { limit, since })
+      const postsQueryset = await HoloCommunitiesDnaInterface.posts.all(id, { limit, since })
 
       return toUiQuerySet(
         postsQueryset.posts.map(post => toUiData('post', post)),
@@ -107,7 +109,7 @@ export const resolvers = {
 
   Me: {
     async memberships () {
-      const communities = await HyloDnaInterface.communities.all()
+      const communities = await HoloCommunitiesDnaInterface.communities.all()
 
       return communities.map(community => ({
         id: getRandomUuid(),
@@ -117,52 +119,56 @@ export const resolvers = {
   },
 
   Message: {
-    async creator ({ creator }) {
-      return toUiData('person', await HyloDnaInterface.people.get(creator))
+    async creator ({ creator }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(creator))
     }
   },
 
   MessageThread: {
     async messages ({ id }) {
-      const messages = await HyloDnaInterface.messages.all(id)
+      const messages = await HoloCommunitiesDnaInterface.messages.allMessagesForThread(id)
 
       return toUiQuerySet(messages.map(message =>
         toUiData('message', message)
       ))
     },
 
-    async participants ({ participants }) {
-      return participants.map(participant => toUiData('person', participant))
+    async participants ({ participantIds }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return Promise.all(
+        participantIds.map(
+          async participantId => toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(participantId))
+        )
+      )
     }
   },
 
   Post: {
     async communities ({ communityId }) {
       return [
-        toUiData('community', await HyloDnaInterface.communities.get(communityId))
+        toUiData('community', await HoloCommunitiesDnaInterface.communities.get(communityId))
       ]
     },
 
-    async creator ({ creator }, _, { HyloDnaInterfaceLoaders }) {
-      return toUiData('person', await HyloDnaInterfaceLoaders.person.load(creator))
+    async creator ({ creator }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      return toUiData('person', await HoloCommunitiesDnaInterfaceLoaders.person.load(creator))
     },
 
-    async comments ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const zomeComments = await HyloDnaInterfaceLoaders.comments.load(id)
+    async comments ({ id }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      const zomeComments = await HoloCommunitiesDnaInterfaceLoaders.comments.load(id)
 
       return toUiQuerySet(zomeComments.map(comment =>
         toUiData('comment', comment)
       ))
     },
 
-    async commenters ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
+    async commenters ({ id }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      const comments = await HoloCommunitiesDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = []
       const commenters = await Promise.all(comments.map(({ creator }) => {
         if (commenterAddresses.includes(creator)) return null
         commenterAddresses.push(creator)
 
-        return HyloDnaInterfaceLoaders.person.load(creator)
+        return HoloCommunitiesDnaInterfaceLoaders.person.load(creator)
       }))
 
       return commenters
@@ -170,8 +176,8 @@ export const resolvers = {
         .map(commenter => toUiData('person', commenter))
     },
 
-    async commentersTotal ({ id }, _, { HyloDnaInterfaceLoaders }) {
-      const comments = await HyloDnaInterfaceLoaders.comments.load(id)
+    async commentersTotal ({ id }, _, { HoloCommunitiesDnaInterfaceLoaders }) {
+      const comments = await HoloCommunitiesDnaInterfaceLoaders.comments.load(id)
       const commenterAddresses = comments.map(comment => comment.creator)
 
       return new Set(commenterAddresses).size

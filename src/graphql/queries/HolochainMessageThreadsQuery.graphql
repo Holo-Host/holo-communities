@@ -4,10 +4,9 @@ query HolochainMessageThreadsQuery ($first: Int = 10, $offset: Int, $firstMessag
     hasMore
     items {
       id
-      unreadCount
-      lastReadAt
       createdAt
       updatedAt
+      lastReadTime
       participants {
         id
         name

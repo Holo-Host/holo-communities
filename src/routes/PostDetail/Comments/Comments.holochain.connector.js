@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import { get, compose, uniqBy } from 'lodash/fp'
 import getMe from 'store/selectors/getMe'
-import { currentDateString } from 'util/holochain'
 import HolochainCreateCommentMutation from 'graphql/mutations/HolochainCreateCommentMutation.graphql'
 import HolochainPostQuery from 'graphql/queries/HolochainPostQuery.graphql'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
@@ -38,8 +37,7 @@ const createComment = graphql(HolochainCreateCommentMutation, {
         await mutate({
           variables: {
             postId: ownProps.postId,
-            text,
-            createdAt: currentDateString()
+            text
           },
           update: (proxy, { data: { createComment } }) => {
             const { post } = proxy.readQuery({

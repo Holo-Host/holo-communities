@@ -75,7 +75,7 @@ export default function (state = {}, action) {
       return matchNewPostIntoQueryResults(state, root)
 
     case FIND_OR_CREATE_THREAD:
-      root = payload.data.findOrCreateThread
+      root = payload.data.findOrCreateMessageThread
       return matchNewThreadIntoQueryResults(state, root)
 
     case FETCH_NETWORK_SETTINGS:

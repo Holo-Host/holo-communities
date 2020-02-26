@@ -21,30 +21,33 @@ export function participantAttributes (messageThread, currentUser, maxShown) {
   return { names, avatarUrls }
 }
 
-export function isUnread (messageThread) {
-  const { lastReadAt, updatedAt } = messageThread
+export function unreadCount ({ messages: { items: messages }, lastReadTime: lastReadTimeString }) {
+  if (!messages || !lastReadTimeString) return 0
 
-  return lastReadAt === undefined || new Date(lastReadAt) < new Date(updatedAt)
+  // TODO: Replace with the following once link tagging with ISO dates is working again in DNA:
+  // const lastReadTime = new Date(lastReadTimeString)
+  const lastReadTime = new Date(Number(lastReadTimeString) * 1000)
+  let count = -1
+
+  messages.forEach(message => {
+    if (new Date(message.createdAt) > lastReadTime) {
+      count += 1
+    }
+  })
+
+  return count < 0 ? 0 : count
 }
 
-export function isUpdatedSince (messageThread, date) {
-  return new Date(messageThread.updatedAt) > date
+export function isUnread (messageThread) {
+  return unreadCount(messageThread) > 0
 }
 
 export function markAsRead (messageThreadInstance) {
   messageThreadInstance.update({
     unreadCount: 0,
-    lastReadAt: new Date().toString()
+    lastReadAt: new Date().toISOString()
   })
 
-  return messageThreadInstance
-}
-
-export function newMessageReceived (messageThreadInstance, bumpUnreadCount) {
-  const update = bumpUnreadCount
-    ? { unreadCount: messageThreadInstance.unreadCount + 1, updatedAt: new Date().toString() }
-    : { updatedAt: new Date().toString() }
-  messageThreadInstance.update(update)
   return messageThreadInstance
 }
 
@@ -55,16 +58,8 @@ const MessageThread = Model.createClass({
     return isUnread(this)
   },
 
-  isUpdatedSince (date) {
-    return isUpdatedSince(this, date)
-  },
-
   toString () {
     return `MessageThread: ${this.id}`
-  },
-
-  newMessageReceived (bumpUnreadCount) {
-    return newMessageReceived(this, bumpUnreadCount)
   },
 
   markAsRead () {
@@ -82,10 +77,8 @@ MessageThread.modelName = 'MessageThread'
 
 MessageThread.fields = {
   id: attr(),
-  unreadCount: attr(),
-  participants: many('Person'),
-  updatedAt: attr(),
-  lastReadAt: attr()
+  lastReadTime: attr(),
+  participants: many('Person')
 }
 
 // Utility

@@ -92,8 +92,11 @@ export default class MessageSection extends React.Component {
     if (this.shouldScroll) this.scrollToBottom()
   }
 
-  atBottom = ({ offsetHeight, scrollHeight, scrollTop }) =>
-    scrollHeight - scrollTop - offsetHeight < 1
+  atBottom = ({ offsetHeight, scrollHeight, scrollTop }) => {
+    const atbottom = scrollHeight - scrollTop - offsetHeight < 1
+
+    return atbottom
+  }
 
   handleVisibilityChange = () => {
     const { onNextVisible } = this.state
@@ -138,8 +141,13 @@ export default class MessageSection extends React.Component {
   }
 
   markAsRead = debounce(() => {
-    const { messageThread, updateThreadReadTime } = this.props
-    if (messageThread) updateThreadReadTime(messageThread.id)
+    const { messageThread, setMessageThreadLastReadTime, messages } = this.props
+
+    if (messageThread) {
+      // TODO: Replace with the following once link tagging with ISO dates is working again in DNA:
+      // setMessageThreadLastReadTime(messageThread.id, messages[messages.length - 1].createdAt)
+      setMessageThreadLastReadTime(messageThread.id, Math.round(new Date(messages[messages.length - 1].createdAt) / 1000).toString())
+    }
   }, 2000)
 
   render () {
@@ -166,5 +174,5 @@ MessageSection.propTypes = {
   pending: bool,
   socket: object,
   currentUser: object,
-  updateThreadReadTime: func
+  setMessageThreadLastReadTime: func
 }
