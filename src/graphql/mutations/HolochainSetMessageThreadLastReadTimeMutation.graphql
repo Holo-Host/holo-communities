@@ -6,9 +6,7 @@ mutation HolochainSetMessageThreadLastReadTimeMutation (
     messageThreadId: $messageThreadId,
     lastReadTime: $lastReadTime
   }) {
-    messageThread {
-      id
-      lastReadTime
-    }
+    id
+    lastReadTime
   }
 }

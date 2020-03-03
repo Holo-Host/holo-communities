@@ -74,8 +74,14 @@ export const HoloCommunitiesDnaInterface = {
       timestamp: currentDataTimeIso()
     }),
 
-    // TODO: Re-introduce pagination here
-    all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base }),
+    // TODO: Remove underscores on unused pagination vars _from_time and _limit once DNA is ready
+    // TODO: Change DNA to receive integer instead of string for limit
+    all: (base, { limit, since }) => {
+      const fromTime = since || currentDataTimeIso()
+      const limitString = Number(limit).toString()
+
+      return createZomeCall('posts/all_for_base')({ base, _from_time: fromTime, _limit: limitString })
+    },
 
     get: address => createZomeCall('posts/get')({ address })
   }

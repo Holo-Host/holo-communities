@@ -63,7 +63,8 @@ export const community = graphql(HolochainCommunityQuery, {
   }),
   options: props => ({
     variables: {
-      slug: getRouteParam('slug', {}, props)
+      slug: getRouteParam('slug', {}, props),
+      withPosts: false
     },
     fetchPolicy: 'cache-only'
   })
