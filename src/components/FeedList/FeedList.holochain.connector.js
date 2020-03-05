@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import { get, pick, compose } from 'lodash/fp'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
-import { currentDataTimeIso, HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
+import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 
 export function mapStateToProps (state, props) {
   const fetchPostsParam = {
@@ -49,10 +49,10 @@ export const posts = graphql(HolochainCommunityQuery, {
         }),
         variables: {
           slug: get('fetchPostsParam.slug', ownProps),
+          withPosts: true,
           limit: 10,
           // TODO: Update to oldest known post timestamp
-          since: currentDataTimeIso(),
-          withPosts: true
+          since: '2020-02-17T06:56:08+00:00'
         }
       })
     }
@@ -60,7 +60,10 @@ export const posts = graphql(HolochainCommunityQuery, {
   options: props => ({
     variables: {
       slug: get('fetchPostsParam.slug', props),
-      withPosts: true
+      withPosts: true,
+      limit: 10,
+      // TODO: Update to oldest known post timestamp
+      since: '2020-02-17T06:56:08+00:00'
     },
     pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
     // Will need to change/be refactored once pagination is introduced

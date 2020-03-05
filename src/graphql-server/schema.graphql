@@ -24,7 +24,7 @@ type Community {
   id: ID
   name: String
   slug: String
-  posts(limit: Int, since: ID): PostQuerySet
+  posts(limit: Int, since: String): PostQuerySet
 }
 
 type PeopleQuerySet {
