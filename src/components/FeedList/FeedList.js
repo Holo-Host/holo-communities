@@ -74,7 +74,8 @@ export default class FeedList extends React.Component {
     const { pending, posts, hasMore, fetchPosts } = this.props
 
     if (pending || posts.length === 0 || !hasMore) return
-    fetchPosts(posts.length)
+
+    fetchPosts(posts[posts.length - 1].createdAt)
   }
 
   render () {

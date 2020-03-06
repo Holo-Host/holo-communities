@@ -33,28 +33,31 @@ export const posts = graphql(HolochainCommunityQuery, {
       pending: loading,
       // Only used in the case of feed pagination, which has not yet been implemented
       hasMore: get('posts.hasMore', community),
-      fetchPosts: () => fetchMore({
-        updateQuery: (previousResult, { fetchMoreResult, variables }) => ({
-          ...previousResult,
-          community: {
-            ...previousResult.community,
-            posts: {
-              ...previousResult.community.posts,
-              items: [
-                ...previousResult.community.posts.items,
-                ...fetchMoreResult.community.posts.items
-              ]
+      fetchPosts: since => {
+        console.log('!!!! here since!!!!', since)
+        return fetchMore({
+          updateQuery: (previousResult, { fetchMoreResult, variables }) => ({
+            ...previousResult,
+            community: {
+              ...previousResult.community,
+              posts: {
+                ...previousResult.community.posts,
+                items: [
+                  ...previousResult.community.posts.items,
+                  ...fetchMoreResult.community.posts.items
+                ]
+              }
             }
+          }),
+          variables: {
+            slug: get('fetchPostsParam.slug', ownProps),
+            withPosts: true,
+            limit: 10,
+            // TODO: Update to oldest known post timestamp
+            since
           }
-        }),
-        variables: {
-          slug: get('fetchPostsParam.slug', ownProps),
-          withPosts: true,
-          limit: 10,
-          // TODO: Update to oldest known post timestamp
-          since: '2020-02-17T06:56:08+00:00'
-        }
-      })
+        })
+      }
     }
   },
   options: props => ({
