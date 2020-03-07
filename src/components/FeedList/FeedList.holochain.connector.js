@@ -53,7 +53,6 @@ export const posts = graphql(HolochainCommunityQuery, {
             slug: get('fetchPostsParam.slug', ownProps),
             withPosts: true,
             limit: 10,
-            // TODO: Update to oldest known post timestamp
             since
           }
         })
@@ -65,8 +64,8 @@ export const posts = graphql(HolochainCommunityQuery, {
       slug: get('fetchPostsParam.slug', props),
       withPosts: true,
       limit: 10,
-      // TODO: Update to oldest known post timestamp
-      since: '2020-02-17T06:56:08+00:00'
+      // TODO: Make a forever future default in DNA
+      since: '2100-01-01T06:56:08+00:00'
     },
     pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
     // Will need to change/be refactored once pagination is introduced
