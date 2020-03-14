@@ -130,7 +130,7 @@ export const contacts = graphql(HolochainPeopleQuery, {
 export const threads = graphql(HolochainMessageThreadsQuery, {
   props: ({ data: { messageThreads, loading }, ownProps }) => {
     const threads = get('items', messageThreads)
-    console.log('!!!! threads in connector:', threads)
+
     return {
       threads: threads && threads
         .filter(filterThreadsByParticipant(ownProps.threadSearch)),

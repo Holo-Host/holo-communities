@@ -1,5 +1,5 @@
 import { instanceCreateZomeCall } from '../graphql-server/holochainClient'
-import { currentDataTimeIso, currentDateTimeUnixTimestamp } from 'util/holochain'
+import { currentDataTimeIso } from 'util/holochain'
 
 const createZomeCall = instanceCreateZomeCall(process.env.COMMUNITY_DNA_INSTANCE_ID)
 
@@ -44,8 +44,7 @@ export const HoloCommunitiesDnaInterface = {
   messages: {
     createMessageThread: async createMessageThreadData => createZomeCall('messages/create_thread')({
       ...createMessageThreadData,
-      // TODO: Replace with currentDataTimeIso() once link tagging with ISO dates is working again in DNA
-      timestamp: currentDateTimeUnixTimestamp()
+      timestamp: currentDataTimeIso()
     }),
 
     createMessage: createMessageData => createZomeCall('messages/create_message')({
@@ -74,8 +73,13 @@ export const HoloCommunitiesDnaInterface = {
       timestamp: currentDataTimeIso()
     }),
 
-    // TODO: Re-introduce pagination here
-    all: (base, { limit, since }) => createZomeCall('posts/all_for_base')({ base }),
+    // TODO: Remove underscores on unused pagination vars _from_time and _limit once DNA is ready
+    // TODO: Change DNA to receive integer instead of string for limit
+    all: (base, { limit, since }) => {
+      const fromTime = since || currentDataTimeIso()
+
+      return createZomeCall('posts/all_for_base')({ base, from_time: fromTime, limit: Number(limit) })
+    },
 
     get: address => createZomeCall('posts/get')({ address })
   }

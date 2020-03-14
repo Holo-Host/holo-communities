@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
 import { get, pick, compose } from 'lodash/fp'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
+import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 
 export function mapStateToProps (state, props) {
   const fetchPostsParam = {
@@ -32,7 +33,7 @@ export const posts = graphql(HolochainCommunityQuery, {
       pending: loading,
       // Only used in the case of feed pagination, which has not yet been implemented
       hasMore: get('posts.hasMore', community),
-      fetchPosts: () => fetchMore({
+      fetchPosts: since => fetchMore({
         updateQuery: (previousResult, { fetchMoreResult, variables }) => ({
           ...previousResult,
           community: {
@@ -48,7 +49,9 @@ export const posts = graphql(HolochainCommunityQuery, {
         }),
         variables: {
           slug: get('fetchPostsParam.slug', ownProps),
-          withPosts: true
+          withPosts: true,
+          limit: 10,
+          since
         }
       })
     }
@@ -56,10 +59,14 @@ export const posts = graphql(HolochainCommunityQuery, {
   options: props => ({
     variables: {
       slug: get('fetchPostsParam.slug', props),
-      withPosts: true
+      withPosts: true,
+      limit: 10,
+      // TODO: Make a forever future default in DNA
+      since: '2100-01-01T06:56:08+00:00'
     },
+    pollInterval: HOLOCHAIN_POLL_INTERVAL_SLOW
     // Will need to change/be refactored once pagination is introduced
-    fetchPolicy: 'cache-only'
+    // fetchPolicy: 'cache-only'
   })
 })
 
