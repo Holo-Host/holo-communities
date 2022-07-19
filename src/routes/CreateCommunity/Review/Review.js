@@ -112,7 +112,8 @@ export default class Review extends Component {
     }
   }
 
-  componentWillMount = () => {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount = () => {
     const { communityPrivacy } = this.props
     const privacyOption = find(privacyOptions, { label: communityPrivacy })
     const selectedCommunityPrivacy = get('label', privacyOption) // set to Private by default

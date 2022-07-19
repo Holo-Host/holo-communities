@@ -8,9 +8,9 @@ import Button from 'components/Button'
 import RoundImage from 'components/RoundImage'
 import Loading from 'components/Loading'
 import { HOLOCHAIN_DEFAULT_COMMUNITY_SLUG } from 'util/holochain'
-import './HolochainLogin.scss'
+import './RegisterAgent.scss'
 
-export default class HolochainLogin extends React.Component {
+export default class RegisterAgent extends React.Component {
   state = {
     loading: false
   }
@@ -80,7 +80,7 @@ export default class HolochainLogin extends React.Component {
   }
 }
 
-HolochainLogin.propTypes = {
+RegisterAgent.propTypes = {
   className: PropTypes.string,
   error: PropTypes.string,
   redirectOnSignIn: PropTypes.func,

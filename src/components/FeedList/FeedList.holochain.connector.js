@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { graphql } from 'react-apollo'
-import { get, pick, compose } from 'lodash/fp'
+import { get, pick, compose, isEmpty } from 'lodash/fp'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 import { HOLOCHAIN_POLL_INTERVAL_SLOW } from 'util/holochain'
 
@@ -25,6 +25,7 @@ export function mapStateToProps (state, props) {
 }
 
 export const posts = graphql(HolochainCommunityQuery, {
+  skip: props => isEmpty(get('fetchPostsParam.slug', props)),
   props: ({ data: { community, loading, fetchMore }, ownProps }) => {
     const posts = get('posts.items', community)
 

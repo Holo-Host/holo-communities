@@ -98,11 +98,16 @@ type Message {
   createdAt: String
 }
 
+type CommunityExistsResult {
+  communityExists: Boolean
+}
+
 type Query {
   me: Me
   person(id: ID): Person
   community(slug: String): Community
   communities: [Community]
+  communityExists: CommunityExistsResult
   messageThreads: MessageThreadQuerySet
   messageThread(id: ID): MessageThread
   post(id: ID): Post
@@ -140,44 +145,6 @@ input CommunityInput {
   slug: String
 }
 
-# Holofuel related
-type HolofuelUser {
-  id: ID
-  nickname: String
-}
-
-enum TransactionType {
-  offer
-  request
-}
-
-enum TransactionStatus {
-  pending
-  completed
-  rejected
-  cancelled
-}
-
-enum TransactionDirection {
-  incoming # indicates the recipient of funds
-  outgoing # indicates the spender of funds
-}
-
-type Transaction {
-  id: ID # ID will be the originCommitHash
-  amount: Float
-  counterparty: HolofuelUser
-  direction: TransactionDirection
-  status: TransactionStatus
-  type: TransactionType
-  timestamp: String
-  fees: Float
-  presentBalance: Float
-  notes: String
-  happName: String
-}
-# END Holofuel
-
 type Mutation {
   createComment(data: CommentInput): Comment
   createCommunity(data: CommunityInput): Community
@@ -185,6 +152,5 @@ type Mutation {
   createMessage(data: MessageInput): Message
   setMessageThreadLastReadTime(data: SetMessageThreadLastReadTimeInput): MessageThread
   createPost(data: PostInput): Post
-  offerHolofuel(counterpartyId: String, amount: Float, requestId:ID): Transaction
   registerUser(name: String, avatarUrl: String): Person
 }

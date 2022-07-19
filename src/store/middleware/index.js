@@ -8,7 +8,6 @@ import apiMiddleware from './apiMiddleware'
 import apolloMiddleware from './apolloMiddleware'
 import pendingMiddleware from './pendingMiddleware'
 import optimisticMiddleware from './optimisticMiddleware'
-import userFetchedMiddleware from './userFetchedMiddleware'
 import userBlockingMiddleware from './userBlockingMiddleware'
 import mixpanelMiddleware from './mixpanelMiddleware'
 import errorMiddleware from './errorMiddleware'
@@ -24,7 +23,6 @@ export default function createMiddleware (history, req) {
     optimisticMiddleware,
     pendingMiddleware,
     promiseMiddleware,
-    userFetchedMiddleware,
     userBlockingMiddleware,
     mixpanelMiddleware,
     !req && isDev && createLogger({ collapsed: true })

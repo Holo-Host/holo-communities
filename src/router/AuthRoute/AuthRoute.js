@@ -23,15 +23,15 @@ export default function AuthRoute ({
   // to auth the user with a token and send them into sign-up.
   if (
     (!isLoggedIn && (requireAuth || returnToOnAuth)) ||
-    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/login')
+    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/register')
   ) {
     setReturnToURL(location.pathname + location.search)
   }
   if (
     (!isLoggedIn && requireAuth) ||
-    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/login')
+    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/register')
   ) {
-    return <RedirectRoute to={'/login'} />
+    return <RedirectRoute to={'/register'} />
   }
   return <Route {...rest} render={props => React.createElement(component, props)} />
 }

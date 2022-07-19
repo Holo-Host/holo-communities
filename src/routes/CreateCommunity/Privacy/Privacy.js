@@ -31,7 +31,8 @@ export default class Privacy extends Component {
     })
   }
 
-  componentWillMount = () => {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount = () => {
     const { communityPrivacy } = this.props
     const privacyOption = find(privacyOptions, { label: communityPrivacy })
     this.setState({ selectedPrivacy: get('id', privacyOption) || 1 })

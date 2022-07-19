@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { throttle, isEmpty, some } from 'lodash/fp'
+import { throttle, some } from 'lodash/fp'
 import cx from 'classnames'
-import { HOLOCHAIN_ACTIVE } from 'util/holochain'
 import { CENTER_COLUMN_ID, position } from 'util/scrolling'
 import { queryParamWhitelist } from 'store/reducers/queryResults'
 import TabBar from './TabBar'
@@ -63,12 +62,7 @@ export default class FeedList extends React.Component {
     }
   }
 
-  fetchOrShowCached = () => {
-    if (HOLOCHAIN_ACTIVE) return
-    const { hasMore, posts, fetchPosts, storeFetchPostsParam } = this.props
-    if (isEmpty(posts) && hasMore !== false) fetchPosts()
-    storeFetchPostsParam()
-  }
+  fetchOrShowCached = () => {}
 
   fetchMorePosts = () => {
     const { pending, posts, hasMore, fetchPosts } = this.props
@@ -93,9 +87,9 @@ export default class FeedList extends React.Component {
     const style = {
       width: tabBarWidth + 'px'
     }
-    const isProject = routeParams.postTypeContext === 'project'
-    const isEvent = routeParams.postTypeContext === 'event'
-    const showSortAndFilters = !isProject && !isEvent && !HOLOCHAIN_ACTIVE
+    // const isProject = routeParams.postTypeContext === 'project'
+    // const isEvent = routeParams.postTypeContext === 'event'
+    const showSortAndFilters = false
 
     return <div styleName='FeedList-container'>
       <ScrollListener

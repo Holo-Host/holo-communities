@@ -1,5 +1,4 @@
 import HoloCommunitiesDnaInterface from 'data-interfaces/HoloCommunitiesDnaInterface'
-import HoloFuelDnaInterface from 'data-interfaces/HoloFuelDnaInterface'
 import { getRandomUuid } from 'util/holochain'
 import {
   toUiData,
@@ -9,15 +8,22 @@ import {
 
 export const resolvers = {
   Mutation: {
-    async registerUser (_, registerUserData) {
+    async registerUser (_, providedRegisterUserData = {}) {
+      const registerUserData = {
+        name: 'Loren Johnson',
+        avatar_url: 'https://d3ngex8q79bk55.cloudfront.net/evo-uploads/user/22955/userAvatar/22955/2A0E7E57-C815-4524-8EA4-F2FB93C3A213.jpg',
+        ...providedRegisterUserData
+      }
+
       return dataMappedCall('person', registerUserData, HoloCommunitiesDnaInterface.currentUser.create)
     },
 
     async createCommunity (_, { data: createCommunityData }) {
-      return dataMappedCall('community', createCommunityData, HoloCommunitiesDnaInterface.communities.create)
+      // return dataMappedCall('community', createCommunityData, HoloCommunitiesDnaInterface.communities.create)
     },
 
     async createPost (_, { data: createPostData }) {
+      console.log('!!! postRecord:', createPostData)
       return dataMappedCall('post', createPostData, HoloCommunitiesDnaInterface.posts.create)
     },
 
@@ -35,10 +41,6 @@ export const resolvers = {
 
     async setMessageThreadLastReadTime (_, { data: setMessageThreadLastReadTimeData }) {
       return dataMappedCall('messageThread', setMessageThreadLastReadTimeData, HoloCommunitiesDnaInterface.messages.setLastReadTime)
-    },
-
-    async offerHolofuel (_, { counterpartyId, amount, notes }) {
-      return HoloFuelDnaInterface.offers.create(counterpartyId, amount, notes)
     }
   },
 
@@ -47,8 +49,13 @@ export const resolvers = {
       return toUiData('person', await HoloCommunitiesDnaInterface.currentUser.get())
     },
 
+    async communityExists (_, { slug }) {
+      console.log('!!! here', slug)
+      return { communityExists: false }
+    },
+
     async communities () {
-      const communities = await HoloCommunitiesDnaInterface.communities.all()
+      const communities = await HoloCommunitiesDnaInterface.communities.get_group()
 
       return communities.map(community => toUiData('community', community))
     },

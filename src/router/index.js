@@ -35,7 +35,7 @@ function rootRoutes () {
       <Switch>
         <AuthRoute returnToOnAuth path='/c/:slug/join/:accessCode' component={JoinCommunity} />
         <AuthRoute returnToOnAuth path='/h/use-invitation' component={JoinCommunity} />
-        <AuthRoute path='/login' component={NonAuthLayout} />
+        <AuthRoute path='/register' component={NonAuthLayout} />
         <AuthRoute path='/signup' exact component={NonAuthLayout} />
         <AuthRoute path='/reset-password' exact component={NonAuthLayout} />
         <AuthRoute requireAuth path='/' component={PrimaryLayout} />

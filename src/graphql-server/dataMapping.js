@@ -27,7 +27,7 @@ export const toInterfaceKeyMap = {
     'communityId': 'base'
   },
   person: {
-    'id': 'agent_id'
+    'id': 'agent_pub_key'
   },
   comment: {
     'postId': 'base',
