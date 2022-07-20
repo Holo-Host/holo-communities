@@ -4,6 +4,7 @@ import recordParser from './recordParser'
 
 const groupLogFormat = 'font-weight: normal; color: rgb(160, 160, 160)'
 const detailsLogFormat = 'font-weight: bold; color: rgb(220, 208, 120)'
+const successLogFormat = 'font-weight: bold; color: rgb(75,166,238)'
 const errorLogFormat = 'font-weight: bold; color: red'
 
 export const HOLOCHAIN_LOGGING = true
@@ -68,21 +69,20 @@ export function createZomeCall (zomeCallPath, callOpts = {}) {
         provenance: await myPubKey(),
         cap: null
       }, 30000)
-      const entry = opts.resultParser(unparsedResponse)
+      const result = opts.resultParser(unparsedResponse)
 
       if (opts.logging) {
-        console.groupCollapsed(`👍 %c${zomeCallPath}%c zome call complete`, groupLogFormat)
+        console.groupCollapsed(`👍 %c${zomeCallPath}%c zome call complete`, successLogFormat, groupLogFormat)
         console.groupCollapsed('%cArgs', detailsLogFormat)
         console.log(args)
         console.groupEnd()
         console.groupCollapsed('%cResult', detailsLogFormat)
-        console.log(entry)
+        console.log(result)
         console.groupEnd()
         console.groupEnd()
       }
-      return entry
+      return result
     } catch (error) {
-      console.log('~~~ zomeCallPath', zomeCallPath)
       console.log(
         `👎 %c${zomeCallPath}%c zome call ERROR using args: `,
         errorLogFormat,

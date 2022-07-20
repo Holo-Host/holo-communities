@@ -3,7 +3,7 @@ import { currentDataTimeIso } from 'util/holochain'
 
 const createZomeCall = instanceCreateZomeCall('__hylo')
 
-export const HoloCommunitiesDnaInterface = {
+export const HyloHappInterface = {
   comments: {
     create: createData => createZomeCall('comments/create_comment')({
       ...createData,
@@ -13,9 +13,9 @@ export const HoloCommunitiesDnaInterface = {
     get: address => createZomeCall('comments/get')({ address })
   },
 
-  communities: {
+  groups: {
     create: createZomeCall('groups/create_group'),
-    all: () => ([]),
+    all: async () => createZomeCall('groups/all')(null),
     get: address => createZomeCall('groups/get')({ address }),
     getBySlug: slug => createZomeCall('groups/get_by_slug')({ slug })
   },
@@ -48,12 +48,11 @@ export const HoloCommunitiesDnaInterface = {
   people: {
     all: createZomeCall('people/all'),
 
-    get: async (agentPubKey) => createZomeCall('people/get')(agentPubKey)
+    get: createZomeCall('people/get')
   },
 
   posts: {
     create: createData => {
-      console.log('!!! create_post, createData:', createData)
       return createZomeCall('posts/create_post')(createData)
     },
 
@@ -69,7 +68,7 @@ export const HoloCommunitiesDnaInterface = {
   }
 }
 
-export default HoloCommunitiesDnaInterface
+export default HyloHappInterface
 
 // console.log('~~~~ result', result)
 
@@ -105,4 +104,3 @@ export default HoloCommunitiesDnaInterface
 //       .map((x) => parseInt(x, 10))
 //   )
 // )
-

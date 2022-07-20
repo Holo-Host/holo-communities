@@ -4,12 +4,12 @@ import apolloLogger from 'apollo-link-logger'
 import { SchemaLink } from 'apollo-link-schema'
 import { RetryLink } from 'apollo-link-retry'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import HoloCommunitiesDnaInterfaceLoaders from 'data-interfaces/HoloCommunitiesDnaInterfaceLoaders'
+import HyloHappInterfaceLoaders from 'data-interfaces/HyloHappInterfaceLoaders'
 import schema from '../graphql-server'
 
 function schemaContext () {
   return {
-    HoloCommunitiesDnaInterfaceLoaders: HoloCommunitiesDnaInterfaceLoaders()
+    HyloHappInterfaceLoaders: HyloHappInterfaceLoaders()
   }
 }
 
