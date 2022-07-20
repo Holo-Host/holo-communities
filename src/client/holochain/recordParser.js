@@ -31,4 +31,3 @@ export default function recordParser (response) {
 // // Serialize Byte Array agentPubKey to String
 // entry.agent_pub_key = entry.agent_pub_key.toString()
 // const uint8array = new TextEncoder().encode(string)
-
