@@ -8,13 +8,7 @@ import {
 
 export const resolvers = {
   Mutation: {
-    async registerUser (_, providedRegisterUserData = {}) {
-      const registerUserData = {
-        name: 'Loren Johnson',
-        avatar_url: 'https://d3ngex8q79bk55.cloudfront.net/evo-uploads/user/22955/userAvatar/22955/2A0E7E57-C815-4524-8EA4-F2FB93C3A213.jpg',
-        ...providedRegisterUserData
-      }
-
+    async registerUser (_, registerUserData = {}) {
       return dataMappedCall('person', registerUserData, HoloCommunitiesDnaInterface.currentUser.create)
     },
 
@@ -23,7 +17,6 @@ export const resolvers = {
     },
 
     async createPost (_, { data: createPostData }) {
-      console.log('!!! postRecord:', createPostData)
       return dataMappedCall('post', createPostData, HoloCommunitiesDnaInterface.posts.create)
     },
 

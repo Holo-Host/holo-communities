@@ -1,17 +1,7 @@
 import { instanceCreateZomeCall } from 'client/holochain'
 import { currentDataTimeIso } from 'util/holochain'
-import agentPubKeyParser from 'client/holochain/agentPubKeyParser'
-// import { decode, encode } from '@msgpack/msgpack'
 
 const createZomeCall = instanceCreateZomeCall('__hylo')
-
-// const fakeAgentPubKey = () => Buffer.from(
-//   [0x84, 0x20, 0x24].concat(
-//     "000000000000000000000000000000000000"
-//       .split("")
-//       .map((x) => parseInt(x, 10))
-//   )
-// )
 
 export const HoloCommunitiesDnaInterface = {
   comments: {
@@ -19,63 +9,20 @@ export const HoloCommunitiesDnaInterface = {
       ...createData,
       timestamp: currentDataTimeIso()
     }),
-
     all: base => createZomeCall('comments/all_for_base')({ base }),
-
     get: address => createZomeCall('comments/get')({ address })
   },
 
   communities: {
     create: createZomeCall('groups/create_group'),
-
     all: () => ([]),
-
     get: address => createZomeCall('groups/get')({ address }),
-
     getBySlug: slug => createZomeCall('groups/get_by_slug')({ slug })
   },
 
   currentUser: {
-    create: async user => {
-      const result = await createZomeCall('people/create_person')({
-        name: 'Current Holochain Agent',
-        avatar_url: 'https://d3ngex8q79bk55.cloudfront.net/evo-uploads/user/22955/userAvatar/22955/2A0E7E57-C815-4524-8EA4-F2FB93C3A213.jpg'
-      })
-
-      // result.agent_pub_key = decode(result.agent_pub_key)
-      // result.agent_pub_key = await myPubKey().toString()
-      result.isRegistered = true
-
-      // console.log('!!!! result - processed:', result)
-
-      return result
-    },
-
-    get: async () => {
-      // Should tolerate an None option and return the current agent's person entry (action hash)
-      const result = await createZomeCall('people/get', { parser: agentPubKeyParser })(null)
-      console.log('~~~~ result', result)
-
-      // console.log('!!! fakePubKey', fakeAgentPubKey())
-      // const myKey = await myPubKey()
-      // console.log('!!! myPubKey', myKey)
-
-      // https://docs.rs/holochain_deterministic_integrity/latest/holochain_deterministic_integrity/hash/index.html#valid-holochain-hash-types
-      // https://github.com/holochain/holochain-client-js/blob/develop/test/e2e/index.ts
-      // https://discord.com/channels/919686143581253632/919686143581253639/973428081375195136
-      // https://github.com/holochain-open-dev/wiki/wiki/How-To-Pass-A-String-to-a-Client-Instead-of-A-Buffer-for-Hashes
-      // https://developer.mozilla.org/en-US/docs/Web/API/btoa
-      // console.log('!!!! myKey', myKey)
-      // console.log('!!!! string agent_pub_key1:', Buffer.from(myKey).toString('base64'))
-      // console.log('!!!! string agent_pub_key2:', Buffer.from(myKey, 'base64').toString('base64'))
-      // console.log('!!!! base64 agent_pub_key:', Buffer.from(myKey, 'base64'))
-
-      // const result = await createZomeCall('people/get', { parser: agentPubKeyParser })(myKey)
-
-      // result.isRegistered = true
-
-      return result
-    }
+    create: async personAttribs => createZomeCall('people/create')(personAttribs),
+    get: async () => createZomeCall('people/get')(null)
   },
 
   messages: {
@@ -101,7 +48,7 @@ export const HoloCommunitiesDnaInterface = {
   people: {
     all: createZomeCall('people/all'),
 
-    get: agentId => createZomeCall('people/get')({ agent_id: agentId })
+    get: async (agentPubKey) => createZomeCall('people/get')(agentPubKey)
   },
 
   posts: {
@@ -123,3 +70,39 @@ export const HoloCommunitiesDnaInterface = {
 }
 
 export default HoloCommunitiesDnaInterface
+
+// console.log('~~~~ result', result)
+
+// console.log('!!! fakePubKey', fakeAgentPubKey())
+// const myKey = await myPubKey()
+// console.log('!!! myPubKey', myKey)
+
+// https://docs.rs/holochain_deterministic_integrity/latest/holochain_deterministic_integrity/hash/index.html#valid-holochain-hash-types
+// https://github.com/holochain/holochain-client-js/blob/develop/test/e2e/index.ts
+// https://discord.com/channels/919686143581253632/919686143581253639/973428081375195136
+// https://github.com/holochain-open-dev/wiki/wiki/How-To-Pass-A-String-to-a-Client-Instead-of-A-Buffer-for-Hashes
+// https://developer.mozilla.org/en-US/docs/Web/API/btoa
+// console.log('!!!! myKey', myKey)
+// console.log('!!!! string agent_pub_key1:', Buffer.from(myKey).toString('base64'))
+// console.log('!!!! string agent_pub_key2:', Buffer.from(myKey, 'base64').toString('base64'))
+// console.log('!!!! base64 agent_pub_key:', Buffer.from(myKey, 'base64'))
+
+//   {
+//   name: 'Current Holochain Agent',
+//   avatar_url: 'https://d3ngex8q79bk55.cloudfront.net/evo-uploads/user/22955/userAvatar/22955/2A0E7E57-C815-4524-8EA4-F2FB93C3A213.jpg'
+// }
+// )
+
+// result.agent_pub_key = decode(result.agent_pub_key)
+// result.agent_pub_key = await myPubKey().toString()
+
+// console.log('!!!! result - processed:', result)
+
+// const fakeAgentPubKey = () => Buffer.from(
+//   [0x84, 0x20, 0x24].concat(
+//     "000000000000000000000000000000000000"
+//       .split("")
+//       .map((x) => parseInt(x, 10))
+//   )
+// )
+

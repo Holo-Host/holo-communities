@@ -19,7 +19,8 @@ export function mergeProps (stateProps, dispatchProps, ownProps) {
   const { setLogin } = dispatchProps
 
   const checkLogin = holochainAgent
-    ? () => setLogin(holochainAgent.isRegistered)
+    // is logged-in/registered if name for agent exists
+    ? () => setLogin(holochainAgent.name)
     : () => {}
 
   return {
