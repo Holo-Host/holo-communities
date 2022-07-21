@@ -1,9 +1,9 @@
-# hylo-evo
+# UI for Hylo on Holochain
 
 ## Getting Started
 
-1. `git clone git@github.com:Hylozoic/hylo-evo.git`
-2. `cd hylo-evo`
+1. `git clone git@github.com:Hylozoic/hylo-happ-ui.git`
+2. `cd hylo-happ-ui`
 
 ## Running local:
 
