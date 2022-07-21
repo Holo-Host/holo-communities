@@ -4,7 +4,6 @@ import { push } from 'connected-react-router'
 import { graphql } from 'react-apollo'
 import { get, compose } from 'lodash/fp'
 import { communityUrl } from 'util/navigation'
-import mobileRedirect from 'util/mobileRedirect'
 import HolochainCommunityQuery from 'graphql/queries/HolochainCommunityQuery.graphql'
 import HolochainCurrentUserQuery from 'graphql/queries/HolochainCurrentUserQuery.graphql'
 import fetchForCurrentUserMock from 'store/actions/fetchForCurrentUserMock'
@@ -21,7 +20,6 @@ export function mapStateToProps (state, props) {
     slug,
     returnToURL: getReturnToURL(state),
     isCommunityRoute: isCommunityRoute(state, props),
-    downloadAppUrl: mobileRedirect(),
     isDrawerOpen: get('PrimaryLayout.isDrawerOpen', state),
     showLogoBadge: false,
     // not used by holochain

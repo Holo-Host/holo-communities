@@ -23,27 +23,6 @@ describe('NotificationSettingsTab', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it("hides mobile options if user doesn't have device", () => {
-    const wrapper = shallow(<NotificationSettingsTab memberships={[]} currentUser={{
-      ...currentUser,
-      hasDevice: false
-    }} />)
-    expect(wrapper.find('Select').at(1).prop('options')).toHaveLength(2)
-  })
-
-  it("does the right thing with 'both' if user doesn't have device", () => {
-    const wrapper = shallow(<NotificationSettingsTab memberships={[]} currentUser={{
-      ...currentUser,
-      settings: {
-        ...currentUser.settings,
-        dmNotifications: 'both'
-      },
-      hasDevice: false
-    }} />)
-
-    expect(wrapper.find('Select').at(1).prop('selected')).toEqual('email')
-  })
-
   describe('updateMessageSettings', () => {
     it('calls updateUserSettings', () => {
       const props = {

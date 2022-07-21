@@ -27,10 +27,6 @@ export function mapStateToProps (state, props) {
     linkPreview: null,
     linkPreviewStatus: null,
     fetchLinkPreviewPending: null,
-    showImages: null,
-    showFiles: null,
-    images: null,
-    files: null,
     topic: null,
     topicName: null,
     setAnnouncement: () => {},
@@ -40,9 +36,7 @@ export function mapStateToProps (state, props) {
     updatePost: () => {},
     createPost: () => {},
     holochainCreatePost: () => {},
-    createProject: () => {},
-    addImage: () => {},
-    addFile: () => {}
+    createProject: () => {}
   }
 }
 

@@ -475,39 +475,6 @@ describe('on DELETE_COMMENT_PENDING', () => {
   })
 })
 
-describe('on UPDATE_POST_PENDING', () => {
-  const postId = '123'
-  const session = orm.session(orm.getEmptyState())
-
-  session.Attachment.create({
-    id: '1',
-    post: postId
-  })
-
-  session.Attachment.create({
-    id: '1',
-    post: postId
-  })
-
-  session.Post.create({
-    id: postId
-  })
-
-  const action = {
-    type: UPDATE_POST_PENDING,
-    meta: {
-      id: postId
-    }
-  }
-
-  it('removes attachments', () => {
-    const newState = ormReducer(session.state, action)
-    const newSession = orm.session(newState)
-    const attachments = newSession.Post.withId(postId).attachments.toModelArray()
-    expect(attachments.length).toEqual(0)
-  })
-})
-
 describe('on CREATE_COMMUNITY', () => {
   const session = orm.session(orm.getEmptyState())
   const community1 = session.Community.create({ id: 'c1' })

@@ -10,7 +10,7 @@ export const HOLOCHAIN_POLL_INTERVAL_FAST = 5000
 export const HOLOCHAIN_DEFAULT_COMMUNITY_SLUG = 'holochain'
 export const HOLOCHAIN_WEBSOCK_URI_DEFAULT = 'ws://localhost'
 export const HOLOCHAIN_WEBSOCK_PORT_DEFAULT = '3400'
-export const HOLOCHAIN_WEBSOCKET_URI = 'ws://localhost:14202'
+export const HOLOCHAIN_WEBSOCKET_URI = process.env.HOLOCHAIN_WEBSOCKET_URI
 // HOLOCHAIN_WEBSOCK_URI_DEFAULT + ':' +
 //   (conductorPortMatch ? conductorPortMatch[0] : HOLOCHAIN_WEBSOCK_PORT_DEFAULT)
 

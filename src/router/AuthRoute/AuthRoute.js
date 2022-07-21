@@ -21,16 +21,10 @@ export default function AuthRoute ({
   // Specifically we don't want any components to do any work but this,
   // namely JoinCommunity which utilizes returnToOnAuth) and may attempt
   // to auth the user with a token and send them into sign-up.
-  if (
-    (!isLoggedIn && (requireAuth || returnToOnAuth)) ||
-    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/register')
-  ) {
+  if (!isLoggedIn && (requireAuth || returnToOnAuth)) {
     setReturnToURL(location.pathname + location.search)
   }
-  if (
-    (!isLoggedIn && requireAuth) ||
-    (process.env.REDIRECT_TO_APP_STORE && isMobile && location.pathname !== '/register')
-  ) {
+  if (!isLoggedIn && requireAuth) {
     return <RedirectRoute to={'/register'} />
   }
   return <Route {...rest} render={props => React.createElement(component, props)} />

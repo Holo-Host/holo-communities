@@ -5,8 +5,6 @@ import login from 'store/reducers/login'
 import pending from './pending'
 import locationHistory from './locationHistory'
 import resetStore from './resetStore'
-import mixpanel from './mixpanel'
-import intercom from './intercom'
 
 // Local store
 // generator-marker-local-store-import
@@ -20,7 +18,6 @@ import Members from 'routes/Members/Members.store'
 import PeopleTyping from 'components/PeopleTyping/PeopleTyping.store'
 import HyloEditor from 'components/HyloEditor/HyloEditor.store'
 import PostEditor from 'components/PostEditor/PostEditor.store'
-import AttachmentManager from 'components/PostEditor/AttachmentManager/AttachmentManager.store'
 import ModeratorsSettings from 'routes/CommunitySettings/ModeratorsSettingsTab/ModeratorsSettingsTab.store'
 import FullPageModal from 'routes/FullPageModal/FullPageModal.store'
 import AllTopics from 'routes/AllTopics/AllTopics.store'
@@ -42,8 +39,6 @@ export const combinedReducers = combineReducers({
   pending,
   queryResults,
   locationHistory,
-  mixpanel,
-  intercom,
 
   // Local store (Component)
   // generator-marker-local-store-reducer
@@ -56,7 +51,6 @@ export const combinedReducers = combineReducers({
   PeopleTyping,
   HyloEditor,
   PostEditor,
-  AttachmentManager,
   Members,
   FullPageModal,
   AllTopics,

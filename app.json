@@ -6,9 +6,6 @@
     "API_HOST": {
       "required": true
     },
-    "FILEPICKER_API_KEY": {
-      "required": true
-    },
     "NODE_MODULES_CACHE": {
       "required": true
     },
@@ -25,15 +22,6 @@
       "required": true
     },
     "ROLLBAR_ENV": {
-      "required": true
-    },
-    "MIXPANEL_TOKEN": {
-      "required": true
-    },
-    "INTERCOM_APP_ID": {
-      "required": true
-    },
-    "REDIRECT_TO_APP_STORE": {
       "required": true
     },
     "HOLOCHAIN_WEBSOCKET_URI": {

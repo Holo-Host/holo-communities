@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import mobileRedirect from 'util/mobileRedirect'
 import getIsLoggedIn from 'store/selectors/getIsLoggedIn'
 import getMe from 'store/selectors/getMe'
 import {
@@ -9,7 +8,6 @@ import {
 
 export function mapStateToProps (state, props) {
   return {
-    isMobile: mobileRedirect(),
     isLoggedIn: getIsLoggedIn(state),
     currentUser: getMe(state),
     returnToURL: getReturnToURL(state)

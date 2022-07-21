@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 import cx from 'classnames'
 import { some } from 'lodash/fp'
-// import Intercom from 'react-intercom'
 // import config, { isTest } from 'config'
 import { isSmallScreen, isMediumScreen } from 'util/responsive'
 // import AddLocation from 'routes/Signup/AddLocation'
@@ -45,13 +44,12 @@ import HolochainSignalsSubscriber from 'components/HolochainSignalsSubscriber'
 import {
   POST_ID_MATCH,
   VALID_POST_TYPE_CONTEXTS_MATCH,
-  isSignupPath,
   // isAllCommunitiesPath,
   // isTagPath,
   defaultHolochainCommunityUrl
 } from 'util/navigation'
 import { CENTER_COLUMN_ID, DETAIL_COLUMN_ID } from 'util/scrolling'
-import { HOLOCHAIN_ACTIVE } from 'util/holochain'
+// import { HOLOCHAIN_ACTIVE } from 'util/holochain'
 import './PrimaryLayout.scss'
 
 export default function PrimaryLayout ({
@@ -98,6 +96,7 @@ export default function PrimaryLayout ({
   // const showTopics = !isAllCommunitiesPath(location.pathname) && !isNetworkPath(location.pathname) && !isTagPath(location.pathname)
 
   return <div styleName='container'>
+    <Route path='/' exact render={() => <Redirect to={defaultHolochainCommunityUrl()} />} />
     <Drawer styleName={cx('drawer', { hidden: !isDrawerOpen })} {...{ community, network }} />
     <TopNav
       styleName='top'
@@ -111,9 +110,6 @@ export default function PrimaryLayout ({
         showTopics={showTopics}
         currentUser={currentUser} />} */}
       <div styleName={cx('center', { hidden: hasDetail && mediumScreen })} id={CENTER_COLUMN_ID}>
-        {/* <RedirectToSignupFlow currentUser={currentUser} pathname={location.pathname} /> */}
-        <RedirectToCommunity path='/' currentUser={currentUser} />
-        {/* <RedirectToCommunity path='/app' currentUser={currentUser} /> */}
         <Switch>
           {/* <Route path='/tag/:topicName' exact component={TopicSupportComingSoon} /> */}
           {/* <Route path={`/all/${OPTIONAL_POST_MATCH}`} exact component={Feed} /> */}
@@ -205,29 +201,3 @@ const postEditorRoutes = [
 //   { path: '/create-community/domain', component: Domain },
 //   { path: '/create-community/review', component: CommunityReview }
 // ]
-
-export function RedirectToSignupFlow ({ currentUser, pathname }) {
-  if (!currentUser || !currentUser.settings || !currentUser.settings.signupInProgress) return null
-  if (isSignupPath(pathname)) return null
-  const destination = '/signup/upload-photo'
-  return <Redirect to={destination} />
-}
-
-export function RedirectToCommunity ({ path, currentUser }) {
-  return <Route path={path} exact render={redirectIfCommunity(currentUser)} />
-}
-
-export function redirectIfCommunity (currentUser, holochain = HOLOCHAIN_ACTIVE) {
-  return () => {
-    if (holochain) return <Redirect to={defaultHolochainCommunityUrl()} />
-
-    if (currentUser.memberships.count() === 0) return <Redirect to={`/all`} />
-
-    const mostRecentCommunity = currentUser.memberships
-      .orderBy(m => new Date(m.lastViewedAt), 'desc')
-      .first()
-      .community
-
-    return <Redirect to={`/c/${mostRecentCommunity.slug}`} />
-  }
-}

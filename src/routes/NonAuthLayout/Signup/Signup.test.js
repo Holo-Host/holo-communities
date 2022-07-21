@@ -7,9 +7,4 @@ describe('Signup', () => {
     const wrapper = shallow(<Signup />)
     expect(wrapper).toMatchSnapshot()
   })
-  it('renders correctly with mobile redirect', () => {
-    const url = 'some.url'
-    const wrapper = shallow(<Signup downloadAppUrl={url} />)
-    expect(wrapper).toMatchSnapshot()
-  })
 })

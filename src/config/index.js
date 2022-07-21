@@ -14,33 +14,9 @@ const isServer = typeof window === 'undefined'
 //   require('dotenv').load({silent: true})
 // }
 
-export const filepickerKey = process.env.FILEPICKER_API_KEY
 export const logLevel = process.env.LOG_LEVEL
 export const socketHost = process.env.SOCKET_HOST
 export const host = process.env.HOST
-export const slack = {
-  clientId: process.env.SLACK_APP_CLIENT_ID
-}
-export const s3 = {
-  bucket: process.env.AWS_S3_BUCKET,
-  host: process.env.AWS_S3_HOST
-}
-export const google = {
-  key: process.env.GOOGLE_BROWSER_KEY,
-  clientId: process.env.GOOGLE_CLIENT_ID
-}
-export const facebook = {
-  appId: process.env.FACEBOOK_APP_ID
-}
-export const segment = {
-  writeKey: process.env.SEGMENT_KEY
-}
-export const intercom = {
-  appId: process.env.INTERCOM_APP_ID
-}
-export const mixpanel = {
-  token: process.env.MIXPANEL_TOKEN
-}
 
 export const featureFlags = () => {
   if (isServer) {
@@ -58,17 +34,9 @@ export const featureFlags = () => {
 
 const config = {
   environment,
-  filepickerKey,
   logLevel,
   host,
-  slack,
-  s3,
-  google,
-  facebook,
-  segment,
-  featureFlags,
-  intercom,
-  mixpanel
+  featureFlags
 }
 
 if (!isServer) window.__appConfig = config

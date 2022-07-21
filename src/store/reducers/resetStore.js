@@ -9,8 +9,6 @@ export const KEYS_PRESERVED_ON_RESET = [
   'login',
   'pending',
   'locationHistory',
-  'intercom',
-  'mixpanel',
   'holochain'
 ]
 

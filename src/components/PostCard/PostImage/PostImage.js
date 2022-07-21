@@ -1,7 +1,7 @@
 import React from 'react'
+import { isEmpty } from 'lodash'
 import { bgImageStyle } from 'util/index'
 import './PostImage.scss'
-import { isEmpty } from 'lodash'
 
 const PostImage = ({ imageUrl, otherImageUrls, className, linked }) => {
   if (!imageUrl) return null
