@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
-import { get, isEqual, throttle } from 'lodash/fp'
-import cheerio from 'cheerio'
+import { get } from 'lodash/fp'
 import cx from 'classnames'
 import Moment from 'moment'
 import { HOLOCHAIN_ACTIVE } from 'util/holochain'
-import { TOPIC_ENTITY_TYPE } from 'hylo-utils/constants'
 import { POST_PROP_TYPES } from 'store/models/Post'
 import AttachmentManager from './AttachmentManager'
 import { uploadSettings } from './AttachmentManager/AttachmentManager'
@@ -245,19 +243,20 @@ export default class PostEditor extends React.Component {
     pollingFetchLinkPreview(contentStateToHTML(contentState))
   }
 
-  updateTopics = throttle(2000, (contentState) => {
-    const html = contentStateToHTML(contentState)
-    const $ = cheerio.load(html)
-    var topicNames = []
-    $(`a[data-entity-type=${TOPIC_ENTITY_TYPE}]`).map((i, el) =>
-      topicNames.push($(el).text().replace('#', '')))
-    const hasChanged = !isEqual(this.state.detailsTopics, topicNames)
-    if (hasChanged) {
-      this.setState({
-        detailsTopics: topicNames.map(tn => ({ name: tn, id: tn }))
-      })
-    }
-  })
+  updateTopics = () => {}
+  // throttle(2000, (contentState) => {
+  //   const html = contentStateToHTML(contentState)
+  //   const $ = cheerio.load(html)
+  //   var topicNames = []
+  //   $(`a[data-entity-type=${TOPIC_ENTITY_TYPE}]`).map((i, el) =>
+  //     topicNames.push($(el).text().replace('#', '')))
+  //   const hasChanged = !isEqual(this.state.detailsTopics, topicNames)
+  //   if (hasChanged) {
+  //     this.setState({
+  //       detailsTopics: topicNames.map(tn => ({ name: tn, id: tn }))
+  //     })
+  //   }
+  // })
 
   removeLinkPreview = () => {
     this.props.removeLinkPreview()

@@ -2,12 +2,20 @@ import { get, isArray } from 'lodash/fp'
 import { decode } from '@msgpack/msgpack'
 
 export function decodedEntryFromRecord (record) {
-  console.log('!!!! raw zome response (record):', record)
+  // console.log('!!!! zome response (record - raw):', record)
+
   const entry = decode(get('entry.Present.entry', record))
 
   if (entry.agent_pub_key) {
     entry.agent_pub_key = entry.agent_pub_key.toString()
   }
+
+  if (get('signed_action.hashed.hash', record)) {
+    entry.action_hash = record.signed_action.hashed.hash.toString()
+  }
+
+  // console.log('!!!! zome response (entry - decoded):', entry)
+  // signed_action.hashed.hash.toString()
 
   return entry
 }

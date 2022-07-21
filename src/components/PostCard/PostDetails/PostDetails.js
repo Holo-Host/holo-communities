@@ -5,7 +5,7 @@ import Highlight from 'components/Highlight'
 import Icon from 'components/Icon'
 import ClickCatcher from 'components/ClickCatcher'
 import LinkPreview from '../LinkPreview'
-import { sanitize, present, textLength, truncate } from 'hylo-utils/text'
+import { textLength, truncate } from 'hylo-utils/text'
 import './PostDetails.scss'
 
 const maxDetailsLength = 144
@@ -19,7 +19,9 @@ export default function PostDetails ({
   fileAttachments,
   hideDetails
 }) {
-  details = present(sanitize(details), { slug })
+  // TODO: Sanitize is faling due to a cheerio issue, investigate...
+  // details = present(details, { slug })
+
   if (!expanded && textLength(details) > maxDetailsLength) {
     details = truncate(details, maxDetailsLength)
   }

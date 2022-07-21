@@ -13,6 +13,8 @@ export function mapStateToProps (state, props) {
   const routeParams = props.match.params
   const currentUser = getMe(state)
 
+  console.log('!!!! postdetails connector', props)
+
   return {
     id,
     routeParams,
@@ -41,7 +43,7 @@ export function mapDispatchToProps (dispatch, props) {
   }
 }
 
-export const posts = graphql(HolochainPostQuery, {
+export const post = graphql(HolochainPostQuery, {
   props: ({ data: { post, loading } }) => {
     return {
       post: post,
@@ -58,5 +60,5 @@ export const posts = graphql(HolochainPostQuery, {
 
 export default compose(
   connect(mapStateToProps),
-  posts
+  post
 )

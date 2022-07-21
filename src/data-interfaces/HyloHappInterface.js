@@ -1,70 +1,65 @@
+/* eslint-disable camelcase */
 import { instanceCreateZomeCall } from 'client/holochain'
-import { currentDataTimeIso } from 'util/holochain'
 
 const createZomeCall = instanceCreateZomeCall('__hylo')
 
+export function Uint8ArrayStringToUint8Array (uint8ArrayString) {
+  return Uint8Array.from(uint8ArrayString.split(',').map(num => parseInt(num, 10)))
+}
+
 export const HyloHappInterface = {
   comments: {
-    create: createData => createZomeCall('comments/create_comment')({
-      ...createData,
-      timestamp: currentDataTimeIso()
-    }),
-    all: base => createZomeCall('comments/all_for_base')({ base }),
-    get: address => createZomeCall('comments/get')({ address })
+    create: createZomeCall('comments/create'),
+    all: () => [], // base_action_hash => createZomeCall('comments/all')(base_action_hash),
+    get: () => {} // address => createZomeCall('comments/get')(action_hash)
   },
 
   groups: {
     create: createZomeCall('groups/create_group'),
     all: async () => createZomeCall('groups/all')(null),
-    get: address => createZomeCall('groups/get')({ address }),
-    getBySlug: slug => createZomeCall('groups/get_by_slug')({ slug })
+    get: action_hash => createZomeCall('groups/get')(action_hash),
+    getBySlug: group_slug => createZomeCall('groups/get_by_slug')(group_slug)
   },
 
   currentUser: {
-    create: async personAttribs => createZomeCall('people/create')(personAttribs),
+    create: createZomeCall('people/create'),
     get: async () => createZomeCall('people/get')(null)
   },
 
   messages: {
-    createMessageThread: async createMessageThreadData => createZomeCall('messages/create_thread')({
-      ...createMessageThreadData,
-      timestamp: currentDataTimeIso()
-    }),
-
-    createMessage: createMessageData => createZomeCall('messages/create_message')({
-      ...createMessageData,
-      timestamp: currentDataTimeIso()
-    }),
-
+    createMessageThread: createZomeCall('messages/create_thread'),
+    createMessage: createZomeCall('messages/create_message'),
     setLastReadTime: createZomeCall('messages/set_last_read_time'),
-
     allThreads: createZomeCall('messages/all_threads'),
-
-    allMessagesForThread: async address => createZomeCall('messages/all_messages_for_thread')({ thread_address: address }),
-
-    getThread: async threadId => createZomeCall('messages/get_thread')({ thread_address: threadId })
+    allMessagesForThread: async thread_action_hash => createZomeCall('messages/all_messages_for_thread')({ thread_action_hash }),
+    getThread: async thread_action_hash => createZomeCall('messages/get_thread')({ thread_action_hash })
   },
 
   people: {
     all: createZomeCall('people/all'),
-
     get: createZomeCall('people/get')
   },
 
   posts: {
-    create: createData => {
-      return createZomeCall('posts/create_post')(createData)
+    create: data => {
+      console.log('!!! data in HyloHappInterface.posts.create', data)
+      const convertedData = {
+        ...data,
+        to_base_action_hashes: data.to_base_action_hashes.map(Uint8ArrayStringToUint8Array)
+      }
+
+      createZomeCall('posts/create')(convertedData)
     },
 
     // TODO: Remove underscores on unused pagination vars _from_time and _limit once DNA is ready
     // TODO: Change DNA to receive integer instead of string for limit
-    all: (base, { limit, since }) => {
-      const fromTime = since || currentDataTimeIso()
-
-      return createZomeCall('posts/all_for_base')({ base, from_time: fromTime, limit: Number(limit) })
+    all: async (base_action_hash, { limit, since }) => {
+      // const fromTime = since || currentDataTimeIso()
+      // return createZomeCall('posts/all')({ base, from_time: fromTime, limit: Number(limit) })
+      return createZomeCall('posts/all')(Uint8ArrayStringToUint8Array(base_action_hash))
     },
 
-    get: address => createZomeCall('posts/get')({ address })
+    get: action_hash => createZomeCall('posts/get')(Uint8ArrayStringToUint8Array(action_hash))
   }
 }
 

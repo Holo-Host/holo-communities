@@ -101,6 +101,7 @@ export default class PostDetail extends Component {
   togglePeopleDialog = () => this.setState(state => ({ showPeopleDialog: !state.showPeopleDialog }))
 
   render () {
+    console.log('!!!!! in PostDetail')
     const {
       routeParams,
       post,

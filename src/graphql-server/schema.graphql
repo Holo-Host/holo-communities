@@ -105,7 +105,7 @@ type CommunityExistsResult {
 type Query {
   me: Me
   person(id: ID): Person
-  community(slug: String): Community
+  community(slug: String, id: ID): Community
   communities: [Community]
   communityExists: CommunityExistsResult
   messageThreads: MessageThreadQuerySet
@@ -115,10 +115,10 @@ type Query {
 }
 
 input PostInput {
-  title: String
   details: String
+  postToGroupIds: [ID]
+  title: String
   type: String
-  communityId: String
 }
 
 input CommentInput {

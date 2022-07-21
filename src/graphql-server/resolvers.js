@@ -1,3 +1,4 @@
+import { myPubKey } from 'client/holochain'
 import HyloHappInterface from 'data-interfaces/HyloHappInterface'
 import { isEmpty } from 'lodash/fp'
 import { getRandomUuid } from 'util/holochain'
@@ -18,7 +19,19 @@ export const resolvers = {
     },
 
     async createPost (_, { data: createPostData }) {
-      return dataMappedCall('post', createPostData, HyloHappInterface.posts.create)
+      const post = {
+        announcement: false,
+        details: createPostData.details,
+        post_type: createPostData.type,
+        title: createPostData.title,
+        author_pub_key: await myPubKey()
+      }
+      const data = {
+        post,
+        to_base_action_hashes: createPostData.postToGroupIds
+      }
+
+      return dataMappedCall('post', data, HyloHappInterface.posts.create)
     },
 
     async createComment (_, { data: createCommentData }) {
@@ -26,15 +39,15 @@ export const resolvers = {
     },
 
     async findOrCreateMessageThread (_, { data: findOrCreateMessageThreadData }) {
-      return dataMappedCall('messageThread', findOrCreateMessageThreadData, HyloHappInterface.messages.createMessageThread)
+      // return dataMappedCall('messageThread', findOrCreateMessageThreadData, HyloHappInterface.messages.createMessageThread)
     },
 
     async createMessage (_, { data: createMessageData }) {
-      return dataMappedCall('message', createMessageData, HyloHappInterface.messages.createMessage)
+      // return dataMappedCall('message', createMessageData, HyloHappInterface.messages.createMessage)
     },
 
     async setMessageThreadLastReadTime (_, { data: setMessageThreadLastReadTimeData }) {
-      return dataMappedCall('messageThread', setMessageThreadLastReadTimeData, HyloHappInterface.messages.setLastReadTime)
+      // return dataMappedCall('messageThread', setMessageThreadLastReadTimeData, HyloHappInterface.messages.setLastReadTime)
     }
   },
 
@@ -58,8 +71,9 @@ export const resolvers = {
       return toUiData('community', await HyloHappInterface.groups.getBySlug(slug))
     },
 
-    async post (_, { id }) {
-      return toUiData('post', await HyloHappInterface.posts.get(id))
+    async post (_, data) {
+      console.log('!!!!! data in post query resolver:', data)
+      return toUiData('post', await HyloHappInterface.posts.get(data.id))
     },
 
     async people () {
@@ -75,15 +89,15 @@ export const resolvers = {
     },
 
     async messageThreads () {
-      const messageThreads = await HyloHappInterface.messages.allThreads()
+      // const messageThreads = await HyloHappInterface.messages.allThreads()
 
-      return toUiQuerySet(messageThreads.map(messageThread =>
-        toUiData('messageThread', messageThread)
-      ))
+      // return toUiQuerySet(messageThreads.map(messageThread =>
+      //   toUiData('messageThread', messageThread)
+      // ))
     },
 
     async messageThread (_, { id }) {
-      return toUiData('messageThread', await HyloHappInterface.messages.getThread(id))
+      // return toUiData('messageThread', await HyloHappInterface.messages.getThread(id))
     }
   },
 
@@ -100,10 +114,11 @@ export const resolvers = {
   Community: {
     async posts ({ id }, { limit, since }) {
       const postsQueryset = await HyloHappInterface.posts.all(id, { limit, since })
-
+      console.log('!!! Community posts query set', postsQueryset)
       return toUiQuerySet(
-        postsQueryset.posts.map(post => toUiData('post', post)),
-        { hasMore: postsQueryset.more }
+        postsQueryset.map(post => toUiData('post', post)),
+        { hasMore: false }
+        // { hasMore: postsQueryset.more }
       )
     }
   },
@@ -130,19 +145,19 @@ export const resolvers = {
 
   MessageThread: {
     async messages ({ id }) {
-      const messages = await HyloHappInterface.messages.allMessagesForThread(id)
+      // const messages = await HyloHappInterface.messages.allMessagesForThread(id)
 
-      return toUiQuerySet(messages.map(message =>
-        toUiData('message', message)
-      ))
+      // return toUiQuerySet(messages.map(message =>
+      //   toUiData('message', message)
+      // ))
     },
 
     async participants ({ participantIds }, _, { HyloHappInterfaceLoaders }) {
-      return Promise.all(
-        participantIds.map(
-          async participantId => toUiData('person', await HyloHappInterfaceLoaders.person.load(participantId))
-        )
-      )
+      // return Promise.all(
+      //   participantIds.map(
+      //     async participantId => toUiData('person', await HyloHappInterfaceLoaders.person.load(participantId))
+      //   )
+      // )
     }
   },
 
