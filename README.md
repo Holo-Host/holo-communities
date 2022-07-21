@@ -10,16 +10,10 @@
 1. `yarn install`
 2. `yarn start`
 
-## Building for standard Hylo API deployment
+## Running Holochain Hylo Holochain App
 
-1. Run `yarn build`
-2. Once complete Hylo is ready to be served at `<projectRoot>/build`
+This UI requires a locally running instance of the Hylo Holochain Application. See instructions for building or running the Hylo hApp here: [https://github.com/Hylozoic/hylo-happ](https://github.com/Hylozoic/hylo-happ)
 
-## Building for Holochain
-
-1. Optionally set `HOLOCHAIN_BUILD_PATH` in your local `.env` file. Defaults to `<projectRoot>/build-hc`
-2. Run `yarn build:hc`
-3. Once complete Hylo+Holochain is ready to be served at `<HOLOCHAIN_BUILD_PATH>`
 
 ## Further documentation
 
