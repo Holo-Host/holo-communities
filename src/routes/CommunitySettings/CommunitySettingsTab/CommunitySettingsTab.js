@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import './CommunitySettingsTab.scss'
 import Button from 'components/Button'
-import ChangeImageButton from 'components/ChangeImageButton'
 import SettingsControl from 'components/SettingsControl'
 import Loading from 'components/Loading'
 import { bgImageStyle } from 'util/index'
@@ -80,18 +79,8 @@ export default class CommunitySettingsTab extends Component {
 
     return <div>
       <input type='text' styleName='name' onChange={updateSetting('name')} value={name || ''} />
-      <div style={bgImageStyle(bannerUrl)} styleName='banner'>
-        <ChangeImageButton
-          update={updateSettingDirectly('bannerUrl')}
-          uploadSettings={{ type: 'communityBanner', id: community.id }}
-          styleName='change-banner-button' />
-      </div>
-      <div style={bgImageStyle(avatarUrl)} styleName='avatar'>
-        <ChangeImageButton
-          update={updateSettingDirectly('avatarUrl')}
-          uploadSettings={{ type: 'communityAvatar', id: community.id }}
-          styleName='change-avatar-button' />
-      </div>
+      <div style={bgImageStyle(bannerUrl)} styleName='banner' />
+      <div style={bgImageStyle(avatarUrl)} styleName='avatar' />
       <SettingsControl label='Description' onChange={updateSetting('description')} value={description} type='textarea' />
       <SettingsControl label='Location' onChange={updateSetting('location')} value={location} />
       <div styleName='button-row'>

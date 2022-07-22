@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { push, goBack } from 'connected-react-router'
 import getMe from 'store/selectors/getMe'
-import { UPLOAD_ATTACHMENT } from 'store/constants'
 import updateUserSettings from 'store/actions/updateUserSettings'
 import trackAnalyticsEvent from 'store/actions/trackAnalyticsEvent'
 import fetchMySkills from 'store/actions/fetchMySkills'
@@ -9,10 +8,8 @@ import getMySkills from 'store/selectors/getMySkills'
 import { getReturnToURL, resetReturnToURL } from 'router/AuthRoute/AuthRoute.store'
 
 export function mapStateToProps (state, props) {
-  const uploadImagePending = state.pending[UPLOAD_ATTACHMENT]
   return {
     currentUser: getMe(state),
-    uploadImagePending,
     skills: getMySkills(state),
     returnToURL: getReturnToURL(state)
   }

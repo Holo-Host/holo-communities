@@ -23,6 +23,7 @@ export default function reducer (state = defaultState, action) {
     return { ...state, networkId: action.payload }
   }
   if (action.type === FETCH_COMMUNITY_EXISTS) {
+    console.log('!!!! FETCH_COMMUNITY_EXISTS action:', action)
     return { ...state, domainExists: action.payload.data.communityExists.exists }
   }
   if (action.type === CREATE_COMMUNITY) {

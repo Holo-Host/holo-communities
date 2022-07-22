@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { get, pick } from 'lodash/fp'
-
-import './Feed.scss'
 import FeedList from 'components/FeedList'
 import Loading from 'components/Loading'
 import FeedBanner from 'components/FeedBanner'
 import TopicFeedHeader from 'components/TopicFeedHeader'
 import Button from 'components/Button'
 import { bgImageStyle } from 'util/index'
-import { HOLOCHAIN_ACTIVE } from 'util/holochain'
+import './Feed.scss'
 
 export default class Feed extends Component {
   static propTypes = {
@@ -76,9 +74,11 @@ export default class Feed extends Component {
     } = this.props
     const { networkSlug, topicName } = routeParams
 
+    console.log('!!!!! in feed component', routeParams)
+
     if (topicName && !topic) return <Loading />
     if (community && topicName && !communityTopic) return <Loading />
-    if (!currentUser || (HOLOCHAIN_ACTIVE && !community)) return <Loading />
+    if (!currentUser || !community) return <Loading />
     if (membershipsPending) return <Loading />
 
     return <div>

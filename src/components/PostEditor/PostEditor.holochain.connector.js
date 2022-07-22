@@ -27,10 +27,6 @@ export function mapStateToProps (state, props) {
     linkPreview: null,
     linkPreviewStatus: null,
     fetchLinkPreviewPending: null,
-    showImages: null,
-    showFiles: null,
-    images: null,
-    files: null,
     topic: null,
     topicName: null,
     setAnnouncement: () => {},
@@ -40,9 +36,7 @@ export function mapStateToProps (state, props) {
     updatePost: () => {},
     createPost: () => {},
     holochainCreatePost: () => {},
-    createProject: () => {},
-    addImage: () => {},
-    addFile: () => {}
+    createProject: () => {}
   }
 }
 
@@ -70,36 +64,39 @@ export const currentCommunity = graphql(HolochainCommunityQuery, {
 
 export const createPost = graphql(HolochainCreatePostMutation, {
   props: ({ mutate, ownProps }) => ({
-    createPost: post => mutate({
-      variables: {
-        ...pick([
-          'type',
-          'title',
-          'details'
-        ], post),
-        communityId: get('communities[0].id', post)
-      },
-      // NOTE: Replaced this with update below
-      // refetchQueries: [{
-      //   query: HolochainCommunityQuery,
-      //   variables: {
-      //     slug: getRouteParam('slug', {}, ownProps)
-      //   }
-      // }],
-      update: (proxy, { data: { createPost } }) => {
-        const slug = getRouteParam('slug', {}, ownProps)
-        const post = { ...createPost, __typename: 'Post' }
-        const data = proxy.readQuery({
-          query: HolochainCommunityQuery,
-          variables: {
-            slug,
-            withPosts: true
-          }
-        })
-        data.community.posts.items.unshift(post)
-        proxy.writeData({ data })
-      }
-    }),
+    createPost: post => {
+      console.log('!!! post in createPost mutation Apollo:', post)
+      return mutate({
+        variables: {
+          ...pick([
+            'type',
+            'title',
+            'details'
+          ], post),
+          postToGroupIds: post.communities.map(c => c.id)
+        },
+        // NOTE: Replaced this with update below
+        // refetchQueries: [{
+        //   query: HolochainCommunityQuery,
+        //   variables: {
+        //     slug: getRouteParam('slug', {}, ownProps)
+        //   }
+        // }],
+        update: (proxy, { data: { createPost } }) => {
+          const slug = getRouteParam('slug', {}, ownProps)
+          const post = { ...createPost, __typename: 'Post' }
+          const data = proxy.readQuery({
+            query: HolochainCommunityQuery,
+            variables: {
+              slug,
+              withPosts: true
+            }
+          })
+          data.community.posts.items.unshift(post)
+          proxy.writeData({ data })
+        }
+      })
+    },
     // postPending: TBD
     goToPost: props => {
       const { slug, postTypeContext } = ownProps.routeParams

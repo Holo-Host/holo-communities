@@ -3,11 +3,9 @@ import { Route, Link } from 'react-router-dom'
 import Particles from 'react-particles-js'
 import particlesjsConfig from './particlesjsConfig'
 import Button from 'components/Button'
-import Login from './Login'
 import Signup from './Signup'
-import HolochainLogin from './HolochainLogin'
+import RegisterAgent from './RegisterAgent'
 import PasswordReset from 'routes/NonAuthLayout/PasswordReset'
-import { HOLOCHAIN_ACTIVE } from 'util/holochain'
 import './NonAuthLayout.scss'
 
 export default class NonAuthLayout extends React.Component {
@@ -29,28 +27,19 @@ export default class NonAuthLayout extends React.Component {
         <Particles params={particlesjsConfig} style={particlesStyle} />
       </div>
       <div styleName='topRow'>
-        {!HOLOCHAIN_ACTIVE && <a href='/'>
+        <a href='/'>
           <img styleName='logo' src='assets/hylo.svg' alt='Hylo logo' />
-        </a>}
-        {!HOLOCHAIN_ACTIVE && <Route path='/login' component={() =>
-          <Link tabIndex={-1} to='/signup'>
-            <Button styleName='signupButton' color='green-white-green-border'>Sign Up</Button>
-          </Link>
-        } />}
+        </a>
         <Route path='/reset-password' component={() =>
-          <Link to='/login'>
+          <Link to='/register'>
             <Button styleName='signupButton' color='green-white-green-border'>Log In</Button>
           </Link>
         } />
       </div>
 
-      {HOLOCHAIN_ACTIVE && <Route path='/login' component={() =>
-        <HolochainLogin {...this.props} styleName='form' />
-      } />}
-
-      {!HOLOCHAIN_ACTIVE && <Route path='/login' component={() =>
-        <Login {...this.props} styleName='form' />
-      } />}
+      <Route path='/register' component={() =>
+        <RegisterAgent {...this.props} styleName='form' />
+      } />
 
       <Route path='/signup' component={() =>
         <Signup {...this.props} styleName='form' />
@@ -63,7 +52,7 @@ export default class NonAuthLayout extends React.Component {
       <div>
         <p styleName='below-container'>
           <Route path='/signup' component={() =>
-            <Link to='/login'>
+            <Link to='/register'>
               Already have an account? <span styleName='green-text'>Sign in</span>
             </Link>
           } />

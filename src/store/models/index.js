@@ -1,7 +1,6 @@
 import { ORM } from 'redux-orm'
 import './Model.extension'
 import Activity from './Activity'
-import Attachment from './Attachment'
 import Comment from './Comment'
 import Community, { CommunityModerator } from './Community'
 import CommunityTopic from './CommunityTopic'
@@ -27,7 +26,6 @@ export const orm = new ORM()
 
 orm.register(
   Activity,
-  Attachment,
   Comment,
   Community,
   CommunityModerator,

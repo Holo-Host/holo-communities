@@ -9,7 +9,6 @@ export default function presentPost (post, communityId) {
     linkPreview: post.linkPreview,
     commenters: post.commenters.toModelArray(),
     communities: post.communities.toModelArray(),
-    fileAttachments: post.attachments.filter(a => a.type === 'file').toModelArray(),
     pinned,
     topics: post.topics.toModelArray(),
     members: post.members.toModelArray().map(person => {

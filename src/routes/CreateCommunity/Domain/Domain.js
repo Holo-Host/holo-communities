@@ -39,7 +39,7 @@ export default class Domain extends Component {
   }
 
   errorCheckAndSubmit = () => {
-    if (this.props.communityDomainExists) {
+    if (this.props.communityExists) {
       this.setState({
         error: 'This URL already exists. Try another.'
       })
@@ -69,10 +69,12 @@ export default class Domain extends Component {
     return confusedAxolotl
   }
 
-  componentWillMount = () => {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount = () => {
     const { communityDomain } = this.props
     if (communityDomain) this.setState({ communityDomain: communityDomain })
   }
+
   render () {
     return <div styleName='flex-wrapper'>
       <ModalSidebar

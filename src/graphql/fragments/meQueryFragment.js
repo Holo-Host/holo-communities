@@ -16,7 +16,6 @@ export default
   facebookUrl
   url
   hasDevice
-  intercomHash
   hasStripeAccount
   blockedUsers {
     id

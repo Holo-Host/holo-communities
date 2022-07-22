@@ -15,10 +15,6 @@ describe('presentSearchResult', () => {
     creator: creator.id,
     post: 'commentpost'
   })
-  session.Attachment.create({
-    url: 'foo.png',
-    comment: commentId
-  })
   const searchResult = session.SearchResult.create({
     content: `Comment-${commentId}`
   })

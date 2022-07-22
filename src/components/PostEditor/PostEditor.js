@@ -1,15 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
-import { get, isEqual, throttle } from 'lodash/fp'
-import cheerio from 'cheerio'
+import { get } from 'lodash/fp'
 import cx from 'classnames'
 import Moment from 'moment'
 import { HOLOCHAIN_ACTIVE } from 'util/holochain'
-import { TOPIC_ENTITY_TYPE } from 'hylo-utils/constants'
 import { POST_PROP_TYPES } from 'store/models/Post'
-import AttachmentManager from './AttachmentManager'
-import { uploadSettings } from './AttachmentManager/AttachmentManager'
 import contentStateToHTML from 'components/HyloEditor/contentStateToHTML'
 import Icon from 'components/Icon'
 import RoundImage from 'components/RoundImage'
@@ -21,7 +17,6 @@ import TopicSelector from 'components/TopicSelector'
 import MemberSelector from 'components/MemberSelector'
 import LinkPreview from './LinkPreview'
 import DatePicker from 'components/DatePicker'
-import ChangeImageButton from 'components/ChangeImageButton'
 import SendAnnouncementModal from 'components/SendAnnouncementModal'
 import styles from './PostEditor.scss'
 import { PROJECT_CONTRIBUTIONS } from 'config/featureFlags'
@@ -245,19 +240,20 @@ export default class PostEditor extends React.Component {
     pollingFetchLinkPreview(contentStateToHTML(contentState))
   }
 
-  updateTopics = throttle(2000, (contentState) => {
-    const html = contentStateToHTML(contentState)
-    const $ = cheerio.load(html)
-    var topicNames = []
-    $(`a[data-entity-type=${TOPIC_ENTITY_TYPE}]`).map((i, el) =>
-      topicNames.push($(el).text().replace('#', '')))
-    const hasChanged = !isEqual(this.state.detailsTopics, topicNames)
-    if (hasChanged) {
-      this.setState({
-        detailsTopics: topicNames.map(tn => ({ name: tn, id: tn }))
-      })
-    }
-  })
+  updateTopics = () => {}
+  // throttle(2000, (contentState) => {
+  //   const html = contentStateToHTML(contentState)
+  //   const $ = cheerio.load(html)
+  //   var topicNames = []
+  //   $(`a[data-entity-type=${TOPIC_ENTITY_TYPE}]`).map((i, el) =>
+  //     topicNames.push($(el).text().replace('#', '')))
+  //   const hasChanged = !isEqual(this.state.detailsTopics, topicNames)
+  //   if (hasChanged) {
+  //     this.setState({
+  //       detailsTopics: topicNames.map(tn => ({ name: tn, id: tn }))
+  //     })
+  //   }
+  // })
 
   removeLinkPreview = () => {
     this.props.removeLinkPreview()
@@ -301,7 +297,7 @@ export default class PostEditor extends React.Component {
 
   save = () => {
     const {
-      editing, createPost, createProject, updatePost, onClose, goToPost, images, files, setAnnouncement, announcementSelected, isProject
+      editing, createPost, createProject, updatePost, onClose, goToPost, setAnnouncement, announcementSelected, isProject
     } = this.props
     const {
       id, type, title, communities, linkPreview, members, acceptContributions, eventInvitations, startTime, endTime, location
@@ -311,7 +307,7 @@ export default class PostEditor extends React.Component {
     const memberIds = members && members.map(m => m.id)
     const eventInviteeIds = eventInvitations && eventInvitations.map(m => m.id)
     const postToSave = {
-      id, type, title, details, communities, linkPreview, imageUrls: images, fileUrls: files, topicNames, sendAnnouncement: announcementSelected, memberIds, acceptContributions, eventInviteeIds, startTime, endTime, location
+      id, type, title, details, communities, linkPreview, topicNames, sendAnnouncement: announcementSelected, memberIds, acceptContributions, eventInviteeIds, startTime, endTime, location
     }
     const saveFunc = editing ? updatePost : isProject ? createProject : createPost
     setAnnouncement(false)
@@ -337,10 +333,9 @@ export default class PostEditor extends React.Component {
     const { initialPrompt, titlePlaceholder, titleLengthError, dateError, valid, post, detailsTopics = [], showAnnouncementModal } = this.state
     const { id, title, details, communities, linkPreview, topics, members, acceptContributions, eventInvitations, startTime, endTime, location } = post
     const {
-      onClose, detailsPlaceholder,
-      currentUser, communityOptions, loading, addImage,
-      showImages, addFile, showFiles, setAnnouncement, announcementSelected,
-      canModerate, myModeratedCommunities, isProject, isEvent
+      onClose, detailsPlaceholder, currentUser, communityOptions,
+      loading, setAnnouncement, announcementSelected, canModerate,
+      myModeratedCommunities, isProject, isEvent
     } = this.props
 
     const hasStripeAccount = get('hasStripeAccount', currentUser)
@@ -391,8 +386,6 @@ export default class PostEditor extends React.Component {
       </div>
       {linkPreview &&
         <LinkPreview linkPreview={linkPreview} onClose={this.removeLinkPreview} />}
-      <AttachmentManager postId={id || 'new'} type='image' />
-      <AttachmentManager postId={id || 'new'} type='file' />
       <div styleName='footer'>
         {isProject && <div styleName='footerSection'>
           <div styleName='footerSection-label'>Project Members</div>
@@ -466,10 +459,6 @@ export default class PostEditor extends React.Component {
         </div>
         <ActionsBar
           id={id}
-          addImage={addImage}
-          showImages={showImages}
-          addFile={addFile}
-          showFiles={showFiles}
           valid={valid}
           loading={loading}
           submitButtonLabel={this.buttonLabel()}
@@ -489,10 +478,6 @@ export default class PostEditor extends React.Component {
 }
 
 export function ActionsBar ({ id,
-  addImage,
-  showImages,
-  addFile,
-  showFiles,
   valid,
   loading,
   submitButtonLabel,
@@ -508,20 +493,6 @@ export function ActionsBar ({ id,
 }) {
   return <div styleName='actionsBar'>
     {!HOLOCHAIN_ACTIVE && <div styleName='actions'>
-      <ChangeImageButton update={addImage}
-        uploadSettings={uploadSettings(id)}
-        attachmentType='image'
-        disable={showImages}>
-        <Icon name='AddImage'
-          styleName={cx('action-icon', { 'highlight-icon': showImages })} />
-      </ChangeImageButton>
-      <ChangeImageButton update={addFile}
-        uploadSettings={uploadSettings(id)}
-        attachmentType='file'
-        disable={showFiles}>
-        <Icon name='Paperclip'
-          styleName={cx('action-icon', { 'highlight-icon': showFiles })} />
-      </ChangeImageButton>
       {canModerate && <span data-tip='Send Announcement' data-for='announcement-tt'>
         <Icon name='Announcement'
           onClick={() => setAnnouncement(!announcementSelected)}

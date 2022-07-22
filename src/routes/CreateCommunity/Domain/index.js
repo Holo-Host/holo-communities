@@ -1,3 +1,4 @@
 import component from './Domain'
-import connector from './Domain.connector'
-export default connector(component)
+import holochainConnector from './Domain.holochain.connector'
+
+export default holochainConnector(component)

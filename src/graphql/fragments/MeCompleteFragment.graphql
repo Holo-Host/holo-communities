@@ -15,7 +15,6 @@ fragment MeCompleteFragment on Me {
   facebookUrl
   url
   hasDevice
-  intercomHash
   hasStripeAccount
   blockedUsers {
     id

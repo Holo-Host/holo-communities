@@ -4,9 +4,7 @@ import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import appMiddleware from './appMiddleware'
-import apiProxy from './apiProxy'
 import redirectToApp from './redirectToApp'
-import { handleStaticPages } from './proxy'
 
 const port = process.env.PORT || 9001
 
@@ -14,9 +12,7 @@ export default function () {
   const server = express()
   server.use(cookieParser())
   server.use(compression())
-  server.use(apiProxy)
   server.use(redirectToApp)
-  handleStaticPages(server)
   server.use(express.static('build'))
   server.use(appMiddleware)
 

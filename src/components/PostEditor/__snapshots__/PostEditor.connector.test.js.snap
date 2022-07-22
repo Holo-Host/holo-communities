@@ -2,8 +2,6 @@
 
 exports[`mapDispatchToProps returns the right keys 1`] = `
 Object {
-  "addFile": [Function],
-  "addImage": [Function],
   "clearLinkPreview": [Function],
   "createPost": [Function],
   "createProject": [Function],
@@ -65,8 +63,6 @@ Object {
   },
   "editing": false,
   "fetchLinkPreviewPending": undefined,
-  "files": Array [],
-  "images": Array [],
   "isEvent": false,
   "isProject": false,
   "linkPreview": null,
@@ -88,8 +84,6 @@ Object {
   "post": null,
   "postPending": false,
   "postTypeContext": undefined,
-  "showFiles": false,
-  "showImages": false,
   "topic": null,
   "topicName": undefined,
 }
@@ -145,8 +139,6 @@ Object {
   },
   "editing": true,
   "fetchLinkPreviewPending": undefined,
-  "files": Array [],
-  "images": Array [],
   "isEvent": false,
   "isProject": false,
   "linkPreview": null,
@@ -168,8 +160,6 @@ Object {
   "post": null,
   "postPending": true,
   "postTypeContext": undefined,
-  "showFiles": false,
-  "showImages": false,
   "topic": null,
   "topicName": undefined,
 }

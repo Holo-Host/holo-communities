@@ -1,17 +1,17 @@
 #import '../fragments/HolochainPostFieldsFragment.graphql'
 
 mutation HolochainCreatePostMutation (
-  $communityId: String,
-  $type: String,
-  $title: String,
   $details: String
+  $postToGroupIds: [ID],
+  $title: String,
+  $type: String,
   # $withComments: Boolean = false
 ) {
   createPost(data: {
-    title: $title,
     details: $details,
+    postToGroupIds: $postToGroupIds
+    title: $title,
     type: $type,
-    communityId: $communityId
   }) {
     ...HolochainPostFieldsFragment
   }

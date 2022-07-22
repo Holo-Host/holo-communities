@@ -80,7 +80,7 @@ export default class AddLocation extends Component {
 
   render () {
     const currentAvatarUrl = this.state.edits.avatarUrl
-    const { currentUser, uploadImagePending } = this.props
+    const { currentUser } = this.props
     return <div styleName='flex-wrapper'>
       <LeftSidebar
         header='Everything looking good?'
@@ -94,7 +94,6 @@ export default class AddLocation extends Component {
             avatarUrl={currentAvatarUrl}
             updateSettingDirectly={this.updateSettingDirectly}
             currentUser={currentUser}
-            loading={uploadImagePending}
           />}
         </div>
         <div styleName='final-edit'>

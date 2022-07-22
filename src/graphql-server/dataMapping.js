@@ -15,23 +15,27 @@ const uiDefaultAttribsMap = () => ({
 
 export const toInterfaceKeyMap = {
   global: {
-    'createdAt': 'timestamp',
-    'id': 'address',
     'avatarUrl': 'avatar_url',
-    'messageThreadId': 'thread_address',
-    'participantIds': 'participant_addresses',
-    'lastReadTime': 'last_read_time'
+    'createdAt': 'timestamp',
+    'creator': 'author_pub_key',
+    'id': 'action_hash',
+    'lastReadTime': 'last_read_time',
+    'messageThreadId': 'thread_action_hash',
+    'participantIds': 'participant_action_hashes'
   },
   post: {
+    'postToGroupIds': 'to_base_action_hashes',
     'type': 'post_type',
-    'communityId': 'base'
+    'creator': 'author_pub_key'
   },
   person: {
-    'id': 'agent_id'
+    'id': 'agent_pub_key'
+  },
+  community: {
+    'id': 'action_hash'
   },
   comment: {
-    'postId': 'base',
-    'creator': 'agent_id'
+    'postId': 'base_action_hash'
   }
 }
 

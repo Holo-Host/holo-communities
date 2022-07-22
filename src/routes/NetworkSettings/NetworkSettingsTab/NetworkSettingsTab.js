@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bgImageStyle } from 'util/index'
-import ChangeImageButton from 'components/ChangeImageButton'
 import SettingsControl from 'components/SettingsControl'
 import '../NetworkSettings.scss'
 import Button from 'components/Button'
@@ -96,18 +95,8 @@ export default class NetworkSettingsTab extends Component {
 
     return <div>
       <input type='text' styleName='name' onChange={updateSetting('name')} value={name || ''} />
-      <div style={bgImageStyle(bannerUrl)} styleName='banner'>
-        <ChangeImageButton
-          update={updateSettingDirectly('bannerUrl')}
-          uploadSettings={{ type: 'networkBanner', id: network.id }}
-          styleName='change-banner-button' />
-      </div>
-      <div style={bgImageStyle(avatarUrl)} styleName='avatar'>
-        <ChangeImageButton
-          update={updateSettingDirectly('avatarUrl')}
-          uploadSettings={{ type: 'networkAvatar', id: network.id }}
-          styleName='change-avatar-button' />
-      </div>
+      <div style={bgImageStyle(bannerUrl)} styleName='banner' />
+      <div style={bgImageStyle(avatarUrl)} styleName='avatar' />
       <SettingsControl label='Description' onChange={updateSetting('description')} value={description} type='textarea' />
       <div styleName='button-row'>
         <Button label={saved ? 'Saved' : 'Save Changes'} color={changed ? 'green' : 'gray'} onClick={changed ? save : null} styleName='button' />

@@ -42,7 +42,8 @@ export default class Name extends Component {
     }
   }
 
-  componentWillMount = () => {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount = () => {
     const { communityName } = this.props
     if (communityName) this.setState({ communityName })
   }

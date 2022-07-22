@@ -1,4 +1,4 @@
-import { get, isEmpty } from 'lodash/fp'
+import { get } from 'lodash/fp'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { postUrl } from 'util/navigation'
@@ -13,8 +13,7 @@ import getCommunityForCurrentRoute from 'store/selectors/getCommunityForCurrentR
 import {
   CREATE_POST,
   CREATE_PROJECT,
-  FETCH_POST,
-  UPLOAD_ATTACHMENT
+  FETCH_POST
 } from 'store/constants'
 import createPost from 'store/actions/createPost'
 import createProject from 'store/actions/createProject'
@@ -28,10 +27,6 @@ import {
   getLinkPreview,
   setAnnouncement
 } from './PostEditor.store'
-import {
-  addAttachment,
-  getAttachments
-} from './AttachmentManager/AttachmentManager.store'
 
 export function mapStateToProps (state, props) {
   const currentUser = getMe(state)
@@ -43,17 +38,9 @@ export function mapStateToProps (state, props) {
   const linkPreview = getLinkPreview(state, props)
   const linkPreviewStatus = get('linkPreviewStatus', state[MODULE_NAME])
   const fetchLinkPreviewPending = state.pending[FETCH_LINK_PREVIEW]
-  const uploadAttachmentPending = state.pending[UPLOAD_ATTACHMENT]
   const postPending = !!state.pending[CREATE_POST] || !!state.pending[CREATE_PROJECT]
-  const loading = !!state.pending[FETCH_POST] || !!uploadAttachmentPending || postPending
+  const loading = !!state.pending[FETCH_POST] || postPending
   const editing = !!post || loading
-  const images = getAttachments(state, { type: 'image' })
-  const files = getAttachments(state, { type: 'file' })
-  // Note: this could be a selector exported from AttachmentManager
-  const showImages = !isEmpty(images) ||
-    get('attachmentType', uploadAttachmentPending) === 'image'
-  const showFiles = !isEmpty(files) ||
-    get('attachmentType', uploadAttachmentPending) === 'file'
   const communitySlug = getRouteParam('slug', null, props)
   const networkSlug = getRouteParam('networkSlug', null, props)
   const topic = getTopicForCurrentRoute(state, props)
@@ -78,10 +65,6 @@ export function mapStateToProps (state, props) {
     linkPreview,
     linkPreviewStatus,
     fetchLinkPreviewPending,
-    showImages,
-    showFiles,
-    images,
-    files,
     topic,
     topicName,
     communitySlug,
@@ -101,8 +84,6 @@ export const mapDispatchToProps = (dispatch, props) => {
     createPost: postParams => dispatch(createPost(postParams)),
     createProject: postParams => dispatch(createProject(postParams)),
     goToUrl: url => dispatch(push(url)),
-    addImage: url => dispatch(addAttachment(url, 'image')),
-    addFile: url => dispatch(addAttachment(url, 'file')),
     setAnnouncement: bool => dispatch(setAnnouncement(bool))
   }
 }

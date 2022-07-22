@@ -15,17 +15,7 @@ it('matches last snapshot', () => {
     slug: 'foomunity',
     expanded: true,
     className: 'classy',
-    highlightProps: { term: 'foo' },
-    fileAttachments: [
-      {
-        id: 1,
-        url: 'https://www.hylo.com/awitp.pdf'
-      },
-      {
-        id: 1,
-        url: 'http://www.google.com/lalala.zip'
-      }
-    ]
+    highlightProps: { term: 'foo' }
   }
   const wrapper = shallow(<PostBody {...props} />)
   expect(wrapper).toMatchSnapshot()
